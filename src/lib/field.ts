@@ -1,5 +1,6 @@
 import type { Game } from "./games/game";
 import { draw_objects, update_objects } from "./objects/object";
+import type { Path } from "./paths/path";
 import type { Input } from "./types";
 
 export const inch_pixel_ratio = 5;
@@ -52,8 +53,12 @@ export function update_field(input: Input) {
     update_objects(transated_input);
 }
 
-let game = new Promise<Game>(async resolve => {
+const game = new Promise<Game>(async resolve => {
     resolve(new (await import("./games/spin-up/spin-up")).SpinUp());
+});
+
+const path = new Promise<Path>(async resolve => {
+    resolve(new (await import("./paths/path")).Path());
 });
 
 export async function draw_field_bg(ctx: CanvasRenderingContext2D) {

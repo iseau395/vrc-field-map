@@ -22,16 +22,12 @@ export class Disc {
         ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI);
 
         ctx.fillStyle = "#FFFF00";
-        ctx.strokeStyle = "#FFFF00";
-        ctx.stroke();
         ctx.fill();
 
         ctx.beginPath();
         ctx.arc(this.x, this.y, radius/1.4, 0, 2 * Math.PI);
 
         ctx.fillStyle = "#DDDD00";
-        ctx.strokeStyle = "#DDDD00";
-        ctx.stroke();
         ctx.fill();
     }
 }

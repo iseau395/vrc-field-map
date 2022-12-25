@@ -2,6 +2,7 @@ import type { Input } from "../types";
 
 const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
     render: new Map(),
+    postrender: new Map(),
     update: new Map()
 };
 
@@ -118,8 +119,9 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
 // Events
 
 interface Events {
-    render: (ctx: CanvasRenderingContext2D) => void
-    update: (input: Input) => void
+    render: (ctx: CanvasRenderingContext2D) => void;
+    postrender: (ctx: CanvasRenderingContext2D) => void;
+    update: (input: Input) => void;
 }
 
 export function on<E extends keyof Events>(event: E) {
@@ -135,6 +137,9 @@ export function on<E extends keyof Events>(event: E) {
 
 export function draw_objects(ctx: CanvasRenderingContext2D) {
     callbacks.render.forEach(callback => {
+        callback(ctx);
+    });
+    callbacks.postrender.forEach(callback => {
         callback(ctx);
     });
 }
