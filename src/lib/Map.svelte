@@ -67,7 +67,6 @@
             render(true);
         }
         window.addEventListener("resize", resize);
-        resize();
 
         function tick() {
             update_field(input);
@@ -81,6 +80,8 @@
                 anim_frame = requestAnimationFrame(() => render(false));
         }
         anim_frame = requestAnimationFrame(() => render(false));
+
+        resize();
     });
 
     onDestroy(() => {
