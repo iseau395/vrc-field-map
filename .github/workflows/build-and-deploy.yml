@@ -32,7 +32,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
       - run: npm ci
-      - run: npm run build
+      - run: npx vite build --outDir="./_site"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
