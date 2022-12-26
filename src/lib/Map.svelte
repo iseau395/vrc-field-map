@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
 
-    import { draw_field, draw_field_bg, update_field } from "./field";
+    import { draw_field, update_field } from "./field";
     import type { Input } from "./types";
 
     let bg_canvas: HTMLCanvasElement;
@@ -81,7 +81,7 @@
         }
         anim_frame = requestAnimationFrame(() => render(false));
 
-        resize();
+        setTimeout(resize(), 10);
     });
 
     onDestroy(() => {

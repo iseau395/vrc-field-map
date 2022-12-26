@@ -12,12 +12,17 @@ let field_x = 100;
 let field_y = 100;
 let field_scale = 1;
 
-let last_mouse_x: number = 0;
-let last_mouse_y: number = 0;
+let last_mouse_x: number;
+let last_mouse_y: number;
 let last_field_x = field_x;
 let last_field_y = field_y;
 let last_scale = field_scale;
 export function update_field(input: Input) {
+    if (!last_mouse_x || !last_mouse_y) {
+        last_mouse_x = input.mouse_x;
+        last_mouse_y = input.mouse_y;
+    }
+
     if (input.mouse_button == 1) {
         field_x += input.mouse_x - last_mouse_x;
         field_y += input.mouse_y - last_mouse_y;
