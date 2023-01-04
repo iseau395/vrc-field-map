@@ -1,6 +1,6 @@
 <script lang="ts">
     import NavBar from "./lib/NavBar.svelte";
-    import Map from "./lib/Map.svelte";
+    import Map from "./lib/map/Map.svelte";
 </script>
 
 <main>
