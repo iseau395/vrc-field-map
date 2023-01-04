@@ -64,24 +64,24 @@
             fg_canvas.width = fg_canvas.clientWidth;
             fg_canvas.height = fg_canvas.clientHeight;
 
-            render(true);
+            draw_field(fg_ctx, bg_ctx, true);
         }
         window.addEventListener("resize", resize);
 
         function tick() {
             update_field(input);
         }
-        interval = setInterval(tick, 20);
 
-        function render(resize = false) {
-            draw_field(fg_ctx, bg_ctx, resize);
+        function render() {
+            draw_field(fg_ctx, bg_ctx, false);
 
-            if (!resize)
-                anim_frame = requestAnimationFrame(() => render(false));
+            anim_frame = requestAnimationFrame(render);
         }
-        anim_frame = requestAnimationFrame(() => render(false));
 
-        setTimeout(resize(), 10);
+        interval = setInterval(tick, 20);
+        anim_frame = requestAnimationFrame(render);
+        update_field(input);
+        resize();
     });
 
     onDestroy(() => {
