@@ -14,15 +14,16 @@ export class Path {
 
     @on("postrender")
     render(ctx: CanvasRenderingContext2D) {
-        ctx.beginPath();
-        ctx.moveTo(this.points[0].x, this.points[0].y);
-
-        this.points.forEach(p => {
-            ctx.lineTo(p.x, p.y);
-        });
         
         ctx.strokeStyle = "#DD0000";
         ctx.lineWidth = .5 * inch_pixel_ratio;
-        ctx.stroke();
+        ctx.lineCap = "butt";
+
+        for (let i = 0; i < this.points.length-1; i++) {
+            ctx.beginPath();
+            ctx.moveTo(this.points[i].x, this.points[i].y);
+            ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
+            ctx.stroke();
+        }
     }
 }
