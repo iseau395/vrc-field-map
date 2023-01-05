@@ -1,5 +1,5 @@
 <script lang="ts">
-    import NavBar from "./lib/NavBar.svelte";
+    import NavBar from "./lib/navbar/NavBar.svelte";
     import Map from "./lib/map/Map.svelte";
 </script>
 
