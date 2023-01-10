@@ -5,10 +5,10 @@ import { HorizontalRoller, RollerState, VerticalRoller } from "./roller";
 
 export class SpinUp implements Game {
     readonly objects = [
-        new VerticalRoller(0, field_side / 6, true, RollerState.Red),
-        new HorizontalRoller(field_side / 6, 0, false, RollerState.Red),
-        new VerticalRoller(field_side - 2.4, field_side / 6 * 5 - 9.8, true, RollerState.Red),
-        new HorizontalRoller(field_side / 6 * 5 - 9.8, field_side - 2.4, false, RollerState.Red),
+        new VerticalRoller(0, field_side / 6, true, RollerState.BlueRed),
+        new HorizontalRoller(field_side / 6, 0, false, RollerState.RedBlue),
+        new VerticalRoller(field_side - 2.4, field_side / 6 * 5 - 9.8, true, RollerState.BlueRed),
+        new HorizontalRoller(field_side / 6 * 5 - 9.8, field_side - 2.4, false, RollerState.RedBlue),
 
         new Disc(field_side / 12 * 1, field_side / 12 * 1),
         new Disc(field_side / 12 * 2, field_side / 12 * 2),

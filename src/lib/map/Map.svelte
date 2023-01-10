@@ -31,15 +31,11 @@
                 input.keys.set(ev.key, true);
             });
 
-            window.addEventListener(
-                "keyup",
-                (ev) => {
-                    ev.preventDefault();
+            window.addEventListener("keyup", (ev) => {
+                ev.preventDefault();
 
-                    input.keys.set(ev.key, false);
-                },
-                true
-            );
+                input.keys.set(ev.key, false);
+            });
 
             fg_canvas.addEventListener("mousemove", (ev) => {
                 input.mouse_x = ev.offsetX;

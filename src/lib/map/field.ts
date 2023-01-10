@@ -23,7 +23,7 @@ export function update_field(input: Input) {
         last_mouse_y = input.mouse_y;
     }
 
-    if (input.mouse_button == 1) {
+    if (input.mouse_button == 1 || (input.mouse_button == 0 && input.keys.get("Alt"))) {
         field_x += input.mouse_x - last_mouse_x;
         field_y += input.mouse_y - last_mouse_y;
 
