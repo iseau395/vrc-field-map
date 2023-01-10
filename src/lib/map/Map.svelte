@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
+    import ContextMenu from "../context_menu/ContextMenu.svelte";
+    import { options } from "../context_menu/context_menu.ts";
 
     import { draw_field, update_field } from "./field";
     import type { Input } from "./types";
@@ -10,6 +12,12 @@
 
     let interval: NodeJS.Timer;
     let anim_frame: number;
+
+    const context_menu = {
+        x: 0,
+        y: 0,
+        visible: 0
+    }
 
     onMount(() => {
         const bg_ctx = bg_canvas.getContext("2d", { alpha: false });
@@ -25,27 +33,39 @@
 
         // Input events
         {
-            window.addEventListener("keydown", (ev) => {
+            window.addEventListener("keydown", ev => {
                 ev.preventDefault();
 
                 input.keys.set(ev.key, true);
             });
 
-            window.addEventListener("keyup", (ev) => {
+            window.addEventListener("keyup", ev => {
                 ev.preventDefault();
 
                 input.keys.set(ev.key, false);
             });
 
-            fg_canvas.addEventListener("mousemove", (ev) => {
-                input.mouse_x = ev.offsetX;
-                input.mouse_y = ev.offsetY;
+            window.addEventListener("mousemove", ev => {
+                input.mouse_x = ev.clientX;
+                input.mouse_y = ev.clientY;
             });
-            fg_canvas.addEventListener("mousedown", (ev) => {
+            fg_canvas.addEventListener("mousedown", ev => {
                 input.mouse_button = ev.button as 0 | 1 | 2;
+
+                context_menu.visible = false;
             });
-            fg_canvas.addEventListener("mouseup", (ev) => {
+            fg_canvas.addEventListener("mouseup", ev => {
                 input.mouse_button = -1;
+            });
+
+            fg_canvas.addEventListener("contextmenu", ev => {
+                ev.preventDefault();
+
+                if (ev.button == 2) {
+                    context_menu.visible = true;
+                    context_menu.x = input.mouse_x;
+                    context_menu.y = input.mouse_y;
+                }
             });
 
             fg_canvas.addEventListener("wheel", ev => {
@@ -88,6 +108,9 @@
 
 <canvas bind:this={bg_canvas} style="z-index: -1;" />
 <canvas bind:this={fg_canvas} style="z-index: 0;" />
+{#if context_menu.visible}
+<ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
+{/if}
 
 <style>
     canvas {
