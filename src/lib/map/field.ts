@@ -12,6 +12,13 @@ let field_x = 100;
 let field_y = 100;
 let field_scale = 1;
 
+export function translate_cords(x: number, y: number) {
+    return {
+        x: (x - field_x) / field_scale,
+        y: (y - field_y) / field_scale
+    }
+}
+
 let last_mouse_x: number;
 let last_mouse_y: number;
 let last_field_x = field_x;
@@ -51,8 +58,10 @@ export function update_field(input: Input) {
 
     const transated_input = {
         ...input,
-        mouse_x: (input.mouse_x - field_x) / field_scale,
-        mouse_y: (input.mouse_y - field_y) / field_scale,
+        ...translate_cords(
+            input.mouse_x,
+            input.mouse_y
+        )
     };
 
     update_objects(transated_input);

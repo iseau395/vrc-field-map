@@ -1,6 +1,7 @@
 import { inch_pixel_ratio } from "../field";
 import { object, on } from "../objects/object";
 import { Point } from "./point";
+import { register_insert_option } from "../../context_menu/context_menu";
 
 @object
 export class Path {
@@ -10,7 +11,15 @@ export class Path {
         new Point(20, 10),
         new Point(30, 10),
         new Point(40, 10),
-    ]
+    ];
+
+    constructor() {
+        register_insert_option({
+            name: "Point",
+            on_select: (x, y) =>
+                this.points.push(new Point(x/inch_pixel_ratio, y/inch_pixel_ratio))
+        });
+    }
 
     @on("postrender")
     render(ctx: CanvasRenderingContext2D) {

@@ -2,8 +2,11 @@
     import ContextMenu from "./ContextMenu.svelte";
     import type { Option } from "./context_menu.ts";
 
+    export let og_x: number;
+    export let og_y: number;
+
     export let name: string;
-    export let options: Option[] | null = null;
+    export let options: ContextMenuOption[] | null = null;
 
     let submenu_visible = false;
     function onmouseenter() {
@@ -18,13 +21,14 @@
     {name}
 
     {#if options != null}
+    ...
     <span>
         >
     </span>
     {/if}
 
     {#if submenu_visible && options != null}
-    <ContextMenu x=14 on:mouseenter={onmouseenter} on:mouseleave={onmouseleave} options={options}/>
+    <ContextMenu x=14 y=0 og_x={og_x} og_y={og_y} on:mouseenter={onmouseenter} on:mouseleave={onmouseleave} options={options}/>
     {/if}
 </div>
 

@@ -1,24 +1,18 @@
-export type Option = {
+export type ContextMenuOption = {
     name: string,
 } & ({
-    sub_options?: Option[];
+    sub_options?: ContextMenuOption[];
 } | {
     on_select: (x: number, y: number) => void;
-})
+});
 
-export const options: Option[] = [{
-    name: "Test",
-    options: [{
-        name: "Test",
-        on_select: () => { console.log("test"); }
-    }]
-}, {
-    name: "Test",
-    on_select: () => { console.log("test"); }
-}, {
-    name: "Test",
-    on_select: () => { console.log("test"); }
-}, {
-    name: "Test",
-    on_select: () => { console.log("test"); }
-}];
+export const options: ContextMenuOption[] = [
+    {
+        name: "Insert",
+        options: []
+    }
+];
+
+export function register_insert_option(data: ContextMenuOption) {
+    options[0].options.push(data);
+}

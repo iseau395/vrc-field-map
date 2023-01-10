@@ -2,6 +2,7 @@ import { field_side, inch_pixel_ratio } from "../../field";
 import type { Game } from "../game";
 import { Disc } from "./disc";
 import { HorizontalRoller, RollerState, VerticalRoller } from "./roller";
+import { register_insert_option } from "../../../context_menu/context_menu";
 
 export class SpinUp implements Game {
     readonly objects = [
@@ -85,6 +86,14 @@ export class SpinUp implements Game {
         new Disc(field_side + field_side / 12 * 2, field_side / 20 * 12),
         new Disc(field_side + field_side / 12 * 2, field_side / 20 * 13),
     ]
+
+    constructor() {
+        register_insert_option({
+            name: "Disc",
+            on_select: (x, y) =>
+                this.objects.push(new Disc(x/inch_pixel_ratio, y/inch_pixel_ratio))
+        });
+    }
 
     draw_static(ctx: CanvasRenderingContext2D): void {
         ////// Tape //////
