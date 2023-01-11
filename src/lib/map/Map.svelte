@@ -116,7 +116,7 @@
 
 <p>Developed by team 15442C</p>
 <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
-    <img src="/vrc-field-map/github.png" alt="Github Repository"/>
+    <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
 </a>
 
 <style>
