@@ -113,6 +113,7 @@
 {#if context_menu.visible}
 <ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
 {/if}
+<p>Developed by team 15442C</p>
 
 <style>
     canvas {
@@ -120,5 +121,14 @@
         height: calc(100%);
 
         position: absolute;
+    }
+
+    p {
+        position: absolute;
+        left: 15px;
+        bottom: 0;
+
+        color: white;
+        opacity: 50%;
     }
 </style>
