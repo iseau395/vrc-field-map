@@ -130,5 +130,8 @@
 
         color: white;
         opacity: 50%;
+
+        pointer-events: none;
+        user-select: none;
     }
 </style>

@@ -9,10 +9,11 @@
 <style>
     img {
         width: 50px;
+        border-radius: 50%;
 
         opacity: 30%;
 
-        border-radius: 50%;
+        user-select: none;
     }
 
     img:hover {
