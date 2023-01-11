@@ -56,12 +56,15 @@ export function update_field(input: Input) {
     last_field_x = field_x;
     last_field_y = field_y;
 
+    const translated_cords = translate_cords(
+        input.mouse_x,
+        input.mouse_y
+    )
+
     const transated_input = {
         ...input,
-        ...translate_cords(
-            input.mouse_x,
-            input.mouse_y
-        )
+        mouse_x: translated_cords.x,
+        mouse_y: translated_cords.y,
     };
 
     update_objects(transated_input);

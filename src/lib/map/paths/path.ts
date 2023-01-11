@@ -35,8 +35,19 @@ export class Path {
 
         for (let i = 0; i < this.path.length-1; i++) {
             ctx.beginPath();
-            ctx.moveTo(this.path[i].x, this.path[i].y);
-            ctx.lineTo(this.path[i+1].x, this.path[i+1].y);
+            if (this.path[i].points && this.path[i+1].points) {
+                ctx.moveTo(this.path[i].points[3].x, this.path[i].points[3].y);
+                ctx.lineTo(this.path[i+1].points[0].x, this.path[i+1].points[0].y);
+            } else if (this.path[i].points) {
+                ctx.moveTo(this.path[i].points[3].x, this.path[i].points[3].y);
+                ctx.lineTo(this.path[i+1].x, this.path[i+1].y);
+            } else if (this.path[i+1].points) {
+                ctx.moveTo(this.path[i].x, this.path[i].y);
+                ctx.lineTo(this.path[i+1].points[0].x, this.path[i+1].points[0].y);
+            } else {
+                ctx.moveTo(this.path[i].x, this.path[i].y);
+                ctx.lineTo(this.path[i+1].x, this.path[i+1].y);
+            }
             ctx.stroke();
         }
     }
