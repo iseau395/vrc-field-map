@@ -35,6 +35,8 @@ export function update_field(input: Input) {
         field_y += input.mouse_y - last_mouse_y;
 
         redraw_background = true;
+
+        set_cursor("move");
     }
 
     field_scale = input.wheel * -1;
@@ -48,14 +50,6 @@ export function update_field(input: Input) {
         redraw_background = true;
     }
 
-    last_scale = field_scale;
-
-    last_mouse_x = input.mouse_x;
-    last_mouse_y = input.mouse_y;
-
-    last_field_x = field_x;
-    last_field_y = field_y;
-
     const translated_cords = translate_cords(
         input.mouse_x,
         input.mouse_y
@@ -68,6 +62,19 @@ export function update_field(input: Input) {
     };
 
     update_objects(transated_input);
+
+    if (field_scale < last_scale)
+        set_cursor("zoom-in");
+    else if (field_scale > last_scale)
+        set_cursor("zoom-out");
+
+    last_scale = field_scale;
+
+    last_mouse_x = input.mouse_x;
+    last_mouse_y = input.mouse_y;
+
+    last_field_x = field_x;
+    last_field_y = field_y;
 }
 
 const game = new Promise<Game>(async resolve => {
@@ -128,4 +135,14 @@ export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRende
     draw_objects(fg_ctx);
 
     fg_ctx.restore();
+}
+
+let new_cursor = "default";
+export function check_cursor(fg_canvas: HTMLCanvasElement) {
+    fg_canvas.style.cursor = new_cursor;
+    new_cursor = "default";
+}
+
+export function set_cursor(cursor: string) {
+    new_cursor = cursor;
 }

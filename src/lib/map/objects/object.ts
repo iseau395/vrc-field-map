@@ -1,4 +1,5 @@
 import type { Input } from "../types";
+import { set_cursor } from "../field";
 
 const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
     render: new Map(),
@@ -107,6 +108,9 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
 
                     if (in_collision(this, input.mouse_x, input.mouse_y) && !input.keys.get("Alt"))
                         selection = this[id_symbol];
+                } else if (selection == -1 && this[collision_symbol]) {
+                    if (in_collision(this, input.mouse_x, input.mouse_y) && !input.keys.get("Alt"))
+                        set_cursor("grab")
                 }
 
                 if (update_func)
@@ -146,6 +150,8 @@ export function draw_objects(ctx: CanvasRenderingContext2D) {
 
 export function update_objects(input: Input) {
     if (selection != -1 && input.mouse_button == 0) {
+        set_cursor("grabbing")
+
         const selected_object = objects.get(selection);
 
         selected_object.x = input.mouse_x;

@@ -1,3 +1,4 @@
+import { set_cursor } from "../../field";
 import { inch_pixel_ratio } from "../../field";
 import { collisionbox, in_collision, object, on, selection } from "../../objects/object";
 import type { Input } from "../../types";
@@ -27,7 +28,9 @@ export class HorizontalRoller {
     private was_clicked = false;
     @on("update")
     public update(input: Input) {
-        if (input.mouse_button == 0 && in_collision(this, input.mouse_x, input.mouse_y) && !this.was_clicked && selection == -1) {
+        const mouse_over = in_collision(this, input.mouse_x, input.mouse_y);
+
+        if (input.mouse_button == 0 && mouse_over && !this.was_clicked && selection == -1) {
             this.state++;
             this.state %= 4;
 
@@ -35,6 +38,9 @@ export class HorizontalRoller {
         } else if (input.mouse_button != 0) {
             this.was_clicked = false;
         }
+
+        if (mouse_over && selection == -1)
+            set_cursor("pointer");
     }
 
     @on("render")
@@ -69,7 +75,9 @@ export class VerticalRoller {
     private was_clicked = false;
     @on("update")
     public update(input: Input) {
-        if (input.mouse_button == 0 && in_collision(this, input.mouse_x, input.mouse_y) && !this.was_clicked && selection == -1) {
+        const mouse_over = in_collision(this, input.mouse_x, input.mouse_y);
+
+        if (input.mouse_button == 0 && mouse_over && !this.was_clicked && selection == -1) {
             this.state++;
             this.state %= 4;
 
@@ -77,6 +85,9 @@ export class VerticalRoller {
         } else if (input.mouse_button != 0) {
             this.was_clicked = false;
         }
+
+        if (mouse_over && selection == -1)
+            set_cursor("pointer");
     }
 
     @on("render")

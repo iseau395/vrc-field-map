@@ -4,7 +4,7 @@
     import ContextMenu from "../context_menu/ContextMenu.svelte";
     import { options } from "../context_menu/context_menu.ts";
 
-    import { draw_field, update_field } from "./field";
+    import { draw_field, update_field, check_cursor } from "./field";
     import type { Input } from "./types";
 
     let bg_canvas: HTMLCanvasElement;
@@ -86,6 +86,8 @@
 
         function tick() {
             update_field(input);
+
+            check_cursor(fg_canvas);
         }
 
         function render() {
