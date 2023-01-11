@@ -35,8 +35,6 @@ export function update_field(input: Input) {
         field_y += input.mouse_y - last_mouse_y;
 
         redraw_background = true;
-
-        set_cursor("move");
     }
 
     field_scale = input.wheel * -1;
@@ -62,6 +60,10 @@ export function update_field(input: Input) {
     };
 
     update_objects(transated_input);
+    
+    if (input.keys.get("Alt") || input.mouse_button == 1) {
+        set_cursor("move");
+    }
 
     if (field_scale < last_scale)
         set_cursor("zoom-in");
