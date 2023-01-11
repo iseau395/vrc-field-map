@@ -27,6 +27,7 @@
             mouse_x: 0,
             mouse_y: 0,
             mouse_button: -1,
+            mouse_button_changed: false,
             wheel: 1,
             keys: new Map<string, boolean | undefined>(),
         };
@@ -51,11 +52,13 @@
             });
             fg_canvas.addEventListener("mousedown", ev => {
                 input.mouse_button = ev.button as 0 | 1 | 2;
+                input.mouse_button_changed = true;
 
                 context_menu.visible = false;
             });
             fg_canvas.addEventListener("mouseup", ev => {
                 input.mouse_button = -1;
+                input.mouse_button_changed = true;
             });
 
             fg_canvas.addEventListener("contextmenu", ev => {
@@ -88,6 +91,8 @@
             update_field(input);
 
             check_cursor(fg_canvas);
+
+            input.mouse_button_changed = false;
         }
 
         function render() {

@@ -51,19 +51,26 @@ type Collision = [type: CollisionType.BOX, x_offset: number, y_offset: number, w
 
 export function collisionbox(x_offset: number, y_offset: number, width: number, height: number) {
     return function (target: any) {
-        if (!target.prototype[collision_symbol])
-            target.prototype[collision_symbol] = [];
-
-        target.prototype[collision_symbol].push([CollisionType.BOX, x_offset, y_offset, width, height]);
+        add_box_collision(target.prototype, x_offset, y_offset, width, height);
     };
 }
 export function collisioncircle(x_offset: number, y_offset: number, radius: number) {
     return function (target: any) {
-        if (!target.prototype[collision_symbol])
-            target.prototype[collision_symbol] = [];
-
-        target.prototype[collision_symbol].push([CollisionType.CIRCLE, x_offset, y_offset, radius]);
+        add_circle_collision(target.prototype, x_offset, y_offset, radius);
     };
+}
+
+export function add_box_collision<T>(object: T, x_offset: number, y_offset: number, width: number, height: number) {
+    if (!object[collision_symbol])
+        object[collision_symbol] = [];
+
+    object[collision_symbol].push([CollisionType.BOX, x_offset, y_offset, width, height]);
+}
+export function add_circle_collision<T>(object: T, x_offset: number, y_offset: number, radius: number) {
+    if (!object[collision_symbol])
+        object[collision_symbol] = [];
+
+    object[collision_symbol].push([CollisionType.CIRCLE, x_offset, y_offset, radius]);
 }
 
 // Misc
