@@ -2,7 +2,7 @@ import { inch_pixel_ratio } from "../field";
 import { collisioncircle, dragable, object, on } from "../objects/object";
 
 @object
-@collisioncircle(0, 0, 1.2 * inch_pixel_ratio)
+@collisioncircle(0, 0, 1.5 * inch_pixel_ratio)
 @dragable
 export class Point {
     x: number;
