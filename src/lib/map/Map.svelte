@@ -113,7 +113,11 @@
 {#if context_menu.visible}
 <ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
 {/if}
+
 <p>Developed by team 15442C</p>
+<a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
+    <img src="/vrc-field-map/github.png" alt="Github Repository"/>
+</a>
 
 <style>
     canvas {
@@ -133,5 +137,29 @@
 
         pointer-events: none;
         user-select: none;
+    }
+
+    img {
+        width: 50px;
+        border-radius: 50%;
+
+        opacity: 30%;
+
+        user-select: none;
+    }
+
+    img:hover {
+        opacity: 70%;
+    }
+
+    a {
+        width: 50px;
+        height: 50px;
+
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+
+        border-radius: 50%;
     }
 </style>
