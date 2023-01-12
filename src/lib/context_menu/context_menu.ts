@@ -1,3 +1,5 @@
+import { inch_pixel_ratio } from "../map/field";
+
 export type ContextMenuOption = {
     name: string,
 } & ({
@@ -10,6 +12,10 @@ export const options: ContextMenuOption[] = [
     {
         name: "Insert",
         options: []
+    },
+    {
+        name: "Copy Cords",
+        on_select: (x, y) => navigator.clipboard.writeText(`${x / inch_pixel_ratio}, ${y / inch_pixel_ratio}`)
     }
 ];
 

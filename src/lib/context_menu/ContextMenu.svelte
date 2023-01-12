@@ -15,7 +15,7 @@
         if (!callback)
             return;
 
-        const translated = translate_cords(og_x, og_y);
+        const translated = translate_cords(og_x || x, og_y || y);
 
         callback(
             translated.x,
