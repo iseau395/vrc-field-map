@@ -35,7 +35,7 @@ export class Roller {
 
     @on("update")
     public update(input: Input) {
-        const mouse_over = in_collision(this, input.mouse_x, input.mouse_y);
+        const mouse_over = in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y);
 
         if (input.mouse_button == 0 && mouse_over && input.mouse_button_changed && selection == -1) {
             this.state++;
