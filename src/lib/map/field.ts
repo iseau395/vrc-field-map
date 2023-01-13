@@ -173,11 +173,11 @@ export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRende
     if (grid_on) {
         fg_ctx.beginPath();
 
-        for (let i = 0; i < grid_scale; i++) {
+        for (let i = 1; i < grid_scale; i++) {
             fg_ctx.moveTo(i * grid_spacing, 0);
             fg_ctx.lineTo(i * grid_spacing, field_side * inch_pixel_ratio);
         }
-        for (let i = 0; i < grid_scale; i++) {
+        for (let i = 1; i < grid_scale; i++) {
             fg_ctx.moveTo(0, i * grid_spacing);
             fg_ctx.lineTo(field_side * inch_pixel_ratio, i * grid_spacing);
         }
