@@ -1,4 +1,5 @@
 import { inch_pixel_ratio } from "../map/field";
+import { settings_screen_visible } from "../../stores/settings";
 
 export type ContextMenuOption = {
     name: string,
@@ -16,6 +17,10 @@ export const options: ContextMenuOption[] = [
     {
         name: "Copy Cords",
         on_select: (x, y) => navigator.clipboard.writeText(`${x / inch_pixel_ratio}, ${y / inch_pixel_ratio}`)
+    },
+    {
+        name: "Settings",
+        on_select: () => settings_screen_visible.set(true)
     }
 ];
 

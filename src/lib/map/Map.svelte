@@ -54,6 +54,9 @@
                 input.mouse_button = ev.button as 0 | 1 | 2;
                 input.mouse_button_changed = true;
 
+                input.mouse_x = ev.clientX;
+                input.mouse_y = ev.clientY;
+
                 context_menu.visible = false;
             });
             fg_canvas.addEventListener("mouseup", ev => {
@@ -74,7 +77,7 @@
             fg_canvas.addEventListener("wheel", ev => {
                 input.wheel += ev.deltaY * 0.01;
                 input.wheel = Math.min(Math.max(-4, input.wheel), -.75);
-            });
+            }, { passive: true });
         }
 
         function resize() {
@@ -146,6 +149,7 @@
 
     img {
         width: 50px;
+        height: 50px;
         border-radius: 50%;
 
         opacity: 30%;
