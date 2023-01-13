@@ -6,7 +6,7 @@ import type { Input } from "./types";
 export const inch_pixel_ratio = 5;
 export const field_side = 144;
 
-let redraw_background = false;
+let redraw_background = true;
 
 let field_x = 100;
 let field_y = 100;
@@ -79,8 +79,10 @@ export function update_field(input: Input) {
     last_field_y = field_y;
 }
 
+let game_loaded = false;
 const game = new Promise<Game>(async resolve => {
     resolve(new (await import("./games/spin-up/spin-up")).SpinUp());
+    game_loaded = true;
 });
 
 const path = new Promise<Path>(async resolve => {
@@ -137,12 +139,13 @@ export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
 }
 
 export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRenderingContext2D, draw_background: boolean) {
-    if (redraw_background || draw_background) {
+    if (redraw_background || draw_background || game_loaded) {
         bg_ctx.fillStyle = "#505050";
         bg_ctx.fillRect(0, 0, bg_ctx.canvas.width, bg_ctx.canvas.height);
 
         draw_field_bg(bg_ctx);
         redraw_background = false;
+        game_loaded = false;
     }
 
     fg_ctx.clearRect(0, 0, fg_ctx.canvas.width, fg_ctx.canvas.height);

@@ -17,11 +17,11 @@
     }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click on:mouseenter={onmouseenter} on:mouseleave={onmouseleave}>
-    {name}
+    {name + (options != null ? "..." : "")}
 
-    {#if options != null}
-    ...
+    {#if options}
     <span>
         >
     </span>

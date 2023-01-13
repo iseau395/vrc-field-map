@@ -106,6 +106,7 @@
 
         interval = setInterval(tick, 20);
         anim_frame = requestAnimationFrame(render);
+
         update_field(input);
         resize();
     });
