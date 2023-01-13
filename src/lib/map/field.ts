@@ -2,6 +2,7 @@ import type { Game } from "./games/game";
 import { draw_objects, update_objects } from "./objects/object";
 import type { Path } from "./paths/path";
 import type { Input } from "./types";
+import { grid_enabled } from "../../stores/settings";
 
 export const inch_pixel_ratio = 5;
 export const field_side = 144;
@@ -11,6 +12,14 @@ let redraw_background = true;
 let field_x = 100;
 let field_y = 100;
 let field_scale = 1;
+
+let grid_on = false;
+grid_enabled.subscribe(g => 
+    grid_on = g
+);
+
+const grid_scale = 48;
+const grid_spacing = field_side*inch_pixel_ratio/grid_scale;
 
 export function translate_cords(x: number, y: number) {
     return {
@@ -57,7 +66,14 @@ export function update_field(input: Input) {
         ...input,
         mouse_x: translated_cords.x,
         mouse_y: translated_cords.y,
+        gridless_mouse_x: translated_cords.x,
+        gridless_mouse_y: translated_cords.y
     };
+
+    if (grid_on) {
+        transated_input.mouse_x = Math.round(transated_input.mouse_x / grid_spacing) * grid_spacing;
+        transated_input.mouse_y = Math.round(transated_input.mouse_y / grid_spacing) * grid_spacing;
+    }
 
     update_objects(transated_input);
     
@@ -153,6 +169,23 @@ export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRende
     fg_ctx.save();
     fg_ctx.translate(field_x, field_y);
     fg_ctx.scale(field_scale, field_scale);
+
+    if (grid_on) {
+        fg_ctx.beginPath();
+
+        for (let i = 0; i < grid_scale; i++) {
+            fg_ctx.moveTo(i * grid_spacing, 0);
+            fg_ctx.lineTo(i * grid_spacing, field_side * inch_pixel_ratio);
+        }
+        for (let i = 0; i < grid_scale; i++) {
+            fg_ctx.moveTo(0, i * grid_spacing);
+            fg_ctx.lineTo(field_side * inch_pixel_ratio, i * grid_spacing);
+        }
+
+        fg_ctx.strokeStyle = "#99999955";
+        fg_ctx.lineWidth = .25 * inch_pixel_ratio;
+        fg_ctx.stroke();
+    }
 
     draw_objects(fg_ctx);
 

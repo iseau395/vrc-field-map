@@ -1,10 +1,10 @@
 <script lang="ts">
     import Switch from "./Switch.svelte";
+    import { grid_enabled } from "../../stores/settings.ts";
 
     export let on_close: () => void;
 
     window.addEventListener("keydown", ev => {
-        console.log(ev.key);
         if (ev.key == "Escape")
             on_close();
     });
@@ -22,10 +22,7 @@
                 <line x1="35" y1="5" x2="5" y2="35" stroke="white" stroke-width="4" />
             </svg>
         </h1>
-        Test: <Switch /><br/>
-        Test: <Switch /><br/>
-        Test: <Switch /><br/>
-        Test: <Switch /><br/>
+        Grid: <Switch bind:value={$grid_enabled}/><br/>
     </span>
 </div>
 

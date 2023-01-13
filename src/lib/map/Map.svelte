@@ -26,6 +26,8 @@
         const input: Input = {
             mouse_x: 0,
             mouse_y: 0,
+            gridless_mouse_x: 0,
+            gridless_mouse_y: 0,
             mouse_button: -1,
             mouse_button_changed: false,
             wheel: 1,
