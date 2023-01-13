@@ -87,10 +87,13 @@ const path = new Promise<Path>(async resolve => {
     resolve(new (await import("./paths/path")).Path());
 });
 
-export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-    ctx.translate(field_x, field_y);
-    ctx.scale(field_scale, field_scale);
+const cache_scale = 3.5;
+const bg_cache = document.createElement("canvas");
+bg_cache.width = field_side * inch_pixel_ratio * cache_scale;
+bg_cache.height = field_side * inch_pixel_ratio * cache_scale;
+
+async function init_field_load(ctx: CanvasRenderingContext2D) {
+    ctx.scale(cache_scale, cache_scale);
 
     ctx.fillStyle = "#777777";
     ctx.fillRect(0, 0, field_side * inch_pixel_ratio, field_side * inch_pixel_ratio);
@@ -115,6 +118,20 @@ export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.rect(ctx.lineWidth / -2, ctx.lineWidth / -2, field_side * inch_pixel_ratio + ctx.lineWidth, field_side * inch_pixel_ratio + ctx.lineWidth);
     ctx.stroke();
+}
+
+let init_load = false;
+export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
+    if (!init_load) {
+        init_field_load(bg_cache.getContext("2d"));
+        init_load = true;
+    }
+
+    ctx.save();
+    ctx.translate(field_x, field_y);
+    ctx.scale(field_scale / cache_scale, field_scale / cache_scale);
+
+    ctx.drawImage(bg_cache, 0, 0);
 
     ctx.restore();
 }
