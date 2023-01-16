@@ -2,7 +2,7 @@
     import NavBar from "./lib/navbar/NavBar.svelte";
     import Map from "./lib/map/Map.svelte";
     import SettingsScreen from "./lib/settings_screen/SettingsScreen.svelte";
-    import { settings_screen_visible } from "./stores/settings.ts";
+    import { settings_screen_visible } from "./stores/settings";
 
     function close_settings() {
         $settings_screen_visible = false;
@@ -23,11 +23,6 @@
 
     $: hasMouse = has_hover || has_pointer;
 </script>
-
-<svelte:head>
-    <title>VRC Field Map</title>
-    <meta name="An interactive map of the VRC field for route planning">
-</svelte:head>
 
 <main>
     <NavBar/>
