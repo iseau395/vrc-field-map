@@ -4,7 +4,7 @@ import { settings_screen_visible } from "../../stores/settings";
 export type ContextMenuOption = {
     name: string,
 } & ({
-    sub_options?: ContextMenuOption[];
+    options: ContextMenuOption[];
 } | {
     on_select: (x: number, y: number) => void;
 });

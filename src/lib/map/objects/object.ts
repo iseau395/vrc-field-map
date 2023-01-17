@@ -29,7 +29,7 @@ export function object<T extends { new(...args: any[]): {} }>(Base: T) {
 
             if (object_callbacks) {
                 object_callbacks.forEach((value: (...args: any[]) => void, key: string) => {
-                    callbacks[key].set(this[id_symbol], (ctx) =>
+                    callbacks[key].set(this[id_symbol], (ctx: CanvasRenderingContext2D) =>
                         value.apply(this, [ctx]));
                 });
             }
@@ -136,7 +136,7 @@ interface Events {
 }
 
 export function on<E extends keyof Events>(event: E) {
-    return (target: any, _, descriptor: TypedPropertyDescriptor<Events[E]>) => {
+    return (target: any, _: any, descriptor: TypedPropertyDescriptor<Events[E]>) => {
         if (!target[callback_symbol])
             target[callback_symbol] = new Map<string, Events[keyof Events]>();
 

@@ -30,8 +30,6 @@ export function translate_cords(x: number, y: number) {
 
 let last_mouse_x: number;
 let last_mouse_y: number;
-let last_field_x = field_x;
-let last_field_y = field_y;
 let last_scale = field_scale;
 export function update_field(input: Input) {
     if (!last_mouse_x || !last_mouse_y) {
@@ -90,9 +88,6 @@ export function update_field(input: Input) {
 
     last_mouse_x = input.mouse_x;
     last_mouse_y = input.mouse_y;
-
-    last_field_x = field_x;
-    last_field_y = field_y;
 }
 
 let game_loaded = false;
@@ -101,7 +96,7 @@ const game = new Promise<Game>(async resolve => {
     game_loaded = true;
 });
 
-const path = new Promise<Path>(async resolve => {
+new Promise<Path>(async resolve => {
     resolve(new (await import("./paths/path")).Path());
 });
 

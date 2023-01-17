@@ -1,6 +1,6 @@
 <script lang="ts">
     import Switch from "./Switch.svelte";
-    import { grid_enabled } from "../../stores/settings.ts";
+    import { grid_enabled } from "../../stores/settings";
 
     export let on_close: () => void;
 

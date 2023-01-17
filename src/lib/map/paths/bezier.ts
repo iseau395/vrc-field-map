@@ -1,4 +1,3 @@
-import { register_insert_option } from "../../context_menu/context_menu";
 import { inch_pixel_ratio } from "../field";
 import { object, on } from "../objects/object";
 import { Point } from "./point";

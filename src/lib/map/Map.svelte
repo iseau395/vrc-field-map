@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
     import ContextMenu from "../context_menu/ContextMenu.svelte";
-    import { options } from "../context_menu/context_menu.ts";
+    import { options } from "../context_menu/context_menu";
 
     import { draw_field, update_field, check_cursor } from "./field";
     import type { Input } from "./types";
@@ -16,7 +16,7 @@
     const context_menu = {
         x: 0,
         y: 0,
-        visible: 0
+        visible: false
     }
 
     onMount(() => {
@@ -61,7 +61,7 @@
 
                 context_menu.visible = false;
             });
-            fg_canvas.addEventListener("mouseup", ev => {
+            fg_canvas.addEventListener("mouseup", () => {
                 input.mouse_button = -1;
                 input.mouse_button_changed = true;
             });
