@@ -92,7 +92,22 @@
         }
         window.addEventListener("resize", resize);
 
+        let last_wheel = input.wheel;
         function tick() {
+
+            let any_true = false;
+            for (const value of input.keys.values()) {
+                if (value == true) {
+                    any_true = true;
+                    break;
+                }
+            }
+
+            if (any_true || last_wheel != input.wheel)
+                context_menu.visible = false;
+
+            last_wheel = input.wheel;
+
             update_field(input);
 
             check_cursor(fg_canvas);
