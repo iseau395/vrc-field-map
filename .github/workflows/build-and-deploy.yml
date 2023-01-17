@@ -1,5 +1,5 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Build and Deploy
+name: Build, Test, and Deploy
 
 on:
   # Runs on pushes targeting the default branch
@@ -21,6 +21,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Test job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run check
+      - run: npm run test
+
   # Build job
   build:
     runs-on: ubuntu-latest
