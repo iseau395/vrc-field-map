@@ -1,9 +1,9 @@
 <script lang="ts">
-
+    export let text: string;
 </script>
 
 <span on:click on:keydown>
-    <slot></slot>
+    {text}
 </span>
 
 <style>

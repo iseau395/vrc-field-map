@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`Button.svelte > mounts 1`] = `"<div><span class=\\"svelte-pbnhkd\\">TestingTesting123</span></div>"`;

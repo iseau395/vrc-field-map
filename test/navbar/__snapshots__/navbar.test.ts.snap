@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`Navbar.svelte > mounts 1`] = `"<div><div class=\\"navbar-wrapper svelte-1i59wqc\\"><div class=\\"navbar-main svelte-1i59wqc\\"><span class=\\"svelte-pbnhkd\\">Spin Up</span> <span class=\\"svelte-pbnhkd\\">Tipping Point</span></div></div></div>"`;

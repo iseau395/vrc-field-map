@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
     import Button from "./Button.svelte";
-
 </script>
+
 <div class="navbar-wrapper">
     <div class="navbar-main">
-        <Button>Spin Up</Button>
-        <Button>Tipping Point</Button>
+        <Button text="Spin Up" />
+        <Button text="Tipping Point" />
     </div>
 </div>
 

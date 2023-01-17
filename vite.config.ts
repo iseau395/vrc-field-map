@@ -7,5 +7,9 @@ export default defineConfig({
     build: {
       outDir: './dist'
     },
-    plugins: [svelte()],
+    test: {
+      globals: true,
+      environment: 'jsdom'
+    },
+    plugins: [svelte({ hot: !process.env.VITEST })],
 })
