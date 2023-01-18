@@ -153,7 +153,6 @@ export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
 }
 
 export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRenderingContext2D, draw_background: boolean) {
-    console.log(redraw_background);
     if ((redraw_background || draw_background) && game_loaded) {
         bg_ctx.fillStyle = "#505050";
         bg_ctx.fillRect(0, 0, bg_ctx.canvas.width, bg_ctx.canvas.height);
