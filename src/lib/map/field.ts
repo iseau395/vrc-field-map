@@ -90,7 +90,7 @@ export function update_field(input: Input) {
 }
 
 let game_loaded = false;
-let game = new Promise<Game>();
+let game = null;
 
 async function load_path_async() {
     new (await import("./paths/path")).Path();
@@ -127,7 +127,7 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
     ctx.strokeStyle = "#7C7C7C";
     ctx.stroke();
 
-    (await game).draw_static(ctx);
+    game.draw_static(ctx);
 
     ctx.strokeStyle = "#505050";
     ctx.lineWidth = 10 * inch_pixel_ratio;
@@ -153,13 +153,13 @@ export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
 }
 
 export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRenderingContext2D, draw_background: boolean) {
-    if (redraw_background || draw_background || game_loaded) {
+    console.log(redraw_background);
+    if ((redraw_background || draw_background) && game_loaded) {
         bg_ctx.fillStyle = "#505050";
         bg_ctx.fillRect(0, 0, bg_ctx.canvas.width, bg_ctx.canvas.height);
 
         draw_field_bg(bg_ctx);
         redraw_background = false;
-        game_loaded = false;
     }
 
     fg_ctx.clearRect(0, 0, fg_ctx.canvas.width, fg_ctx.canvas.height);
