@@ -1,6 +1,5 @@
 import type { Game } from "./games/game";
 import { draw_objects, update_objects } from "./objects/object";
-import type { Path } from "./paths/path";
 import type { Input } from "./types";
 import { grid_enabled } from "../../stores/settings";
 
@@ -25,7 +24,7 @@ export function translate_cords(x: number, y: number) {
     return {
         x: (x - field_x) / field_scale,
         y: (y - field_y) / field_scale
-    }
+    };
 }
 
 let last_mouse_x: number;
@@ -58,7 +57,7 @@ export function update_field(input: Input) {
     const translated_cords = translate_cords(
         input.mouse_x,
         input.mouse_y
-    )
+    );
 
     const transated_input = {
         ...input,
@@ -91,14 +90,18 @@ export function update_field(input: Input) {
 }
 
 let game_loaded = false;
-const game = new Promise<Game>(async resolve => {
-    resolve(new (await import("./games/spin-up/spin-up")).SpinUp());
-    game_loaded = true;
-});
+let game = new Promise<Game>();
 
-new Promise<Path>(async resolve => {
-    resolve(new (await import("./paths/path")).Path());
-});
+async function load_path_async() {
+    new (await import("./paths/path")).Path();
+}
+async function load_game_async() {
+    game = new (await import("./games/spin-up/spin-up")).SpinUp();
+    game_loaded = true;
+}
+
+load_game_async();
+load_path_async();
 
 const cache_scale = 3.5;
 const bg_cache = document.createElement("canvas");
@@ -121,7 +124,7 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
         ctx.lineTo(field_side * inch_pixel_ratio, (field_side * inch_pixel_ratio * i) / 6);
     }
     ctx.lineWidth = 1 * inch_pixel_ratio;
-    ctx.strokeStyle = "#7C7C7C"
+    ctx.strokeStyle = "#7C7C7C";
     ctx.stroke();
 
     (await game).draw_static(ctx);
