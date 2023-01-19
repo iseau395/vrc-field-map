@@ -6,7 +6,7 @@
     export let og_y: number;
 
     export let name: string;
-    export let options: ContextMenuOption[] | null = null;
+    export let options: ContextMenuOption[];
 
     let submenu_visible = false;
     function onmouseenter() {
@@ -27,8 +27,8 @@
     </span>
     {/if}
 
-    {#if submenu_visible && options != null}
-    <ContextMenu x={14} y={0} og_x={og_x} og_y={og_y} on:mouseenter={onmouseenter} on:mouseleave={onmouseleave} options={options}/>
+    {#if submenu_visible && options}
+    <ContextMenu x={140} y={0} og_x={og_x} og_y={og_y} options={options}/>
     {/if}
 </div>
 

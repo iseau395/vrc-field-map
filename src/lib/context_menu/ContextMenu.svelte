@@ -27,7 +27,7 @@
 <span style="left: {x}px; top:{y}px;" on:contextmenu|preventDefault>
     <div on:mouseenter on:mouseleave>
         {#each options as option}
-        <ContextMenuButton name={option.name} options={option.options ?? []} og_x={x ?? og_x} og_y={y ?? og_y} on:click={option.on_select ? () => button_pressed(option.on_select) : undefined}/>
+        <ContextMenuButton name={option.name} options={option.options ?? null} og_x={x ?? og_x} og_y={y ?? og_y} on:click={option.on_select ? () => button_pressed(option.on_select) : undefined}/>
         {/each}
     </div>
 </span>
@@ -36,6 +36,7 @@
     div {
         width: calc(100% - 10px);
         height: 100%;
+        margin: 0;
 
         user-select: none;
 
@@ -46,7 +47,7 @@
 
         background-color: #303030;
 
-        display: flex;
+        display: inline-flex;
         align-items: center;
         flex-direction: column;
     }
