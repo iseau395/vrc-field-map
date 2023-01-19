@@ -1,7 +1,5 @@
-import { describe, it, expect } from "vitest"; 
+import { describe, test, expect } from "vitest"; 
 
-describe("test", () => {
-    it("true", () => {
-        expect(true).toBeTruthy();
-    });
+test("always success", () => {
+    expect(true).toBeTruthy();
 });

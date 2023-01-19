@@ -156,6 +156,8 @@ export function draw_objects(ctx: CanvasRenderingContext2D) {
 }
 
 export function update_objects(input: Input) {
+    debugger;
+
     if (selection != -1 && input.mouse_button == 0) {
         set_cursor("grabbing");
 
