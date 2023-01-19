@@ -85,7 +85,7 @@ export class SpinUp implements Game {
         new Disc(field_side + field_side / 12 * 2, field_side / 20 * 11),
         new Disc(field_side + field_side / 12 * 2, field_side / 20 * 12),
         new Disc(field_side + field_side / 12 * 2, field_side / 20 * 13),
-    ]
+    ];
 
     constructor() {
         register_insert_option({

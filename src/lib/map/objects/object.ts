@@ -7,7 +7,7 @@ const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
     update: new Map()
 };
 
-const objects = new Map<number, any>();
+const objects = new Map<number, { x: number, y: number }>();
 
 // Decorators
 
@@ -16,9 +16,9 @@ const id_symbol = Symbol("ObjectID");
 
 let current_id = 0;
 
-export function object<T extends { new(...args: any[]): {} }>(Base: T) {
+export function object<T extends { new(...args: unknown[]): object }>(Base: T) {
     return class extends Base {
-        constructor(...args: any[]) {
+        constructor(...args: unknown[]) {
             super(...args);
 
             this[id_symbol] = current_id++;
@@ -28,13 +28,13 @@ export function object<T extends { new(...args: any[]): {} }>(Base: T) {
             const object_callbacks = Base.prototype[callback_symbol];
 
             if (object_callbacks) {
-                object_callbacks.forEach((value: (...args: any[]) => void, key: string) => {
+                object_callbacks.forEach((value: (...args: unknown[]) => void, key: string) => {
                     callbacks[key].set(this[id_symbol], (ctx: CanvasRenderingContext2D) =>
                         value.apply(this, [ctx]));
                 });
             }
         }
-    }
+    };
 }
 
 // Collsision
@@ -50,12 +50,12 @@ type Collision = [type: CollisionType.BOX, x_offset: number, y_offset: number, w
 [type: CollisionType.CIRCLE, x_offset: number, y_offset: number, radius: number];
 
 export function collisionbox(x_offset: number, y_offset: number, width: number, height: number) {
-    return function (target: any) {
+    return function (target: unknown) {
         add_box_collision(target.prototype, x_offset, y_offset, width, height);
     };
 }
 export function collisioncircle(x_offset: number, y_offset: number, radius: number) {
-    return function (target: any) {
+    return function (target: unknown) {
         add_circle_collision(target.prototype, x_offset, y_offset, radius);
     };
 }
@@ -84,7 +84,7 @@ export function in_collision<T>(object: T, x: number, y: number) {
             if (collision[1] < x && collision[2] < y &&
                 collision[1] + collision[3] > x &&
                 collision[2] + collision[4] > y) {
-                return true
+                return true;
             }
         }
     
@@ -100,9 +100,9 @@ export function in_collision<T>(object: T, x: number, y: number) {
 
 export let selection = -1;
 
-export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[], x: number, y: number }>(Base: T) {
+export function dragable<T extends new (...args: unknown[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[], x: number, y: number }>(Base: T) {
     return class extends Base {
-        constructor(...args: any[]) {
+        constructor(...args: unknown[]) {
             super(...args);
 
             if (!this[callback_symbol])
@@ -117,14 +117,14 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
                         selection = this[id_symbol];
                 } else if (selection == -1 && this[collision_symbol]) {
                     if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
-                        set_cursor("grab")
+                        set_cursor("grab");
                 }
 
                 if (update_func)
                     update_func(input);
             });
         }
-    }
+    };
 }
 
 // Events
@@ -136,12 +136,12 @@ interface Events {
 }
 
 export function on<E extends keyof Events>(event: E) {
-    return (target: any, _: any, descriptor: TypedPropertyDescriptor<Events[E]>) => {
+    return (target: unknown, _: unknown, descriptor: TypedPropertyDescriptor<Events[E]>) => {
         if (!target[callback_symbol])
             target[callback_symbol] = new Map<string, Events[keyof Events]>();
 
         target[callback_symbol].set(event, descriptor.value);
-    }
+    };
 }
 
 // Update functions
@@ -157,7 +157,7 @@ export function draw_objects(ctx: CanvasRenderingContext2D) {
 
 export function update_objects(input: Input) {
     if (selection != -1 && input.mouse_button == 0) {
-        set_cursor("grabbing")
+        set_cursor("grabbing");
 
         const selected_object = objects.get(selection);
 

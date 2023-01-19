@@ -6,11 +6,11 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 export default defineConfig({
     base: "/vrc-field-map/",
     build: {
-        outDir: './dist'
+        outDir: "./dist"
     },
     test: {
         include: ['test/**/*.test.ts'],
         environment: 'jsdom'
     },
-    plugins: [svelte({ hot: !process.env.VITEST })],
-})
+    plugins: [svelte()],
+});

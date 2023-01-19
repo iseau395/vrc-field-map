@@ -10,14 +10,14 @@
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
 
-    let interval: NodeJS.Timer;
+    let interval: ReturnType<typeof setInterval>;
     let anim_frame: number;
 
     const context_menu = {
         x: 0,
         y: 0,
         visible: false
-    }
+    };
 
     onMount(() => {
         const bg_ctx = bg_canvas.getContext("2d", { alpha: false });

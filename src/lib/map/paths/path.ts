@@ -23,7 +23,7 @@ export class Path {
 
                 this.path.push(new BezierCurve(x, y, x, y-15, x+20, y-15, x+20, y));
             }
-        })
+        });
     }
 
     @on("postrender")
