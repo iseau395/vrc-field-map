@@ -8,7 +8,6 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest",
-    "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
     "lint": "eslint ./src ./test",
     "lint:fix": "eslint ./src ./test --fix"
