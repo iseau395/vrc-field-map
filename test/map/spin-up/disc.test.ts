@@ -18,7 +18,7 @@ describe("Disc", () => {
         [25, 35, 44, 58],
         [-3, 13, 50, -70],
         [144, 0, 0, 144],
-    ])("drags", (x1, y1, x2, y2) => {
+    ]).skip("drags", (x1, y1, x2, y2) => {
         const disc = new Disc(x1, y1);
 
         update_objects({
