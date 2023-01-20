@@ -1,8 +1,7 @@
 import { inch_pixel_ratio } from "../field";
-import { object, on } from "../objects/object";
+import { on_event } from "../objects/object";
 import { Point } from "./point";
 
-@object
 export class BezierCurve {
     points: [Point, Point, Point, Point];
 
@@ -13,9 +12,10 @@ export class BezierCurve {
             new Point(x3, y3),
             new Point(x4, y4)
         ];
+
+        on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
     }
 
-    @on("postrender")
     render(ctx: CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.moveTo(this.points[0].x, this.points[0].y);

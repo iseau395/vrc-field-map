@@ -16,9 +16,9 @@ const id_symbol = Symbol("ObjectID");
 
 let current_id = 0;
 
-export function object<T extends { new(...args: unknown[]): object }>(Base: T) {
+export function object<T extends { new(...args: any[]): { x: number, y: number } }>(Base: T) {
     return class extends Base {
-        constructor(...args: unknown[]) {
+        constructor(...args: any[]) {
             super(...args);
 
             this[id_symbol] = current_id++;
@@ -50,12 +50,12 @@ type Collision = [type: CollisionType.BOX, x_offset: number, y_offset: number, w
 [type: CollisionType.CIRCLE, x_offset: number, y_offset: number, radius: number];
 
 export function collisionbox(x_offset: number, y_offset: number, width: number, height: number) {
-    return function (target: unknown) {
+    return function (target: any) {
         add_box_collision(target.prototype, x_offset, y_offset, width, height);
     };
 }
 export function collisioncircle(x_offset: number, y_offset: number, radius: number) {
-    return function (target: unknown) {
+    return function (target: any) {
         add_circle_collision(target.prototype, x_offset, y_offset, radius);
     };
 }
@@ -100,9 +100,9 @@ export function in_collision<T>(object: T, x: number, y: number) {
 
 export let selection = -1;
 
-export function dragable<T extends new (...args: unknown[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[], x: number, y: number }>(Base: T) {
+export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[], x: number, y: number }>(Base: T) {
     return class extends Base {
-        constructor(...args: unknown[]) {
+        constructor(...args: any[]) {
             super(...args);
 
             if (!this[callback_symbol])
@@ -144,6 +144,11 @@ export function on<E extends keyof Events>(event: E) {
     };
 }
 
+let on_event_id = -1;
+export function on_event<E extends keyof Events>(event: E, callback: Events[E]) {
+    callbacks[event].set(on_event_id--, callback);
+}
+
 // Update functions
 
 export function draw_objects(ctx: CanvasRenderingContext2D) {
@@ -156,8 +161,6 @@ export function draw_objects(ctx: CanvasRenderingContext2D) {
 }
 
 export function update_objects(input: Input) {
-    debugger;
-
     if (selection != -1 && input.mouse_button == 0) {
         set_cursor("grabbing");
 

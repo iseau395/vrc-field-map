@@ -1,4 +1,3 @@
-import type { Game } from "./games/game";
 import { draw_objects, update_objects } from "./objects/object";
 import type { Input } from "./types";
 import { grid_enabled } from "../../stores/settings";
