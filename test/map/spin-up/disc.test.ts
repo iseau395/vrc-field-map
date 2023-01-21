@@ -1,7 +1,7 @@
-import { describe, test, expect, afterEach, vi } from "vitest";
-import { Disc } from "/src/lib/map/games/spin-up/disc";
-import { update_objects } from "/src/lib/map/objects/object";
-import { inch_pixel_ratio } from "/src/lib/map/field";
+import { describe, test, expect } from "vitest";
+import { update_objects } from "src/lib/map/objects/object";
+import { Disc } from "src/lib/map/games/spin-up/disc";
+import { inch_pixel_ratio } from "src/lib/map/field";
 
 describe("Disc", () => {
     test.each([
@@ -14,11 +14,11 @@ describe("Disc", () => {
         expect(disc.y / inch_pixel_ratio).toBe(y);
     });
 
-    test.each([
+    test.skip.each([
         [25, 35, 44, 58],
         [-3, 13, 50, -70],
         [144, 0, 0, 144],
-    ]).skip("drags", (x1, y1, x2, y2) => {
+    ])("drags", (x1, y1, x2, y2) => {
         const disc = new Disc(x1, y1);
 
         update_objects({
