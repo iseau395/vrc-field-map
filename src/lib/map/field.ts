@@ -102,7 +102,7 @@ async function load_game_async() {
 load_game_async();
 load_path_async();
 
-const cache_scale = 3.5;
+export const cache_scale = 3.5;
 const bg_cache = document.createElement("canvas");
 bg_cache.width = field_side * inch_pixel_ratio * cache_scale;
 bg_cache.height = field_side * inch_pixel_ratio * cache_scale;
