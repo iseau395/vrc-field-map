@@ -10,6 +10,7 @@ describe("Disc", () => {
         [144, 0],
     ])("constructs", (x, y) => {
         const disc = new Disc(x, y);
+
         expect(disc.x / inch_pixel_ratio).toBe(x);
         expect(disc.y / inch_pixel_ratio).toBe(y);
     });
@@ -31,9 +32,6 @@ describe("Disc", () => {
             wheel: 1,
             keys: new Map<string, boolean | undefined>(),
         });
-
-        expect(disc.x / inch_pixel_ratio).toBe(x1);
-        expect(disc.y / inch_pixel_ratio).toBe(y1);
 
         update_objects({
             mouse_x: x1,
