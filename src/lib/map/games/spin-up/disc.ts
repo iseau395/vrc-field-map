@@ -5,6 +5,8 @@ const radius = 5.5/2 * inch_pixel_ratio;
 let cached = false;
 let disc_cache = document.createElement("canvas");
 let disc_cache_ctx = undefined;
+disc_cache.width = radius*cache_scale*2;
+disc_cache.height = radius*cache_scale*2;
 
 @object
 @collisioncircle(0, 0, radius)
@@ -22,6 +24,7 @@ export class Disc {
     public render(ctx: CanvasRenderingContext2D) {
         if (!disc_cache_ctx) {
             disc_cache_ctx = disc_cache.getContext("2d");
+
 
             disc_cache_ctx.beginPath();
             disc_cache_ctx.arc(radius * cache_scale, radius * cache_scale, radius * cache_scale, 0, 2 * Math.PI);
