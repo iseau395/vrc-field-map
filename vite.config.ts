@@ -7,6 +7,9 @@ export default defineConfig({
     build: {
         outDir: "./dist"
     },
+    define: {
+      "import.meta.vitest": "undefined",
+    },
     test: {
         include: ['test/**/*.test.ts'],
         environment: 'jsdom',
