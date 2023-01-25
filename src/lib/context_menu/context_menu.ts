@@ -1,13 +1,15 @@
 import { inch_pixel_ratio } from "../map/field";
 import { settings_screen_visible } from "../../stores/settings";
 
-export type ContextMenuOption = {
-    name: string,
-} & ({
+export interface ContextMenuOptionNested {
+    name: string;
     options: ContextMenuOption[];
-} | {
+}
+export interface ContextMenuOptionCallback {
+    name: string;
     on_select: (x: number, y: number) => void;
-});
+}
+export type ContextMenuOption = ContextMenuOptionCallback | ContextMenuOptionNested;
 
 export const options: ContextMenuOption[] = [
     {
@@ -24,6 +26,7 @@ export const options: ContextMenuOption[] = [
     }
 ];
 
-export function register_insert_option(data: ContextMenuOption) {
-    options[0].options.push(data);
+export function register_insert_option(data: ContextMenuOptionCallback) {
+    if ("options" in options[0])
+        options[0].options.push(data);
 }

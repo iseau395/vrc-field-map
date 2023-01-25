@@ -1,7 +1,7 @@
 <script lang="ts">
     import { translate_cords } from "../map/field";
     import ContextMenuButton from "./ContextMenuButton.svelte";
-    import type { ContextMenuOption } from "./context_menu";
+    import type { ContextMenuOption, ContextMenuOptionCallback } from "./context_menu";
 
     export let x: number;
     export let y: number;
@@ -11,7 +11,7 @@
 
     x += 1;
 
-    function button_pressed(callback: ContextMenuOption["on_select"]) {
+    function button_pressed(callback: ContextMenuOptionCallback["on_select"]) {
         if (!callback)
             return;
 
@@ -27,7 +27,7 @@
 <span style="left: {x}px; top:{y}px;" on:contextmenu|preventDefault>
     <div on:mouseenter on:mouseleave>
         {#each options as option}
-        <ContextMenuButton name={option.name} options={option.options ?? null} og_x={x ?? og_x} og_y={y ?? og_y} on:click={option.on_select ? () => button_pressed(option.on_select) : undefined}/>
+        <ContextMenuButton name={option.name} options={"options" in option ? option.options : null} og_x={x ?? og_x} og_y={y ?? og_y} on:click={"on_select" in option ? () => button_pressed("on_select" in option ? option.on_select : null) : undefined}/>
         {/each}
     </div>
 </span>
