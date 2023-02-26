@@ -18,7 +18,7 @@ export const options: ContextMenuOption[] = [
     },
     {
         name: "Copy Cords",
-        on_select: (x, y) => navigator.clipboard.writeText(`${x / inch_pixel_ratio}, ${y / inch_pixel_ratio}`)
+        on_select: (x, y) => navigator.clipboard.writeText(`${Math.round(y / inch_pixel_ratio * 100) / 100}, ${Math.round(x / inch_pixel_ratio * 100) / 100}`)
     },
     {
         name: "Settings",
