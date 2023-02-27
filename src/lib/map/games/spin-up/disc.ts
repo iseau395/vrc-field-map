@@ -39,6 +39,8 @@ export class Disc {
 
         }
 
-        ctx.drawImage(disc_cache, this.x - radius, this.y - radius, radius * 2, radius * 2);
+        ctx.scale(1/cache_scale, 1/cache_scale);
+        ctx.drawImage(disc_cache, (this.x - radius) * cache_scale, (this.y - radius) * cache_scale, radius * cache_scale * 2, radius * cache_scale * 2);
+        ctx.scale(cache_scale, cache_scale);
     }
 }

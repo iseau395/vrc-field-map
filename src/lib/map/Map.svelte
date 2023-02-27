@@ -30,7 +30,7 @@
             gridless_mouse_y: 0,
             mouse_button: -1,
             mouse_button_changed: false,
-            wheel: 1,
+            wheel: -1,
             keys: new Map<string, boolean | undefined>(),
         };
 
@@ -49,15 +49,15 @@
             });
 
             window.addEventListener("mousemove", ev => {
-                input.mouse_x = ev.clientX;
-                input.mouse_y = ev.clientY;
+                input.mouse_x = ev.clientX * window.devicePixelRatio;
+                input.mouse_y = ev.clientY * window.devicePixelRatio;
             });
             fg_canvas.addEventListener("mousedown", ev => {
                 input.mouse_button = ev.button as 0 | 1 | 2;
                 input.mouse_button_changed = true;
 
-                input.mouse_x = ev.clientX;
-                input.mouse_y = ev.clientY;
+                input.mouse_x = ev.clientX * window.devicePixelRatio;
+                input.mouse_y = ev.clientY * window.devicePixelRatio;
 
                 context_menu.visible = false;
             });
@@ -78,15 +78,15 @@
 
             fg_canvas.addEventListener("wheel", ev => {
                 input.wheel += ev.deltaY * 0.01;
-                input.wheel = Math.min(Math.max(-4, input.wheel), -.75);
+                input.wheel = Math.min(Math.max(-10, input.wheel), -.75);
             }, { passive: true });
         }
 
         function resize() {
-            bg_canvas.width = bg_canvas.clientWidth;
-            bg_canvas.height = bg_canvas.clientHeight;
-            fg_canvas.width = fg_canvas.clientWidth;
-            fg_canvas.height = fg_canvas.clientHeight;
+            bg_canvas.width = window.innerWidth * window.devicePixelRatio;
+            bg_canvas.height = window.innerHeight * window.devicePixelRatio;
+            fg_canvas.width = window.innerWidth * window.devicePixelRatio;
+            fg_canvas.height = window.innerHeight * window.devicePixelRatio;
 
             draw_field(fg_ctx, bg_ctx, true);
         }
@@ -149,6 +149,8 @@
     canvas {
         width: 100%;
         height: 100%;
+
+        object-fit: contain;
 
         position: absolute;
     }
