@@ -7,6 +7,8 @@
     import { draw_field, update_field, check_cursor } from "./field";
     import type { Input } from "./types";
 
+    import PathSidebar from "./paths/PathSidebar.svelte";
+
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
 
@@ -144,6 +146,8 @@
 <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
     <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
 </a>
+
+<!-- <PathSidebar /> -->
 
 <style>
     canvas {
