@@ -45,8 +45,6 @@ export function update_field(input: Input) {
     field_scale = Math.log2(input.wheel * -1);
     field_scale = Math.min(Math.max(.75, field_scale), 10);
 
-    console.log(input.wheel, field_scale);
-
     if (last_scale - field_scale != 0) {
         field_x -= ((field_side * inch_pixel_ratio * field_scale) - (field_side * inch_pixel_ratio * last_scale)) *
                     ((input.mouse_x - field_x) / last_scale / inch_pixel_ratio / 144);

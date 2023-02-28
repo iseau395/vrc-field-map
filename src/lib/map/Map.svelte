@@ -7,7 +7,7 @@
     import { draw_field, update_field, check_cursor } from "./field";
     import type { Input } from "./types";
 
-    import PathSidebar from "./paths/PathSidebar.svelte";
+    import PathSidebar, { sidebar_visible } from "./paths/PathSidebar.svelte";
 
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
@@ -38,6 +38,7 @@
 
         // Input events
         {
+
             window.addEventListener("keydown", ev => {
                 ev.preventDefault();
 
@@ -51,15 +52,15 @@
             });
 
             window.addEventListener("mousemove", ev => {
-                input.mouse_x = ev.clientX * window.devicePixelRatio;
-                input.mouse_y = ev.clientY * window.devicePixelRatio;
+                input.mouse_x = ev.clientX;
+                input.mouse_y = ev.clientY;
             });
             fg_canvas.addEventListener("mousedown", ev => {
                 input.mouse_button = ev.button as 0 | 1 | 2;
                 input.mouse_button_changed = true;
 
-                input.mouse_x = ev.clientX * window.devicePixelRatio;
-                input.mouse_y = ev.clientY * window.devicePixelRatio;
+                input.mouse_x = ev.clientX;
+                input.mouse_y = ev.clientY;
 
                 context_menu.visible = false;
             });
@@ -85,10 +86,10 @@
         }
 
         function resize() {
-            bg_canvas.width = window.innerWidth * window.devicePixelRatio;
-            bg_canvas.height = window.innerHeight * window.devicePixelRatio;
-            fg_canvas.width = window.innerWidth * window.devicePixelRatio;
-            fg_canvas.height = window.innerHeight * window.devicePixelRatio;
+            bg_canvas.width = window.innerWidth;
+            bg_canvas.height = window.innerHeight;
+            fg_canvas.width = window.innerWidth;
+            fg_canvas.height = window.innerHeight;
 
             draw_field(fg_ctx, bg_ctx, true);
         }
@@ -147,7 +148,9 @@
     <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
 </a>
 
-<!-- <PathSidebar /> -->
+{#if $sidebar_visible}
+<PathSidebar />
+{/if}
 
 <style>
     canvas {

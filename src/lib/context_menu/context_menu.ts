@@ -1,5 +1,6 @@
 import { inch_pixel_ratio } from "../map/field";
 import { settings_screen_visible } from "../../stores/settings";
+import { sidebar_visible } from "../map/paths/PathSidebar.svelte";
 
 export interface ContextMenuOptionNested {
     name: string;
@@ -23,6 +24,12 @@ export const options: ContextMenuOption[] = [
     {
         name: "Settings",
         on_select: () => settings_screen_visible.set(true)
+    },
+    {
+        name: "Edit Path",
+        on_select: () => {
+            sidebar_visible.set(true);
+        }
     }
 ];
 

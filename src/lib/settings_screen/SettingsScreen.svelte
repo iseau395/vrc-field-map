@@ -16,11 +16,9 @@
     <span class="settings-popup">
         <h1>
             Settings
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <svg class="svelte-qag648" on:click={on_close}>
-                <line x1="5" y1="5" x2="35" y2="35" stroke="white" stroke-width="4" />
-                <line x1="35" y1="5" x2="5" y2="35" stroke="white" stroke-width="4" />
-            </svg>
+            <button on:click={on_close}>
+                <img src="./media/exit.svg" />
+            </button>
         </h1>
         Grid: <Switch bind:value={$grid_enabled}/><br/>
     </span>
@@ -81,10 +79,20 @@
         justify-content: space-between;
     }
 
-    svg {
-        width: 50px;
-        height: 50px;
+    img {
+        width: 30px;
+        height: 30px;
 
         cursor: pointer;
+    }
+
+    button {
+        height: 30px;
+        width: 30px;
+
+        padding: 0;
+
+        background-color: transparent;
+        border-style: none;
     }
 </style>
