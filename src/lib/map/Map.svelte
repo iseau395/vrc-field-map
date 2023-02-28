@@ -38,6 +38,9 @@
 
         // Input events
         {
+            window.addEventListener("focus", ev => {
+                input.keys.clear();
+            });
 
             window.addEventListener("keydown", ev => {
                 ev.preventDefault();
