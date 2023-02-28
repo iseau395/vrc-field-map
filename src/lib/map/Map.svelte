@@ -12,8 +12,8 @@
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
 
-    let interval: ReturnType<typeof setInterval>;
-    let anim_frame: number;
+    // let interval: ReturnType<typeof setInterval> | null = null;
+    let anim_frame: number | null = null;
 
     const context_menu = {
         x: 0,
@@ -100,6 +100,7 @@
 
         let last_wheel = input.wheel;
         function tick() {
+            console.log("tick");
 
             let any_true = false;
             for (const value of input.keys.values()) {
@@ -122,12 +123,14 @@
         }
 
         function render() {
+            tick();
+
             draw_field(fg_ctx, bg_ctx, false);
 
             anim_frame = requestAnimationFrame(render);
         }
 
-        interval = setInterval(tick, 20);
+        // interval = setInterval(tick, 20);
         anim_frame = requestAnimationFrame(render);
 
         update_field(input);
@@ -135,8 +138,10 @@
     });
 
     onDestroy(() => {
-        clearTimeout(interval);
-        cancelAnimationFrame(anim_frame);
+        // if (interval != null)
+        //     clearTimeout(interval);
+        if (anim_frame != null)
+            cancelAnimationFrame(anim_frame);
     });
 </script>
 

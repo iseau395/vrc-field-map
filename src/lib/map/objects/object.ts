@@ -113,8 +113,12 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
             this[callback_symbol].set("update", (input: Input) => {
                 if (selection == -1 && input.mouse_button == 0 && this[collision_symbol]) {
 
-                    if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
+                    if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt")) {
                         selection = this[id_symbol];
+
+                        this.x = input.mouse_x;
+                        this.y = input.mouse_y;
+                    }
                 } else if (selection == -1 && this[collision_symbol]) {
                     if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
                         set_cursor("grab");
