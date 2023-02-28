@@ -5,7 +5,18 @@
 </script>
 
 <script lang="ts">
+    import PathItem from "./PathItem.svelte";
 
+
+    const segments = [{
+        label: "test1"
+    },{
+        label: "test2"
+    },{
+        label: "test3"
+    },{
+        label: "test4"
+    }];
 </script>
 
 <aside>
@@ -15,9 +26,11 @@
             <img src="./media/exit.svg" />
         </button>
     </h1>
-    <div>
-
-    </div>
+    <ul>
+        {#each segments as segment}
+        <PathItem label={segment.label} />
+        {/each}
+    </ul>
 </aside>
 
 <style>
@@ -51,10 +64,12 @@
         cursor: pointer;
     }
 
-    div {
+    ul {
         overflow: scroll;
         display: flex;
         flex-direction: column;
+
+        padding: 0;
     }
 
     h1 {
