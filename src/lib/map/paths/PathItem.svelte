@@ -9,7 +9,11 @@
 <style>
     li {
         width: calc(100% - 10px);
+<<<<<<< HEAD
         height: 40px;
+=======
+        height: 50px;
+>>>>>>> cbe4d898443285132e32aa956a96ffbcc9439fb6
 
         border-radius: 10px;
         padding: 5px;

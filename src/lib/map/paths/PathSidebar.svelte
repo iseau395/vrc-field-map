@@ -16,6 +16,30 @@
         label: "test3"
     },{
         label: "test4"
+    },{
+        label: "test1"
+    },{
+        label: "test2"
+    },{
+        label: "test3"
+    },{
+        label: "test4"
+    },{
+        label: "test1"
+    },{
+        label: "test2"
+    },{
+        label: "test3"
+    },{
+        label: "test4"
+    },{
+        label: "test1"
+    },{
+        label: "test2"
+    },{
+        label: "test3"
+    },{
+        label: "test4"
     }];
 </script>
 
@@ -23,7 +47,7 @@
     <h1>
         Path Editor
         <button on:click={() => $sidebar_visible = false}>
-            <img src="./media/exit.svg" />
+            <img src="./media/exit.svg" alt="Close sidebar"/>
         </button>
     </h1>
     <ul>
@@ -40,6 +64,7 @@
         height: calc(100% - 125px);
 
         padding: 20px;
+        padding-right: 15px;
 
         position: absolute;
         z-index: 1;
@@ -50,6 +75,9 @@
 
         background-color: #303030;
         color: white;
+
+        display: flex;
+        flex-direction: column;
     }
 
     button, img {
@@ -65,11 +93,16 @@
     }
 
     ul {
-        overflow: scroll;
-        display: flex;
+        height: auto;
+
+        overflow-y: auto;
+        display: flexbox;
         flex-direction: column;
 
         padding: 0;
+        padding-right: 5px;
+
+        flex: 1 1 auto;
     }
 
     h1 {
