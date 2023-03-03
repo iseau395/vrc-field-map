@@ -2,7 +2,7 @@ import { draw_objects, update_objects } from "./objects/object";
 import type { Input } from "./types";
 import { grid_enabled } from "../../stores/settings";
 
-export let inch_pixel_ratio = 5 / window.devicePixelRatio;
+export const inch_pixel_ratio = 5 / window.devicePixelRatio;
 export const field_side = 144;
 
 let redraw_background = true;

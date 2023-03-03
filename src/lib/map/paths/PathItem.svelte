@@ -9,7 +9,7 @@
 <style>
     li {
         width: calc(100% - 10px);
-        height: 40px;
+        height: 50px;
 
         border-radius: 10px;
         padding: 5px;
