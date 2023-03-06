@@ -11,12 +11,14 @@
 
     let canvas: HTMLCanvasElement;
 
+    let unsub;
+
     onMount(() => {
         if (point) return;
 
         const ctx = canvas.getContext("2d");
 
-        const unsubscribe = segment.subscribe(() => {
+        unsub = segment.subscribe(() => {
             let min_x = segment.points[0].x;
             let max_x = segment.points[0].x;
             let min_y = segment.points[0].y;
@@ -34,25 +36,29 @@
                     max_y = point.y;
             }
 
-            const x_scale = 40/Math.abs(min_x - max_x);
-            const y_scale = 40/Math.abs(min_y - max_y);
+            const x_scale = 40/Math.abs(max_x - min_x);
+            const y_scale = 40/Math.abs(max_y - min_y);
             const scale = Math.min(x_scale, y_scale)
 
             ctx.restore();
             ctx.clearRect(0, 0, 50, 50);
             ctx.save();
 
+            console.log((max_x - min_x)*scale);
+
             ctx.scale(scale, scale);
-            ctx.translate(-min_x + 5, -min_y + 5);
+            ctx.translate(-min_x + (50 - (max_x - min_x)*scale)/2/scale, -min_y + (50 - (max_y - min_y)*scale)/2/scale);
 
             segment.render(ctx);
             for (const point of segment.points) {
                 point.render(ctx);
             }
         });
-
-        onDestroy(unsubscribe);
     });
+
+
+    if (unsub)
+        onDestroy(unsub);
 </script>
 
 <li>

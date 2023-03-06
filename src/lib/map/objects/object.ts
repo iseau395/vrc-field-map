@@ -181,13 +181,15 @@ export function update_objects(input: Input) {
 
         const selected_object = objects.get(selection);
 
-        if ("notify" in selected_object && (selected_object.x != input.mouse_x || selected_object.y != input.mouse_y))
-            selected_object.notify();
+        let changed = selected_object.x != input.mouse_x || selected_object.y != input.mouse_y;
 
         selected_object.x = input.mouse_x;
         selected_object.y = input.mouse_y;
 
         objects.set(selection, selected_object);
+
+        if ("notify" in selected_object && changed)
+            selected_object.notify();
     } else if (input.mouse_button != 0) {
         selection = -1;
     }
