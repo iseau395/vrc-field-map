@@ -1,4 +1,4 @@
-import { inch_pixel_ratio } from "../field";
+import { inch_pixel_ratio } from "../constants";
 import { on_event } from "../objects/object";
 import { Point } from "./point";
 
@@ -12,6 +12,10 @@ export class BezierCurve {
             new Point(x3, y3),
             new Point(x4, y4)
         ];
+
+        for (const point of this.points) {
+            point.subscribe(() => this.notify());
+        }
 
         on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
     }
@@ -40,4 +44,22 @@ export class BezierCurve {
         ctx.setLineDash([]);
     }
 
+    readonly subscribers = [];
+    subscribe(callback: (point: Point) => void) {
+        callback(this);
+
+        this.subscribers.push(callback);
+
+        const subscriber = this.subscribers.length - 1;
+
+        return () => {
+            this.subscribers.splice(subscriber, 1);
+        };
+    }
+
+    notify() {
+        for (const callback of this.subscribers) {
+            callback(this);
+        };
+    }
 }

@@ -1,4 +1,4 @@
-import { field_side, inch_pixel_ratio } from "../../field";
+import { field_side, inch_pixel_ratio } from "../../constants";
 import type { Game } from "../game";
 import { Disc } from "./disc";
 import { Roller, RollerState } from "./roller";

@@ -1,4 +1,4 @@
-import { inch_pixel_ratio } from "../field";
+import { inch_pixel_ratio } from "../constants";
 import { collisioncircle, dragable, object, on } from "../objects/object";
 
 @object
@@ -20,5 +20,24 @@ export class Point {
 
         ctx.fillStyle = "#DD0000";
         ctx.fill();
+    }
+
+    readonly subscribers = [];
+    subscribe(callback: (point: Point) => void) {
+        callback(this);
+
+        this.subscribers.push(callback);
+
+        const subscriber = this.subscribers.length - 1;
+
+        return () => {
+            this.subscribers.splice(subscriber, 1);
+        };
+    }
+
+    notify() {
+        for (const callback of this.subscribers) {
+            callback(this);
+        };
     }
 }

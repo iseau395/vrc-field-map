@@ -1,4 +1,4 @@
-import { inch_pixel_ratio } from "../map/field";
+import { inch_pixel_ratio } from "../map/constants";
 import { settings_screen_visible } from "../../stores/settings";
 import { sidebar_visible } from "../map/paths/PathSidebar.svelte";
 

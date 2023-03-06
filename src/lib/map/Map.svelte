@@ -100,8 +100,6 @@
 
         let last_wheel = input.wheel;
         function tick() {
-            console.log("tick");
-
             let any_true = false;
             for (const value of input.keys.values()) {
                 if (value == true) {

@@ -1,4 +1,5 @@
-import { cache_scale, inch_pixel_ratio } from "../../field";
+import { inch_pixel_ratio } from "../../constants";
+import { cache_scale } from "../../field";
 import { object, collisioncircle, on, dragable } from "../../objects/object";
 
 const radius = 5.5/2 * inch_pixel_ratio;

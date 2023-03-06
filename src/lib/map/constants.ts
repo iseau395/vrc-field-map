@@ -8,3 +8,6 @@ export interface Input {
     wheel: number;
     keys: Map<string, boolean | null>;
 }
+
+export const inch_pixel_ratio = 5 / window.devicePixelRatio;
+export const field_side = 144;

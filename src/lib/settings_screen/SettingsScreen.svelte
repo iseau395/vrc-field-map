@@ -17,7 +17,7 @@
         <h1>
             Settings
             <button on:click={on_close}>
-                <img src="./media/exit.svg" />
+                <img src="./media/exit.svg" alt="Close Settings Menu"/>
             </button>
         </h1>
         Grid: <Switch bind:value={$grid_enabled}/><br/>

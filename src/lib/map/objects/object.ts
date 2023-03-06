@@ -1,4 +1,4 @@
-import type { Input } from "../types";
+import type { Input } from "../constants";
 import { set_cursor } from "../field";
 
 const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
@@ -7,7 +7,9 @@ const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
     update: new Map()
 };
 
-const objects = new Map<number, { x: number, y: number }>();
+type Object = { x: number, y: number, notify?: () => void };
+
+const objects = new Map<number, Object>();
 
 // Decorators
 
@@ -16,7 +18,7 @@ const id_symbol = Symbol("ObjectID");
 
 let current_id = 0;
 
-export function object<T extends { new(...args: any[]): { x: number, y: number } }>(Base: T) {
+export function object<T extends { new(...args: any[]): Object }>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -100,7 +102,7 @@ export function in_collision<T>(object: T, x: number, y: number) {
 
 export let selection = -1;
 
-export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[], x: number, y: number }>(Base: T) {
+export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[] } & Object>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -111,13 +113,19 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
             const update_func = this[callback_symbol].get("update") as Events["update"];
 
             this[callback_symbol].set("update", (input: Input) => {
+
+                let changed = false;
+
                 if (selection == -1 && input.mouse_button == 0 && this[collision_symbol]) {
 
                     if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt")) {
                         selection = this[id_symbol];
 
-                        this.x = input.mouse_x;
-                        this.y = input.mouse_y;
+                        if (this.x != input.mouse_x || this.y != input.mouse_y)
+                            changed = true;
+
+                        this.x = input.gridless_mouse_x;
+                        this.y = input.gridless_mouse_y;
                     }
                 } else if (selection == -1 && this[collision_symbol]) {
                     if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
@@ -126,6 +134,9 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
 
                 if (update_func)
                     update_func(input);
+
+                if ("notify" in this && changed)
+                    this.notify();
             });
         }
     };
@@ -169,6 +180,9 @@ export function update_objects(input: Input) {
         set_cursor("grabbing");
 
         const selected_object = objects.get(selection);
+
+        if ("notify" in selected_object && (selected_object.x != input.mouse_x || selected_object.y != input.mouse_y))
+            selected_object.notify();
 
         selected_object.x = input.mouse_x;
         selected_object.y = input.mouse_y;

@@ -6,53 +6,24 @@
 
 <script lang="ts">
     import PathItem from "./PathItem.svelte";
+    import { path } from "../field";
 
-
-    const segments = [{
-        label: "test1"
-    },{
-        label: "test2"
-    },{
-        label: "test3"
-    },{
-        label: "test4"
-    },{
-        label: "test1"
-    },{
-        label: "test2"
-    },{
-        label: "test3"
-    },{
-        label: "test4"
-    },{
-        label: "test1"
-    },{
-        label: "test2"
-    },{
-        label: "test3"
-    },{
-        label: "test4"
-    },{
-        label: "test1"
-    },{
-        label: "test2"
-    },{
-        label: "test3"
-    },{
-        label: "test4"
-    }];
+    let path_array = path.path;
+    path.on_path_updated(p => {
+        path_array = p;
+    })
 </script>
 
 <aside>
     <h1>
         Path Editor
-        <button on:click={() => $sidebar_visible = false}>
-            <img src="./media/exit.svg" alt="Close sidebar"/>
+        <button on:click={()=> $sidebar_visible = false}>
+            <img src="./media/exit.svg" alt="Close sidebar" />
         </button>
     </h1>
     <ul>
-        {#each segments as segment}
-        <PathItem label={segment.label} />
+        {#each path_array as segment}
+        <PathItem segment={segment} />
         {/each}
     </ul>
 </aside>
@@ -65,6 +36,7 @@
 
         padding: 20px;
         padding-right: 15px;
+        padding-left: 15px;
 
         position: absolute;
         z-index: 1;
@@ -80,7 +52,8 @@
         flex-direction: column;
     }
 
-    button, img {
+    button,
+    img {
         width: 30px;
         height: 30px;
 
@@ -95,14 +68,16 @@
     ul {
         height: auto;
 
-        overflow-y: auto;
         display: flexbox;
         flex-direction: column;
 
+        flex: 1 1 auto;
+
+        overflow-y: auto;
+
         padding: 0;
         padding-right: 5px;
-
-        flex: 1 1 auto;
+        padding-left: 5px;
     }
 
     h1 {

@@ -1,9 +1,8 @@
 import { draw_objects, update_objects } from "./objects/object";
-import type { Input } from "./types";
+import type { Input } from "./constants";
 import { grid_enabled } from "../../stores/settings";
-
-export const inch_pixel_ratio = 5 / window.devicePixelRatio;
-export const field_side = 144;
+import { inch_pixel_ratio, field_side } from "./constants";
+import { Path } from "./paths/path";
 
 let redraw_background = true;
 
@@ -12,12 +11,12 @@ let field_y = 200;
 let field_scale = 1;
 
 let grid_on = false;
-grid_enabled.subscribe(g => 
+grid_enabled.subscribe(g =>
     grid_on = g
 );
 
 const grid_scale = 48;
-const grid_spacing = field_side*inch_pixel_ratio/grid_scale;
+const grid_spacing = field_side * inch_pixel_ratio / grid_scale;
 
 export function translate_cords(x: number, y: number) {
     return {
@@ -47,9 +46,9 @@ export function update_field(input: Input) {
 
     if (last_scale - field_scale != 0) {
         field_x -= ((field_side * inch_pixel_ratio * field_scale) - (field_side * inch_pixel_ratio * last_scale)) *
-                    ((input.mouse_x - field_x) / last_scale / inch_pixel_ratio / 144);
+            ((input.mouse_x - field_x) / last_scale / inch_pixel_ratio / 144);
         field_y -= ((field_side * inch_pixel_ratio * field_scale) - (field_side * inch_pixel_ratio * last_scale)) *
-                    ((input.mouse_y - field_y) / last_scale / inch_pixel_ratio / 144);
+            ((input.mouse_y - field_y) / last_scale / inch_pixel_ratio / 144);
         redraw_background = true;
     }
 
@@ -72,7 +71,7 @@ export function update_field(input: Input) {
     }
 
     update_objects(transated_input);
-    
+
     if (input.keys.get("Alt") || input.mouse_button == 1) {
         set_cursor("move");
     }
@@ -91,16 +90,14 @@ export function update_field(input: Input) {
 let game_loaded = false;
 let game = null;
 
-async function load_path_async() {
-    new (await import("./paths/path")).Path();
-}
+export const path = new Path();
+
 async function load_game_async() {
     game = new (await import("./games/spin-up/spin-up")).SpinUp();
     game_loaded = true;
 }
 
 load_game_async();
-load_path_async();
 
 export const cache_scale = 3.5;
 const bg_cache = document.createElement("canvas");
@@ -119,7 +116,7 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
         ctx.lineTo((field_side * inch_pixel_ratio * i) / 6, field_side * inch_pixel_ratio);
     }
     for (let i = 1; i < 6; i++) {
-        ctx.moveTo(0,                             (field_side * inch_pixel_ratio * i) / 6);
+        ctx.moveTo(0, (field_side * inch_pixel_ratio * i) / 6);
         ctx.lineTo(field_side * inch_pixel_ratio, (field_side * inch_pixel_ratio * i) / 6);
     }
     ctx.lineWidth = 1 * inch_pixel_ratio;
