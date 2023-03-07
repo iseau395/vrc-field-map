@@ -5,6 +5,8 @@
     import type { Bezier } from "./bezier";
     import { inch_pixel_ratio } from "../constants";
 
+    import OptionsDropdown from "./OptionsDropdown.svelte";
+
     export let segment: Point | Bezier;
 
     const point = is_point(segment);
@@ -69,6 +71,7 @@
     <canvas width="50" height="50" bind:this={canvas}></canvas>
     Bezier Curve
     {/if}
+    <OptionsDropdown />
 </li>
 
 <style>

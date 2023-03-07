@@ -17,7 +17,7 @@
 <aside>
     <h1>
         Path Editor
-        <button on:click={()=> $sidebar_visible = false}>
+        <button on:click={()=> $sidebar_visible = false} title="Close Sidebar">
             <img src="./media/exit.svg" alt="Close sidebar" />
         </button>
     </h1>
@@ -63,6 +63,8 @@
         border-style: none;
 
         cursor: pointer;
+
+        user-select: none;
     }
 
     ul {
