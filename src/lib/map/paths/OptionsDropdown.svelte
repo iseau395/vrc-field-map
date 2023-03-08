@@ -30,7 +30,11 @@
 
 <span>
     <button on:click={toggle} title="Options...">
-        <img src="./media/options.svg" alt="Options...">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <circle cx="15" cy="40" r="10" fill="#777777" />
+            <circle cx="40" cy="40" r="10" fill="#777777" />
+            <circle cx="65" cy="40" r="10" fill="#777777" />
+        </svg>
     </button>
     {#if dropdown_visible}
     <div use:clickOutside on:outclick={() => close()}>
@@ -40,7 +44,7 @@
 </span>
 
 <style>
-    span, button, img {
+    span, button, svg {
         width: 30px;
         height: 30px;
     }

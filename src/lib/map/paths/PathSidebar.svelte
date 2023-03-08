@@ -18,7 +18,10 @@
     <h1>
         Path Editor
         <button on:click={()=> $sidebar_visible = false} title="Close Sidebar">
-            <img src="./media/exit.svg" alt="Close sidebar" />
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <line x1="5" y1="5" x2="45" y2="45" stroke="white" stroke-width="4" />
+                <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
+            </svg>
         </button>
     </h1>
     <ul>
@@ -53,7 +56,7 @@
     }
 
     button,
-    img {
+    svg {
         width: 30px;
         height: 30px;
 

@@ -17,7 +17,10 @@
         <h1>
             Settings
             <button on:click={on_close}>
-                <img src="./media/exit.svg" alt="Close Settings Menu"/>
+                <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <line x1="5" y1="5" x2="45" y2="45" stroke="white" stroke-width="4" />
+                    <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
+                </svg>
             </button>
         </h1>
         Grid: <Switch bind:value={$grid_enabled}/><br/>
@@ -79,7 +82,7 @@
         justify-content: space-between;
     }
 
-    img {
+    svg {
         width: 30px;
         height: 30px;
 
