@@ -62,5 +62,7 @@
         max-width: 500px;
         border-radius: 10px;
         padding: 0.2cm;
+
+        z-index: 1;
     }
 </style>

@@ -89,6 +89,8 @@
         }
 
         function resize() {
+            if (!bg_canvas || !fg_canvas) return;
+
             bg_canvas.width = window.innerWidth;
             bg_canvas.height = window.innerHeight;
             fg_canvas.width = window.innerWidth;
@@ -145,14 +147,15 @@
 
 <canvas bind:this={bg_canvas} style="z-index: -1;" />
 <canvas bind:this={fg_canvas} style="z-index: 0;" />
-{#if context_menu.visible}
-<ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
-{/if}
 
 <p>Developed by team 15442C</p>
 <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
     <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
 </a>
+
+{#if context_menu.visible}
+<ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
+{/if}
 
 {#if $sidebar_visible}
 <PathSidebar />

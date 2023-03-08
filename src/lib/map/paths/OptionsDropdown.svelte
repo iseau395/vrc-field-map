@@ -10,6 +10,7 @@
 
 <script lang="ts">
     import { onDestroy } from "svelte";
+    import { clickOutside } from "../../util/click_outside";
 
     let dropdown_visible = false;
 
@@ -32,8 +33,8 @@
         <img src="./media/options.svg" alt="Options...">
     </button>
     {#if dropdown_visible}
-    <div>
-
+    <div use:clickOutside on:outclick={() => close()}>
+        <slot />
     </div>
     {/if}
 </span>
@@ -66,8 +67,7 @@
     }
 
     div {
-        width: 170px;
-        height: 100px;
+        min-width: 170px;
 
         position: absolute;
         right: 20px;
@@ -75,5 +75,8 @@
         border-radius: 15px;
 
         background-color: rgb(153, 153, 153);
+
+        display: flex;
+        flex-direction: column;
     }
 </style>

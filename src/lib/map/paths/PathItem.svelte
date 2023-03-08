@@ -6,6 +6,7 @@
     import { inch_pixel_ratio } from "../constants";
 
     import OptionsDropdown from "./OptionsDropdown.svelte";
+    import DropdownOption from "./DropdownOption.svelte";
 
     export let segment: Point | Bezier;
 
@@ -58,6 +59,28 @@
         });
     });
 
+    function copy_to_clipboard() {
+        function translate_cords(x: number, y: number) {
+            return `${Math.round(y/inch_pixel_ratio*100)/100}, ${Math.round(x/inch_pixel_ratio*100)/100}`
+        }
+
+        if (point)
+        {
+            navigator.clipboard.writeText(
+                translate_cords(segment.x, segment.y)
+            );
+        }
+        else
+        {
+            navigator.clipboard.writeText(
+                `pos(${translate_cords(segment.points[0].x, segment.points[0].y)}), ` +
+                `pos(${translate_cords(segment.points[1].x, segment.points[1].y)}), ` +
+                `pos(${translate_cords(segment.points[2].x, segment.points[2].y)}), ` +
+                `pos(${translate_cords(segment.points[3].x, segment.points[3].y)})`
+            );
+        }
+    }
+
 
     if (unsub)
         onDestroy(unsub);
@@ -71,7 +94,9 @@
     <canvas width="50" height="50" bind:this={canvas}></canvas>
     Bezier Curve
     {/if}
-    <OptionsDropdown />
+    <OptionsDropdown>
+        <DropdownOption on:click={() => copy_to_clipboard()}>Copy to clipboard</DropdownOption>
+    </OptionsDropdown>
 </li>
 
 <style>
