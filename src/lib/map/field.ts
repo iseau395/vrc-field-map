@@ -77,9 +77,9 @@ export function update_field(input: Input) {
     }
 
     if (field_scale < last_scale)
-        set_cursor("zoom-in");
-    else if (field_scale > last_scale)
         set_cursor("zoom-out");
+    else if (field_scale > last_scale)
+        set_cursor("zoom-in");
 
     last_scale = field_scale;
 

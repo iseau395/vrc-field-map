@@ -92,7 +92,7 @@
     Point ({Math.round($segment.x / inch_pixel_ratio * 100) / 100}, {Math.round($segment.y / inch_pixel_ratio * 100) / 100})
     {:else}
     <canvas width="50" height="50" bind:this={canvas}></canvas>
-    Bezier Curve
+    Bézier Curve
     {/if}
     <OptionsDropdown>
         <DropdownOption on:click={() => copy_to_clipboard()}>Copy to clipboard</DropdownOption>
