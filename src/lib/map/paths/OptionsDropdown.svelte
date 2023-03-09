@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    const close_functions = new Set();
+    const close_functions = new Set<() => void>();
 
     function close_popups() {
         close_functions.forEach(callback => {

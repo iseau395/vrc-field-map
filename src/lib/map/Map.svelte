@@ -5,7 +5,7 @@
     import { options } from "../context_menu/context_menu";
 
     import { draw_field, update_field, check_cursor } from "./field";
-    import type { Input } from "./types";
+    import type { Input } from "./constants";
 
     import PathSidebar, { sidebar_visible } from "./paths/PathSidebar.svelte";
 

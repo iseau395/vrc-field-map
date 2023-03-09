@@ -1,5 +1,5 @@
 import { inch_pixel_ratio } from "../constants";
-import { collisioncircle, dragable, object, on } from "../objects/object";
+import { collisioncircle, dragable, object, on, remove_callbacks } from "../objects/object";
 
 @object
 @collisioncircle(0, 0, 1.5 * inch_pixel_ratio)
@@ -39,5 +39,9 @@ export class Point {
         for (const callback of this.subscribers) {
             callback(this);
         };
+    }
+
+    delete() {
+        remove_callbacks(this);
     }
 }

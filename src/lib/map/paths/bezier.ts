@@ -1,9 +1,11 @@
 import { inch_pixel_ratio } from "../constants";
-import { on_event } from "../objects/object";
+import { on_event, off } from "../objects/object";
 import { Point } from "./point";
 
 export class BezierCurve {
     points: [Point, Point, Point, Point];
+
+    private render_id: number;
 
     constructor(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number) {
         this.points = [
@@ -17,7 +19,7 @@ export class BezierCurve {
             point.subscribe(() => this.notify());
         }
 
-        on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
+        this.render_id = on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -61,5 +63,13 @@ export class BezierCurve {
         for (const callback of this.subscribers) {
             callback(this);
         };
+    }
+
+    delete() {
+        off("postrender", this.render_id);
+
+        for (const point of this.points) {
+            point.delete();
+        }
     }
 }

@@ -13,7 +13,7 @@ const objects = new Map<number, Object>();
 
 // Decorators
 
-const callback_symbol = Symbol("ObjectCallbacks");
+export const callback_symbol = Symbol("ObjectCallbacks");
 const id_symbol = Symbol("ObjectID");
 
 let current_id = 0;
@@ -27,7 +27,7 @@ export function object<T extends { new(...args: any[]): Object }>(Base: T) {
 
             objects.set(this[id_symbol], this);
 
-            const object_callbacks = Base.prototype[callback_symbol];
+            const object_callbacks: Map<keyof Events, Events[keyof Events]> | undefined = Base.prototype[callback_symbol];
 
             if (object_callbacks) {
                 object_callbacks.forEach((value: (...args: unknown[]) => void, key: string) => {
@@ -108,7 +108,7 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
             super(...args);
 
             if (!this[callback_symbol])
-                this[callback_symbol] = new Map<string, Events[keyof Events]>();
+                this[callback_symbol] = new Map<keyof Events, Events[keyof Events]>();
 
             const update_func = this[callback_symbol].get("update") as Events["update"];
 
@@ -153,7 +153,7 @@ interface Events {
 export function on<E extends keyof Events>(event: E) {
     return (target: unknown, _: unknown, descriptor: TypedPropertyDescriptor<Events[E]>) => {
         if (!target[callback_symbol])
-            target[callback_symbol] = new Map<string, Events[keyof Events]>();
+            target[callback_symbol] = new Map<keyof Events, Events[keyof Events]>();
 
         target[callback_symbol].set(event, descriptor.value);
     };
@@ -161,7 +161,22 @@ export function on<E extends keyof Events>(event: E) {
 
 let on_event_id = -1;
 export function on_event<E extends keyof Events>(event: E, callback: Events[E]) {
-    callbacks[event].set(on_event_id--, callback);
+    const id = on_event_id--;
+    callbacks[event].set(id, callback);
+    return id;
+}
+
+export function off(event: keyof Events, id: number) {
+    callbacks[event].delete(id);
+}
+
+export function remove_callbacks(target: { [callback_symbol]: Map<keyof Events, Events[keyof Events]> }) {
+    const target_callbacks = target[callback_symbol];
+    const id = target[id_symbol];
+
+    target_callbacks.forEach((callback, event) => {
+        off(event, id);
+    });
 }
 
 // Update functions

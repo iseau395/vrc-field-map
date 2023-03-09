@@ -65,12 +65,18 @@ export class Path {
     on_path_updated(callback) {
         this.callbacks.push(callback);
     }
+
+    remove_segment(index: number) {
+        this.path[index].delete();
+        this.path.splice(index, 1);
+        this.callbacks.forEach(c => c(this.path));
+    }
 }
 
-export function is_bezier<T extends Point | Bezier>(path_segment: T): T extends Bezier ? true : false {
+export function is_bezier<T extends (Point | Bezier)>(path_segment: T): T extends Bezier ? true : false {
     return "points" in path_segment;
 }
 
-export function is_point<T extends Point | Bezier>(path_segment: T): T extends Point ? true : false {
+export function is_point<T extends (Point | Bezier)>(path_segment: T): T extends Point ? true : false {
     return !("points" in path_segment);
 }

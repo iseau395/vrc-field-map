@@ -11,7 +11,7 @@
     let path_array = path.path;
     path.on_path_updated(p => {
         path_array = p;
-    })
+    });
 </script>
 
 <aside>
@@ -25,8 +25,8 @@
         </button>
     </h1>
     <ul>
-        {#each path_array as segment}
-        <PathItem segment={segment} />
+        {#each path_array as segment, index}
+        <PathItem segment={segment} {index} />
         {/each}
     </ul>
 </aside>

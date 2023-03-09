@@ -29,7 +29,7 @@
     <Map />
     {#if !hasMouse}
     <p>
-        It looks like you are on a device without a mouse or touchpad. If you can, please use a devide with a mouse or touchpad as this map is only designed to work on these devices.
+        It looks like you are on a device without a mouse or touchpad. If you can, please use a device with a mouse or touchpad as this map is only designed to work on these devices.
     </p>
     {/if}
 
@@ -59,7 +59,7 @@
         border-style: solid;
         border-width: 2px;
         border-color: red;
-        max-width: 500px;
+        max-width: 400px;
         border-radius: 10px;
         padding: 0.2cm;
 
