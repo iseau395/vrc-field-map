@@ -104,11 +104,13 @@ export class SpinUp implements Game {
 
         // Diagonal Lines
 
-        ctx.moveTo(2.5 * inch_pixel_ratio, 0);
-        ctx.lineTo((field_side * inch_pixel_ratio), (field_side * inch_pixel_ratio) - 2.5 * inch_pixel_ratio);
+        const line_seperation = Math.SQRT2 + Math.sqrt((.5/2)^2 + (.5/2)^2);
 
-        ctx.moveTo(0, 2.5 * inch_pixel_ratio);
-        ctx.lineTo((field_side * inch_pixel_ratio) - 2.5 * inch_pixel_ratio, (field_side * inch_pixel_ratio));
+        ctx.moveTo(line_seperation * inch_pixel_ratio, 0);
+        ctx.lineTo((field_side * inch_pixel_ratio), (field_side * inch_pixel_ratio) - line_seperation * inch_pixel_ratio);
+
+        ctx.moveTo(0, line_seperation * inch_pixel_ratio);
+        ctx.lineTo((field_side * inch_pixel_ratio) - line_seperation * inch_pixel_ratio, (field_side * inch_pixel_ratio));
 
         // Starting lines
 
