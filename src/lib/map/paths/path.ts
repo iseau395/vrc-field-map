@@ -71,6 +71,11 @@ export class Path {
         this.path.splice(index, 1);
         this.callbacks.forEach(c => c(this.path));
     }
+
+    move_segment(old_index: number, new_index: number) {
+        this.path.splice(new_index, 0, this.path.splice(old_index, 1)[0]);
+        this.callbacks.forEach(c => c(this.path));
+    }
 }
 
 export function is_bezier<T extends (Point | Bezier)>(path_segment: T): T extends Bezier ? true : false {

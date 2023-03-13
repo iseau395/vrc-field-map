@@ -25,9 +25,11 @@
         </button>
     </h1>
     <ul>
+        {#key path_array}
         {#each path_array as segment, index}
         <PathItem segment={segment} {index} />
         {/each}
+        {/key}
     </ul>
 </aside>
 
@@ -79,6 +81,7 @@
         flex: 1 1 auto;
 
         overflow-y: auto;
+        overflow-x: hidden;
 
         padding: 0;
         padding-right: 5px;
