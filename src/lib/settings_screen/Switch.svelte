@@ -9,9 +9,10 @@
 
 <style>
     input {
-        width: 50px;
-        height: 20px;
+        width: 42px;
+        height: 22px;
         margin: 0;
+        margin-top: 3px;
         border-radius: 15px;
 
         opacity: 0;
