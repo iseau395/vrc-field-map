@@ -8,10 +8,7 @@
     import PathItem from "./PathItem.svelte";
     import { path } from "../field";
 
-    let path_array = path.path;
-    path.on_path_updated(p => {
-        path_array = p;
-    });
+    console.log($path);
 </script>
 
 <aside>
@@ -25,8 +22,8 @@
         </button>
     </h1>
     <ul>
-        {#key path_array}
-        {#each path_array as segment, index}
+        {#key $path.path}
+        {#each $path.path as segment, index}
         <PathItem segment={segment} {index} />
         {/each}
         {/key}
@@ -83,9 +80,12 @@
         overflow-y: auto;
         overflow-x: hidden;
 
+        margin-top: 0;
+
         padding: 0;
         padding-right: 5px;
         padding-left: 5px;
+        padding-top: 1em;
     }
 
     h1 {

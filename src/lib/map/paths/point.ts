@@ -22,16 +22,14 @@ export class Point {
         ctx.fill();
     }
 
-    readonly subscribers = [];
+    private readonly subscribers = [];
     subscribe(callback: (point: Point) => void) {
         callback(this);
 
-        this.subscribers.push(callback);
-
-        const subscriber = this.subscribers.length - 1;
+        const index = this.subscribers.push(callback) - 1;
 
         return () => {
-            this.subscribers.splice(subscriber, 1);
+            this.subscribers.splice(index, 1);
         };
     }
 

@@ -148,10 +148,12 @@
 <canvas bind:this={bg_canvas} style="z-index: -1;" />
 <canvas bind:this={fg_canvas} style="z-index: 0;" />
 
-<p>Developed by team 15442C</p>
-<a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
-    <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
-</a>
+<div>
+    <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
+        <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
+    </a>
+    <p>Developed by team 15442C</p>
+</div>
 
 {#if context_menu.visible}
 <ContextMenu x={context_menu.x} y={context_menu.y} options={options}/>
@@ -171,23 +173,36 @@
         position: absolute;
     }
 
-    p {
+    div {
         position: absolute;
+        bottom: 15px;
         left: 15px;
-        bottom: 0;
 
+        display: flex;
+
+        pointer-events: none
+    }
+
+    p {
         color: white;
         opacity: 50%;
 
         pointer-events: none;
         user-select: none;
+
+        margin-left: 15px;
+    }
+
+    a, img {
+        width: 50px;
+        height: 50px;
+
+        border-radius: 50%;
+
+        pointer-events: fill;
     }
 
     img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-
         opacity: 30%;
 
         user-select: none;
@@ -195,16 +210,5 @@
 
     img:hover {
         opacity: 70%;
-    }
-
-    a {
-        width: 50px;
-        height: 50px;
-
-        position: absolute;
-        bottom: 10px;
-        right: 15px;
-
-        border-radius: 50%;
     }
 </style>

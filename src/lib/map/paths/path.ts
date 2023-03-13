@@ -13,7 +13,7 @@ export class Path {
             on_select: (x, y) => {
                 this.path.push(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
-                this.callbacks.forEach(c => c(this.path));
+                this.notify();
             }
         });
 
@@ -25,7 +25,7 @@ export class Path {
 
                 this.path.push(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
 
-                this.callbacks.forEach(c => c(this.path));
+                this.notify();
             }
         });
 
@@ -61,20 +61,30 @@ export class Path {
         }
     }
 
-    readonly callbacks = [];
-    on_path_updated(callback) {
-        this.callbacks.push(callback);
+    private readonly callbacks = [];
+    subscribe(callback) {
+        callback(this);
+
+        const index = this.callbacks.push(callback) - 1;
+
+        return () => {
+            this.callbacks.splice(index, 1);
+        }
+    }
+
+    notify() {
+        this.callbacks.forEach(c => c(this));
     }
 
     remove_segment(index: number) {
         this.path[index].delete();
         this.path.splice(index, 1);
-        this.callbacks.forEach(c => c(this.path));
+        this.notify();
     }
 
     move_segment(old_index: number, new_index: number) {
         this.path.splice(new_index, 0, this.path.splice(old_index, 1)[0]);
-        this.callbacks.forEach(c => c(this.path));
+        this.notify();
     }
 }
 
