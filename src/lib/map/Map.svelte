@@ -38,7 +38,7 @@
 
         // Input events
         {
-            window.addEventListener("focus", ev => {
+            window.addEventListener("focus", () => {
                 input.keys.clear();
             });
 

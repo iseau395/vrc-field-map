@@ -17,8 +17,6 @@
     export let segment: Point | BezierCurve;
     export let index: number;
 
-    const point = !("points" in segment);
-
     let canvas: HTMLCanvasElement;
 
     if ("points" in segment) {
@@ -27,6 +25,8 @@
             const ctx = canvas.getContext("2d");
 
             unsub = segment.subscribe(() => {
+                if (!("points" in segment)) return;
+
                 let min_x = segment.points[0].x;
                 let max_x = segment.points[0].x;
                 let min_y = segment.points[0].y;
@@ -65,10 +65,9 @@
     }
 
     function translate_cords(x: number, y: number) {
-        return `${Math.round((y / inch_pixel_ratio) * 100) / 100}, ${
-            Math.round((x / inch_pixel_ratio) * 100) / 100
-        }`;
+        return `${Math.round(y/inch_pixel_ratio*100)/100}, ${Math.round(x/inch_pixel_ratio*100)/100}`;
     }
+
     function copy_to_clipboard() {
         if (!("points" in segment)) {
             navigator.clipboard.writeText(

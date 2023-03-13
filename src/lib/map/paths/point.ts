@@ -38,7 +38,7 @@ export class Point {
     notify() {
         for (const callback of this.subscribers) {
             callback(this);
-        };
+        }
     }
 
     delete() {
