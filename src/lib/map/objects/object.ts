@@ -7,9 +7,9 @@ const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
     update: new Map()
 };
 
-type Object = { x: number, y: number, notify?: () => void };
+type MapObject = { x: number, y: number, notify?: () => void };
 
-const objects = new Map<number, Object>();
+const objects = new Map<number, MapObject>();
 
 // Decorators
 
@@ -18,7 +18,7 @@ const id_symbol = Symbol("ObjectID");
 
 let current_id = 0;
 
-export function object<T extends { new(...args: any[]): Object }>(Base: T) {
+export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -102,7 +102,7 @@ export function in_collision<T>(object: T, x: number, y: number) {
 
 export let selection = -1;
 
-export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[] } & Object>(Base: T) {
+export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[] } & MapObject>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -196,7 +196,7 @@ export function update_objects(input: Input) {
 
         const selected_object = objects.get(selection);
 
-        let changed = selected_object.x != input.mouse_x || selected_object.y != input.mouse_y;
+        const changed = selected_object.x != input.mouse_x || selected_object.y != input.mouse_y;
 
         selected_object.x = input.mouse_x;
         selected_object.y = input.mouse_y;

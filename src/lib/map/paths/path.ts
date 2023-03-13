@@ -11,7 +11,7 @@ export class Path {
         register_insert_option({
             name: "Point",
             on_select: (x, y) => {
-                this.path.push(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio))
+                this.path.push(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
                 this.callbacks.forEach(c => c(this.path));
             }
