@@ -69,7 +69,7 @@ export class Path {
 
         return () => {
             this.callbacks.splice(index, 1);
-        }
+        };
     }
 
     notify() {

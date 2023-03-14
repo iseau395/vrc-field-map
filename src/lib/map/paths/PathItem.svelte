@@ -128,7 +128,7 @@
     }
 
     function dragEnd(ev: DragEvent) {
-        $selected.style.boxShadow = "none"
+        $selected.style.boxShadow = "none";
         $selected.style.marginLeft = "0";
 
         if (isBefore($selected, ev.target)) {
@@ -137,7 +137,7 @@
             (ev.target as HTMLLIElement).parentNode.insertBefore($selected, (ev.target as HTMLLIElement).nextSibling);
         }
 
-        const nodes = Array.prototype.slice.call( ev.target.parentElement.children );
+        const nodes = Array.prototype.slice.call( (ev.target as HTMLLIElement).parentElement.children );
 
         console.log(index, nodes.indexOf(ev.target));
 
