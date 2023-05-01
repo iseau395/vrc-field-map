@@ -1,4 +1,5 @@
 import { field_side, inch_pixel_ratio } from "../../constants";
+import { register_insert_option } from "../../../context_menu/context_menu";
 import type { Game } from "../game";
 import { Triball } from "./triball";
 
@@ -20,6 +21,14 @@ export class OverUnder implements Game {
         new Triball(field_side / 2, field_side / 12, 90),
         new Triball(field_side / 2, field_side / 12 * 11, 270),
     ];
+
+    constructor() {
+        register_insert_option({
+            name: "Triball",
+            on_select: (x, y) =>
+                this.objects.push(new Triball(x/inch_pixel_ratio, y/inch_pixel_ratio))
+        });
+    }
 
     draw_static(ctx: CanvasRenderingContext2D): void {
         const side = field_side * inch_pixel_ratio;
