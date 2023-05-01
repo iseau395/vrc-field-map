@@ -93,7 +93,7 @@ let game = null;
 export const path = new Path();
 
 async function load_game_async() {
-    game = new (await import("./games/spin-up/spin-up")).SpinUp();
+    game = new (await import("./games/over-under/over-under")).OverUnder();
     game_loaded = true;
 }
 
