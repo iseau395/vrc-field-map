@@ -1,7 +1,7 @@
 import { set_cursor } from "../../field";
 import { inch_pixel_ratio } from "../../constants";
 import { add_box_collision, in_collision, object, on, selection } from "../../objects/object";
-import type { Input } from "../../types";
+import type { Input } from "../../constants";
 
 export enum RollerState {
     Blue,

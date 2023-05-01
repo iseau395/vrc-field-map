@@ -7,15 +7,13 @@
 <script lang="ts">
     import PathItem from "./PathItem.svelte";
     import { path } from "../field";
-
-    console.log($path);
 </script>
 
 <aside>
     <h1>
         Path Editor
-        <button on:click={()=> $sidebar_visible = false} title="Close Sidebar">
-            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <button on:click={()=> $sidebar_visible = false} title="Close Sidebar" class="exit-sidebar-button">
+            <svg viewBox="0 0 50 50">
                 <line x1="5" y1="5" x2="45" y2="45" stroke="white" stroke-width="4" />
                 <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
             </svg>
@@ -27,6 +25,18 @@
         <PathItem segment={segment} {index} />
         {/each}
         {/key}
+
+        <li>
+            <button>
+            <svg viewbox="0 0 50 50">
+                <line x1="5" y1="25" x2="45" y2="25" stroke="#555555" stroke-width="5" stroke-linecap="round" />
+                <line x1="25" y1="5" x2="25" y2="45" stroke="#555555" stroke-width="5" stroke-linecap="round" />
+            </svg>
+
+            <span>Insert Path Segment</span>
+                
+            </button>
+        </li>
     </ul>
 </aside>
 
@@ -54,12 +64,23 @@
         flex-direction: column;
     }
 
-    button,
+    h1 {
+        margin: 0;
+
+        display: flex;
+        justify-content: space-between;
+
+        padding-left: 20px;
+    }
+
+    .exit-sidebar-button,
     svg {
         width: 30px;
         height: 30px;
 
         padding: 0;
+
+        margin-left: 5px;
 
         background-color: transparent;
         border-style: none;
@@ -88,12 +109,44 @@
         padding-top: 1em;
     }
 
-    h1 {
+    li {
+        width: 100%;
+        height: 60px;
+
+        border-radius: 10px;
+        margin: 0px;
+
+        background-color: rgb(193, 193, 193);
+        color: black;
+
+        list-style-type: none;
+
+        cursor: pointer;
+    }
+
+    button {
+        width: 100%;
+        height: 100%;
+
+        border-radius: 10px;
+        padding: 5px;
         margin: 0;
 
         display: flex;
-        justify-content: space-between;
+        align-items: center;
+        justify-content: flex-start;
 
-        padding-left: 20px;
+        background-color: rgba(0, 0, 0, 0);
+        border-width: 0;
+
+        cursor: pointer;
+    }
+
+    span {
+        margin-left: 10px;
+    }
+
+    li:hover {
+        background-color: rgb(163, 163, 163);
     }
 </style>

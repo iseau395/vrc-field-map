@@ -47,7 +47,7 @@ export class BezierCurve {
     }
 
     private readonly subscribers = [];
-    subscribe(callback: (point: Point) => void) {
+    subscribe(callback: (point: BezierCurve) => void) {
         callback(this);
 
         const index = this.subscribers.push(callback) - 1;

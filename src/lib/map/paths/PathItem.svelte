@@ -139,8 +139,6 @@
 
         const nodes = Array.prototype.slice.call( (ev.target as HTMLLIElement).parentElement.children );
 
-        console.log(index, nodes.indexOf(ev.target));
-
         path.move_segment(index, nodes.indexOf(ev.target));
         index = nodes.indexOf(ev.target);
 
@@ -197,9 +195,5 @@
 
         margin-left: 5px;
         margin-right: 10px;
-    }
-
-    li:last-child {
-        margin-bottom: 0;
     }
 </style>

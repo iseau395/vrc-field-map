@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { update_objects } from "src/lib/map/objects/object";
 import { Disc } from "src/lib/map/games/spin-up/disc";
-import { inch_pixel_ratio } from "src/lib/map/field";
+import { inch_pixel_ratio } from "src/lib/map/constants";
 
 describe("Disc", () => {
     test.each([

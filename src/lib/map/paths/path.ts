@@ -11,9 +11,7 @@ export class Path {
         register_insert_option({
             name: "Point",
             on_select: (x, y) => {
-                this.path.push(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
-
-                this.notify();
+                this.add_segment(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
             }
         });
 
@@ -23,9 +21,7 @@ export class Path {
                 x /= inch_pixel_ratio;
                 y /= inch_pixel_ratio;
 
-                this.path.push(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
-
-                this.notify();
+                this.add_segment(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
             }
         });
 
@@ -44,16 +40,16 @@ export class Path {
             const path_segment = this.path[i];
             const next_segment = this.path[i + 1];
 
-            if (is_bezier(path_segment) && is_bezier(next_segment)) {
+            if ("points" in path_segment && "points" in next_segment) {
                 ctx.moveTo(path_segment.points[3].x, path_segment.points[3].y);
                 ctx.lineTo(next_segment.points[0].x, next_segment.points[0].y);
-            } else if (is_bezier(path_segment) && is_point(next_segment)) {
+            } else if ("points" in path_segment && !("points" in next_segment)) {
                 ctx.moveTo(path_segment.points[3].x, path_segment.points[3].y);
                 ctx.lineTo(next_segment.x, next_segment.y);
-            } else if (is_point(path_segment) && is_bezier(next_segment)) {
+            } else if (!("points" in path_segment) &&"points" in next_segment) {
                 ctx.moveTo(path_segment.x, path_segment.y);
                 ctx.lineTo(next_segment.points[0].x, next_segment.points[0].y);
-            } else if (is_point(path_segment) && is_point(next_segment)) {
+            } else if (!("points" in path_segment) && !("points" in next_segment)) {
                 ctx.moveTo(path_segment.x, path_segment.y);
                 ctx.lineTo(next_segment.x, next_segment.y);
             }
@@ -62,7 +58,7 @@ export class Path {
     }
 
     private readonly callbacks = [];
-    subscribe(callback) {
+    subscribe(callback: (path: Path) => void) {
         callback(this);
 
         const index = this.callbacks.push(callback) - 1;
@@ -86,12 +82,9 @@ export class Path {
         this.path.splice(new_index, 0, this.path.splice(old_index, 1)[0]);
         this.notify();
     }
-}
 
-export function is_bezier<T extends (Point | Bezier)>(path_segment: T): T extends Bezier ? true : false {
-    return "points" in path_segment;
-}
-
-export function is_point<T extends (Point | Bezier)>(path_segment: T): T extends Point ? true : false {
-    return !("points" in path_segment);
+    add_segment(segment: Point | BezierCurve) {
+        this.path.push(segment);
+        this.notify();
+    }
 }

@@ -40,6 +40,7 @@ export class Point {
     }
 
     delete() {
+        // @ts-ignore
         remove_callbacks(this);
     }
 }
