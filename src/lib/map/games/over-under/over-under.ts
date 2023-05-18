@@ -36,6 +36,23 @@ export class OverUnder implements Game {
 
         ctx.lineCap = "square";
 
+        // Tape
+        ctx.beginPath();
+        ctx.moveTo(0, side / 12 * 7);
+        ctx.lineTo(side / 2, side / 12 * 7);
+
+        ctx.moveTo(0, side / 2 - inch_pixel_ratio);
+        ctx.lineTo(side, side / 2 - inch_pixel_ratio);
+        ctx.moveTo(0, side / 2 + inch_pixel_ratio);
+        ctx.lineTo(side, side / 2 + inch_pixel_ratio);
+
+        ctx.moveTo(side / 2, side / 12 * 5);
+        ctx.lineTo(side, side / 12 * 5);
+
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = inch_pixel_ratio / 2;
+        ctx.stroke();
+
         // Red Tubes
         ctx.beginPath();
 
