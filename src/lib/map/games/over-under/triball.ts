@@ -21,12 +21,18 @@ export class Triball {
     render(ctx: CanvasRenderingContext2D) {
         const deg_120 = (120 * Math.PI) / 180;
 
-        ctx.fillStyle = "#00FF00";
         ctx.beginPath();
         for (let i = 0; i < 3; i++) {
-            ctx.lineTo(this.x + radius * Math.cos(this.rotation + i * deg_120), this.y + radius * Math.sin(this.rotation + i * deg_120))
+            const x = this.x + radius * Math.cos(this.rotation + i * deg_120);
+            const y = this.y + radius * Math.sin(this.rotation + i * deg_120);
+            ctx.arc(x, y, 6.1 * inch_pixel_ratio, this.rotation + i * deg_120 + deg_120*1.25, this.rotation + i * deg_120 - deg_120*1.25);
         }
         ctx.closePath();
+
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.fillStyle = "#00FF00";
         ctx.fill();
+        ctx.stroke();
     }
 }

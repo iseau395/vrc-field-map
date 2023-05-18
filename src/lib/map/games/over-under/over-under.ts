@@ -34,12 +34,9 @@ export class OverUnder implements Game {
         const side = field_side * inch_pixel_ratio;
         const pipe_diameter = 2.38 * inch_pixel_ratio;
 
-        ctx.lineWidth = pipe_diameter;
-        ctx.lineCap = "round";
+        ctx.lineCap = "square";
 
         // Red Tubes
-        ctx.strokeStyle = "#FF0000";
-
         ctx.beginPath();
 
         ctx.moveTo(side / 6, 0);
@@ -51,11 +48,14 @@ export class OverUnder implements Game {
         ctx.moveTo(side / 2, side / 6 * 5);
         ctx.lineTo(side / 2, side);
 
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = pipe_diameter;
+        ctx.stroke();
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = pipe_diameter - inch_pixel_ratio / 2;
         ctx.stroke();
 
         // Blue Tubes
-        ctx.strokeStyle = "#0000FF";
-
         ctx.beginPath();
 
         ctx.moveTo(side / 2, 0);
@@ -67,9 +67,15 @@ export class OverUnder implements Game {
         ctx.moveTo(side, side / 6 * 5);
         ctx.lineTo(side / 6 * 5, side);
 
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = pipe_diameter;
+        ctx.stroke();
+        ctx.strokeStyle = "#0000FF";
+        ctx.lineWidth = pipe_diameter - inch_pixel_ratio / 2;
         ctx.stroke();
 
         // Barrier
+        ctx.lineCap = "round";
         ctx.strokeStyle = "#000000";
 
         ctx.beginPath();
@@ -86,23 +92,51 @@ export class OverUnder implements Game {
         ctx.stroke();
 
         // Yellow Caps
+        ctx.beginPath();
+        ctx.arc(side / 2, side / 6, pipe_diameter / 2, 0, Math.PI * 2);
+        ctx.closePath();
+
         ctx.fillStyle = "#FFFF00";
+        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio / 4;
+        ctx.stroke();
 
         ctx.beginPath();
-
-        ctx.arc(side / 2, side / 6, pipe_diameter / 2, 0, Math.PI * 2);
         ctx.arc(side / 2, side / 6 * 5, pipe_diameter / 2, 0, Math.PI * 2);
-
         ctx.closePath();
+
+        ctx.fillStyle = "#FFFF00";
         ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio / 4;
+        ctx.stroke();
 
         // Goals
 
         ctx.lineWidth = 1 * inch_pixel_ratio;
 
         // Red Goal
-        ctx.strokeStyle = "#FF0000";
+
+        ctx.beginPath();
+        ctx.arc(side / 6 * 5, side / 3, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
+        ctx.closePath();
+
         ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(side / 6 * 5, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
+        ctx.closePath();
+
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.stroke();
 
         ctx.beginPath();
 
@@ -111,19 +145,34 @@ export class OverUnder implements Game {
         ctx.lineTo(side / 6 * 5, side / 3 * 2);
         ctx.lineTo(side, side / 3 * 2);
 
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1 * inch_pixel_ratio;
+        ctx.stroke();
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = 1 * inch_pixel_ratio - inch_pixel_ratio / 2;
         ctx.stroke();
 
-        ctx.beginPath();
-
-        ctx.arc(side / 6 * 5, side / 3, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
-        ctx.arc(side / 6 * 5, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
-
-        ctx.closePath()
-        ctx.fill();
-
         // Blue Goal
-        ctx.strokeStyle = "#0000FF";
+
+        ctx.beginPath();
+        ctx.arc(side / 6, side / 3, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
+        ctx.closePath();
+
         ctx.fillStyle = "#0000FF";
+        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.stroke();
+
+        ctx.beginPath()
+        ctx.arc(side / 6, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
+        ctx.closePath();
+
+        ctx.fillStyle = "#0000FF";
+        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.stroke();
 
         ctx.beginPath();
 
@@ -132,14 +181,11 @@ export class OverUnder implements Game {
         ctx.lineTo(side / 6, side / 3 * 2);
         ctx.lineTo(0, side / 3 * 2);
 
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1 * inch_pixel_ratio;
         ctx.stroke();
-
-        ctx.beginPath();
-
-        ctx.arc(side / 6, side / 3, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
-        ctx.arc(side / 6, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
-
-        ctx.closePath()
-        ctx.fill();
+        ctx.strokeStyle = "#0000FF";
+        ctx.lineWidth = 1 * inch_pixel_ratio - inch_pixel_ratio / 2;
+        ctx.stroke();
     }
 }
