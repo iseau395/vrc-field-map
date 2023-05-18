@@ -12,7 +12,7 @@
 <aside>
     <h1>
         Path Editor
-        <button on:click={()=> $sidebar_visible = false} title="Close Sidebar" class="exit-sidebar-button">
+        <button on:click={() => $sidebar_visible = false} title="Close Sidebar" class="exit-sidebar-button">
             <svg viewBox="0 0 50 50">
                 <line x1="5" y1="5" x2="45" y2="45" stroke="white" stroke-width="4" />
                 <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
@@ -20,11 +20,11 @@
         </button>
     </h1>
     <ul>
-        {#key $path.path}
+        <!-- {#key $path.path} -->
         {#each $path.path as segment, index}
         <PathItem segment={segment} {index} />
         {/each}
-        {/key}
+        <!-- {/key} -->
 
         <li>
             <button>
