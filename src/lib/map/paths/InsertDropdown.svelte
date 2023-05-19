@@ -39,8 +39,12 @@ import { BezierCurve } from "./bezier";
 <div>
     {#if type == -1}
     <ul>
-        <li on:click={() => type = 0}>Point</li>
-        <li on:click={() => type = 1}>Bezier Curve</li>
+        <li>
+            <button on:click={() => type = 0}>Point</button>
+        </li>
+        <li>
+            <button on:click={() => type = 1}>Bezier Curve</button>
+        </li>
     </ul>
     {:else if type == 0}
     <span>
@@ -106,11 +110,8 @@ import { BezierCurve } from "./bezier";
     }
 
     li {
-        width: calc(100% - 20px);
+        width: 100%;
         height: 30px;
-
-        padding-left: 10px;
-        padding-right: 10px;
 
         list-style-type: none;
 
@@ -118,6 +119,19 @@ import { BezierCurve } from "./bezier";
         align-items: center;
 
         cursor: pointer;
+    }
+
+    li button {
+        width: 100%;
+        height: 100%;
+
+        background-color: transparent;
+        border-style: none;
+
+        padding-left: 10px;
+        padding-right: 10px;
+
+        text-align: left;
     }
 
     li:hover {
