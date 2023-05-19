@@ -43,13 +43,15 @@
             });
 
             window.addEventListener("keydown", ev => {
-                ev.preventDefault();
+                if ((ev.target as HTMLElement).nodeName != "INPUT")
+                    ev.preventDefault();
 
                 input.keys.set(ev.key, true);
             });
 
             window.addEventListener("keyup", ev => {
-                ev.preventDefault();
+                if ((ev.target as HTMLElement).nodeName != "INPUT")
+                    ev.preventDefault();
 
                 input.keys.set(ev.key, false);
             });

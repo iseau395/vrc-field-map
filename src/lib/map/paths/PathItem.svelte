@@ -61,7 +61,10 @@
             });
         });
 
-        onDestroy(unsub);
+        onDestroy(() => {
+            if (unsub)
+                unsub();
+        });
     }
 
     function translate_cords(x: number, y: number) {
