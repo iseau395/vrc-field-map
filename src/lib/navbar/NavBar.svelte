@@ -1,11 +1,13 @@
 <script lang="ts">
     import Button from "./Button.svelte";
+    import { settings_screen_visible } from "../../stores/settings";
+    import { sidebar_visible } from "../map/paths/PathSidebar.svelte";
 </script>
 
 <div class="navbar-wrapper">
     <div class="navbar-main">
-        <Button text="Spin Up" />
-        <Button text="Tipping Point" />
+        <Button text="Settings" on:click={() => $settings_screen_visible = !$settings_screen_visible} />
+        <Button text="Edit Path" on:click={() => $sidebar_visible = !$sidebar_visible} />
     </div>
 </div>
 

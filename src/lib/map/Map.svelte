@@ -151,10 +151,10 @@
 <canvas bind:this={fg_canvas} style="z-index: 0;" />
 
 <div>
-    <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer">
+    <a href="https://github.com/iseau395/vrc-field-map" target="_blank" rel="noreferrer" title="Github Repository">
         <img src="/vrc-field-map/media/github.png" alt="Github Repository"/>
     </a>
-    <p>Developed by team 15442C</p>
+    <p>Developed by<br/>team 15442C</p>
 </div>
 
 {#if context_menu.visible}
@@ -202,6 +202,10 @@
         border-radius: 50%;
 
         pointer-events: fill;
+    }
+
+    a {
+        margin: auto;
     }
 
     img {
