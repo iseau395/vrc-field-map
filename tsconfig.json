@@ -7,7 +7,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "lib": [ "ES6", "DOM" ],
+    "lib": [ "ES6", "DOM", "es2018" ],
     "baseUrl": "./",
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.

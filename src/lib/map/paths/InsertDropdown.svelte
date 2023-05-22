@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { onMount, tick } from "svelte";
     import { path } from "../field";
-import { BezierCurve } from "./bezier";
+    import { BezierCurve } from "./bezier";
     import { insert_dropdown_open } from "./PathSidebar.svelte";
     import { Point } from "./point";
 
@@ -18,6 +19,54 @@ import { BezierCurve } from "./bezier";
     let bezier_x4 = 0;
     let bezier_y4 = 0;
 
+    let insert_dropdown: HTMLSpanElement;
+    let point_button: HTMLElement;
+
+    onMount(() => {
+        point_button.focus();
+
+        insert_dropdown.addEventListener("paste", ev => {
+            const data: string = (ev.clipboardData || (window as any).clipboardData).getData("text");
+
+            if (type == 0) {
+                const point_regex = /^(?<x>-?\d+(?:\.\d+)?), (?<y>-?\d+(?:\.\d+)?)$/;
+
+                if (point_regex.test(data)) {
+                    const output = point_regex.exec(data);
+
+                    point_x = +output.groups.x;
+                    point_y = +output.groups.y;
+
+                    ev.preventDefault();
+                }
+            } else if (type == 1) {
+                const bezier_regex = /^pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\)$/;
+
+                if (bezier_regex.test(data)) {
+                    const output = bezier_regex.exec(data);
+
+                    bezier_x1 = +output[2];
+                    bezier_y1 = +output[1];
+                    bezier_x2 = +output[4];
+                    bezier_y2 = +output[3];
+                    bezier_x3 = +output[6];
+                    bezier_y3 = +output[5];
+                    bezier_x4 = +output[8];
+                    bezier_y4 = +output[7];
+
+                    ev.preventDefault();
+                }
+            }
+        });
+
+        insert_dropdown.addEventListener("keydown", ev => {
+            console.log(ev.key);
+            if (ev.key == "Enter") {
+                submit();
+            }
+        });
+    });
+
     function submit() {
         if (type == 0) {
             path.add_segment(new Point(point_x, point_y));
@@ -33,17 +82,31 @@ import { BezierCurve } from "./bezier";
         }
 
         insert_dropdown_open.set(false);
+
+        console.log("e");
+
+        return false;
+    }
+
+    async function type_select(type_selected: number) {
+        type = type_selected;
+
+        await tick();
+
+        const element = insert_dropdown.getElementsByTagName("input")[0];
+
+        if (element?.focus) element.focus();
     }
 </script>
 
-<div>
+<div bind:this={insert_dropdown}>
     {#if type == -1}
     <ul>
         <li>
-            <button on:click={() => type = 0}>Point</button>
+            <button bind:this={point_button} on:click={() => type_select(0)}>Point</button>
         </li>
         <li>
-            <button on:click={() => type = 1}>Bezier Curve</button>
+            <button on:click={() => type_select(1)}>Bezier Curve</button>
         </li>
     </ul>
     {:else if type == 0}
