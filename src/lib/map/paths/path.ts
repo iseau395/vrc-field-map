@@ -5,7 +5,7 @@ import { register_insert_option } from "../../context_menu/context_menu";
 import { BezierCurve } from "./bezier";
 
 export class Path {
-    readonly path: (Point | BezierCurve)[] = [];
+    path: (Point | BezierCurve)[] = [];
 
     constructor() {
         register_insert_option({
@@ -29,7 +29,6 @@ export class Path {
     }
 
     render(ctx: CanvasRenderingContext2D) {
-
         ctx.strokeStyle = "#DD0000";
         ctx.lineWidth = .5 * inch_pixel_ratio;
         ctx.lineCap = "butt";
@@ -73,18 +72,25 @@ export class Path {
     }
 
     remove_segment(index: number) {
+        save_undo_state();
+        
         this.path[index].delete();
         this.path.splice(index, 1);
         this.notify();
     }
 
     move_segment(old_index: number, new_index: number) {
+        save_undo_state();
+
         this.path.splice(new_index, 0, this.path.splice(old_index, 1)[0]);
         this.notify();
     }
 
     add_segment(segment: Point | BezierCurve) {
+        save_undo_state();
+
         this.path.push(segment);
+
         this.notify();
     }
 }

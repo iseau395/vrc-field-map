@@ -88,16 +88,19 @@ export function update_field(input: Input) {
 }
 
 let game_loaded = false;
-let game = null;
+export let game = new Promise<Game>(async (resolve) => {
+    const value = new (await import("./games/over-under/over-under")).OverUnder();
+    game_loaded = true;
+
+    resolve(value);
+});
 
 export const path = new Path();
 
-async function load_game_async() {
-    game = new (await import("./games/over-under/over-under")).OverUnder();
-    game_loaded = true;
-}
-
-load_game_async();
+// async function load_game_async() {
+//     game = new (await import("./games/over-under/over-under")).OverUnder();
+//     game_loaded = true;
+// }
 
 export const cache_scale = 3.5;
 const bg_cache = document.createElement("canvas");
@@ -123,7 +126,9 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
     ctx.strokeStyle = "#7C7C7C";
     ctx.stroke();
 
-    game.draw_static(ctx);
+    (await game).draw_static(ctx);
+
+    console.log("e");
 
     ctx.strokeStyle = "#505050";
     ctx.lineWidth = 10 * inch_pixel_ratio;
@@ -135,7 +140,7 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
 let init_load = false;
 export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
     if (!init_load) {
-        init_field_load(bg_cache.getContext("2d"));
+        await init_field_load(bg_cache.getContext("2d"));
         init_load = true;
     }
 

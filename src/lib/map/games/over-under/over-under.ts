@@ -4,7 +4,7 @@ import type { Game } from "../game";
 import { Triball } from "./triball";
 
 export class OverUnder implements Game {
-    readonly objects = [
+    objects = [
         new Triball(5.41, 5.41, 90),
         new Triball(field_side - 5.41, 5.41, 180),
         new Triball(5.41, field_side - 5.41),

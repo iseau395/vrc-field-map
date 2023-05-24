@@ -1,7 +1,11 @@
 import type { Input } from "../constants";
 import { set_cursor } from "../field";
 
-const callbacks: { [K in keyof Events]: Map<number, Events[K]> } = {
+export type Callbacks = {
+    [K in keyof Events]: Map<number, Events[K]>
+};
+
+let callbacks: Callbacks = {
     render: new Map(),
     postrender: new Map(),
     update: new Map()
