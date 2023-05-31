@@ -60,7 +60,6 @@
         });
 
         insert_dropdown.addEventListener("keydown", ev => {
-            console.log(ev.key);
             if (ev.key == "Enter") {
                 submit();
             }
@@ -69,7 +68,7 @@
 
     function submit() {
         if (type == 0) {
-            path.add_segment(new Point(point_x, point_y));
+            path.add_segment(new Point(point_y, point_x));
         } else if (type == 1) {
             path.add_segment(
                 new BezierCurve(
@@ -82,8 +81,6 @@
         }
 
         insert_dropdown_open.set(false);
-
-        console.log("e");
 
         return false;
     }

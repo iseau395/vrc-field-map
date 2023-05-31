@@ -11,12 +11,12 @@ export class OverUnder implements Game {
         new Triball(field_side - 5.41, field_side - 5.41, 270),
         
         new Triball(field_side / 3, field_side / 2, 90),
-        new Triball(67, field_side / 2, 270),
-        new Triball(67, field_side / 3, 90),
+        new Triball(field_side / 2 - 4, field_side / 2, 270),
+        new Triball(field_side / 2 - 4, field_side / 3, 90),
 
         new Triball(field_side / 3 * 2, field_side / 2, 270),
-        new Triball(76, field_side / 2, 90),
-        new Triball(76, field_side / 3 * 2, 270),
+        new Triball(field_side / 2 + 4, field_side / 2, 90),
+        new Triball(field_side / 2 + 4, field_side / 3 * 2, 270),
 
         new Triball(field_side / 2, field_side / 12, 90),
         new Triball(field_side / 2, field_side / 12 * 11, 270),

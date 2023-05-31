@@ -88,7 +88,7 @@ export function update_field(input: Input) {
 }
 
 let game_loaded = false;
-export let game = new Promise<Game>(async (resolve) => {
+export const game: Promise<Game> = new Promise<Game>(async (resolve) => {
     const value = new (await import("./games/over-under/over-under")).OverUnder();
     game_loaded = true;
 
@@ -96,11 +96,6 @@ export let game = new Promise<Game>(async (resolve) => {
 });
 
 export const path = new Path();
-
-// async function load_game_async() {
-//     game = new (await import("./games/over-under/over-under")).OverUnder();
-//     game_loaded = true;
-// }
 
 export const cache_scale = 3.5;
 const bg_cache = document.createElement("canvas");

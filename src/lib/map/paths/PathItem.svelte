@@ -196,7 +196,7 @@
         width: 10px;
         height: 10px;
 
-        margin-left: 5px;
-        margin-right: 10px;
+        margin-left: 20px;
+        margin-right: 25px;
     }
 </style>

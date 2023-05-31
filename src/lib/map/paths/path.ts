@@ -72,23 +72,17 @@ export class Path {
     }
 
     remove_segment(index: number) {
-        save_undo_state();
-        
         this.path[index].delete();
         this.path.splice(index, 1);
         this.notify();
     }
 
     move_segment(old_index: number, new_index: number) {
-        save_undo_state();
-
         this.path.splice(new_index, 0, this.path.splice(old_index, 1)[0]);
         this.notify();
     }
 
     add_segment(segment: Point | BezierCurve) {
-        save_undo_state();
-
         this.path.push(segment);
 
         this.notify();
