@@ -15,6 +15,8 @@ export class BezierCurve {
             new Point(x4, y4)
         ];
 
+        this.points[0].hidden = true;
+
         for (const point of this.points) {
             point.subscribe(() => this.notify());
         }

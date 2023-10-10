@@ -11,7 +11,7 @@ let callbacks: Callbacks = {
     update: new Map()
 };
 
-type MapObject = { x: number, y: number, notify?: () => void };
+type MapObject = { x: number, y: number, hidden?: boolean, notify?: () => void };
 
 const objects = new Map<number, MapObject>();
 
@@ -117,6 +117,7 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
             const update_func = this[callback_symbol].get("update") as Events["update"];
 
             this[callback_symbol].set("update", (input: Input) => {
+                if (this.hidden) return;
 
                 let changed = false;
 

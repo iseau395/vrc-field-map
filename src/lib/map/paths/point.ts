@@ -8,6 +8,8 @@ export class Point {
     x: number;
     y: number;
 
+    hidden: boolean;
+
     constructor(x: number, y: number) {
         this.x = x * inch_pixel_ratio;
         this.y = y * inch_pixel_ratio;
@@ -15,6 +17,8 @@ export class Point {
 
     @on("postrender")
     render(ctx: CanvasRenderingContext2D) {
+        if (this.hidden) return;
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, 1 * inch_pixel_ratio, 0, 2 * Math.PI);
 

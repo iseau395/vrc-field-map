@@ -3,6 +3,7 @@ import type { Input } from "./constants";
 import { grid_enabled } from "../../stores/settings";
 import { inch_pixel_ratio, field_side } from "./constants";
 import { Path } from "./paths/path";
+import type { Game } from "./games/game";
 
 let redraw_background = true;
 
@@ -122,8 +123,6 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
     ctx.stroke();
 
     (await game).draw_static(ctx);
-
-    console.log("e");
 
     ctx.strokeStyle = "#505050";
     ctx.lineWidth = 10 * inch_pixel_ratio;

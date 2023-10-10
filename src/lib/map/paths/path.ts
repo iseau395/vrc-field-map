@@ -21,11 +21,16 @@ export class Path {
                 x /= inch_pixel_ratio;
                 y /= inch_pixel_ratio;
 
+                if (this.path.length == 0) {
+                    this.add_segment(new Point(x, y));
+                }
+
                 this.add_segment(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
             }
         });
 
         on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
+        on_event("update", () => this.update());
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -53,6 +58,23 @@ export class Path {
                 ctx.lineTo(next_segment.x, next_segment.y);
             }
             ctx.stroke();
+        }
+    }
+
+    update() {
+        for (let i = 1; i < this.path.length; i++) {
+            let path_segment = this.path[i];
+            let last_path_segment = this.path[i-1];
+
+            if ("points" in path_segment) {
+                if ("points" in last_path_segment) {
+                    path_segment.points[0].x = last_path_segment.points[3].x;
+                    path_segment.points[0].y = last_path_segment.points[3].y;
+                } else {
+                    path_segment.points[0].x = last_path_segment.x;
+                    path_segment.points[0].y = last_path_segment.y;
+                }
+            }
         }
     }
 
