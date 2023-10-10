@@ -1,5 +1,5 @@
 import { inch_pixel_ratio } from "../constants";
-import { on_event, off } from "../objects/object";
+import { on_event, off, remove_callbacks } from "../objects/object";
 import { Point } from "./point";
 
 export class BezierCurve {

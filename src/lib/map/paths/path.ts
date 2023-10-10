@@ -3,7 +3,9 @@ import { on_event } from "../objects/object";
 import { Point } from "./point";
 import { register_insert_option } from "../../context_menu/context_menu";
 import { BezierCurve } from "./bezier";
+import { saveable } from "../saving";
 
+@saveable
 export class Path {
     path: (Point | BezierCurve)[] = [];
 
@@ -63,8 +65,8 @@ export class Path {
 
     update() {
         for (let i = 1; i < this.path.length; i++) {
-            let path_segment = this.path[i];
-            let last_path_segment = this.path[i-1];
+            const path_segment = this.path[i];
+            const last_path_segment = this.path[i-1];
 
             if ("points" in path_segment) {
                 if ("points" in last_path_segment) {
@@ -76,6 +78,71 @@ export class Path {
                 }
             }
         }
+    }
+
+    save() {
+        let data = "";
+
+        function round(value: number) {
+            return Math.round(value * 100) / 100;
+        }
+
+        for (let i = 0; i < this.path.length; i++) {
+            const path_segment = this.path[i];
+
+            if ("points" in path_segment) {
+                data += "b";
+                // data += `${round(path_segment.points[0].x)},${round(path_segment.points[0].y)},`;
+                data += `${round(path_segment.points[1].x)},${round(path_segment.points[1].y)},`;
+                data += `${round(path_segment.points[2].x)},${round(path_segment.points[2].y)},`;
+                data += `${round(path_segment.points[3].x)},${round(path_segment.points[3].y)}`;
+            } else {
+                data += `p${round(path_segment.x)},${round(path_segment.y)}`;
+            }
+
+            if (i != this.path.length - 1)
+                data += ";";
+        }
+
+        return data;
+    }
+
+    load(data_string: string) {
+        let data = data_string.split(";");
+
+        for (const segment of this.path) {
+            segment.delete();
+        }
+        this.path.length = 0;
+        
+        for (let i = 0; i < data.length; i++) {
+            let encoded_segment = data[i];
+
+            if (encoded_segment.startsWith("b")) {
+                encoded_segment = encoded_segment.substring(1);
+
+                let points = encoded_segment.split(",");
+
+                this.path.push(new BezierCurve(
+                    0,
+                    0,
+                    +points[0] / inch_pixel_ratio,
+                    +points[1] / inch_pixel_ratio,
+                    +points[2] / inch_pixel_ratio,
+                    +points[3] / inch_pixel_ratio,
+                    +points[4] / inch_pixel_ratio,
+                    +points[5] / inch_pixel_ratio
+                ));
+            } else {
+                encoded_segment = encoded_segment.substring(1);
+
+                let point = encoded_segment.split(",");
+
+                this.path.push(new Point(+point[0] / inch_pixel_ratio, +point[1] / inch_pixel_ratio));
+            }
+        }
+
+        this.notify();
     }
 
     private readonly callbacks = [];

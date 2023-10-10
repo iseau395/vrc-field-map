@@ -8,6 +8,7 @@
     import type { Input } from "./constants";
 
     import PathSidebar, { sidebar_visible } from "./paths/PathSidebar.svelte";
+    import { get_save_state, load_save_state } from "./saving";
 
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
@@ -36,6 +37,26 @@
             keys: new Map<string, boolean | undefined>(),
         };
 
+        const undo_states: string[] = [];
+        const redo_states: string[] = [];
+
+        function cache_undo_state() {
+            const save_state = get_save_state();
+
+            if (save_state != undo_states.at(-1)) {
+                undo_states.push(save_state);
+
+                if (undo_states.length > 25) {
+                    undo_states.shift();
+                }
+
+                redo_states.length = 0;
+                redo_states.push(save_state);
+            }
+        }
+
+        cache_undo_state();
+
         // Input events
         {
             window.addEventListener("focus", () => {
@@ -54,6 +75,7 @@
                     ev.preventDefault();
 
                 input.keys.set(ev.key, false);
+                cache_undo_state()
             });
 
             window.addEventListener("mousemove", ev => {
@@ -72,6 +94,7 @@
             fg_canvas.addEventListener("mouseup", () => {
                 input.mouse_button = -1;
                 input.mouse_button_changed = true;
+                cache_undo_state()
             });
 
             fg_canvas.addEventListener("contextmenu", ev => {
@@ -103,6 +126,8 @@
         window.addEventListener("resize", resize);
 
         let last_wheel = input.wheel;
+        let last_undo = false;
+        let last_redo = false;
         function tick() {
             let any_true = false;
             for (const value of input.keys.values()) {
@@ -110,6 +135,27 @@
                     any_true = true;
                     break;
                 }
+            }
+
+            const undo_pressed = input.keys.get("Control") && input.keys.get("z");
+            if (undo_pressed && !last_undo && undo_states.length > 1) {
+                load_save_state(undo_states.at(-2));
+                redo_states.push(undo_states.at(-2));
+                undo_states.pop();
+                last_undo = true;
+            } if (!undo_pressed && last_undo) {
+                last_undo = false;
+            }
+            
+
+            const redo_pressed = input.keys.get("Control") && input.keys.get("y");
+            if (redo_pressed && !last_redo && redo_states.length > 1) {
+                load_save_state(redo_states.at(-2));
+                undo_states.push(redo_states.at(-2));
+                redo_states.pop();
+                last_redo = true;
+            } if (!redo_pressed && last_redo) {
+                last_redo = false;
             }
 
             if (any_true || last_wheel != input.wheel)
