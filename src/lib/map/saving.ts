@@ -33,7 +33,6 @@ export function saveable_off<T extends Saveable>(object: T) {
     }
 }
 
-
 export function get_save_state() {
     let data = "";
 
@@ -54,3 +53,54 @@ export function load_save_state(raw_data: string) {
         load_callbacks[i](data[i]);
     }
 }
+
+
+const undo_states: string[] = [];
+const redo_states: string[] = [];
+let skip_cache = false;
+
+export function cache_undo_state() {
+    if (skip_cache) {
+        skip_cache = false;
+        return;
+    }
+
+    const save_state = get_save_state();
+
+    if (save_state != undo_states.at(-1)) {
+        undo_states.push(save_state);
+
+        if (undo_states.length > 25) {
+            undo_states.shift();
+        }
+
+        redo_states.length = 0;
+        redo_states.push(save_state);
+    }
+}
+
+export function undo() {
+    if (undo_states.length <= 1) {
+        return;
+    }
+
+    load_save_state(undo_states.at(-2));
+    redo_states.push(undo_states.at(-2));
+    undo_states.pop();
+
+    skip_cache = true;
+}
+
+export function redo() {
+    if (redo_states.length <= 1) {
+        return;
+    }
+
+    load_save_state(redo_states.at(-2));
+    undo_states.push(redo_states.at(-2));
+    redo_states.pop();
+
+    skip_cache = true;
+}
+
+cache_undo_state();

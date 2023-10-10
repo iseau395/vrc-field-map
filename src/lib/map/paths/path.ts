@@ -81,6 +81,8 @@ export class Path {
     }
 
     save() {
+        if (this.path.length == 0) return "";
+
         let data = "";
 
         function round(value: number) {
@@ -114,6 +116,10 @@ export class Path {
             segment.delete();
         }
         this.path.length = 0;
+
+        if (data.length == 0) {
+            return;
+        }
         
         for (let i = 0; i < data.length; i++) {
             let encoded_segment = data[i];
@@ -133,7 +139,7 @@ export class Path {
                     +points[4] / inch_pixel_ratio,
                     +points[5] / inch_pixel_ratio
                 ));
-            } else {
+            } else if (encoded_segment.startsWith("p")) {
                 encoded_segment = encoded_segment.substring(1);
 
                 let point = encoded_segment.split(",");

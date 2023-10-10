@@ -44,7 +44,6 @@ export class Point {
     }
 
     delete() {
-        console.log("deleting...");
         // @ts-ignore
         remove_callbacks(this);
     }
