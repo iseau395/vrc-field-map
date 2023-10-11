@@ -1,6 +1,6 @@
 
 type SaveFunc = () => string;
-type LoadFunc = (data: String) => void;
+type LoadFunc = (data: string) => void;
 interface Saveable {
     save: SaveFunc;
     load: LoadFunc;
@@ -8,7 +8,7 @@ interface Saveable {
 
 const save_callbacks: SaveFunc[] = [];
 const load_callbacks: LoadFunc[] = [];
-export function saveable<T extends new (...args: any[]) => Saveable>(Base: T) {
+export function saveable<T extends (new (...args: any[]) => Saveable)>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -84,8 +84,8 @@ export function undo() {
         return;
     }
 
-    load_save_state(undo_states.at(-2));
-    redo_states.push(undo_states.at(-2));
+    load_save_state(undo_states.at(-2) as string);
+    redo_states.push(undo_states.at(-2) as string);
     undo_states.pop();
 
     skip_cache = true;
@@ -96,8 +96,8 @@ export function redo() {
         return;
     }
 
-    load_save_state(redo_states.at(-2));
-    undo_states.push(redo_states.at(-2));
+    load_save_state(redo_states.at(-2) as string);
+    undo_states.push(redo_states.at(-2) as string);
     redo_states.pop();
 
     skip_cache = true;

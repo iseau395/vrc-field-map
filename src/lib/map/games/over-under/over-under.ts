@@ -181,7 +181,7 @@ export class OverUnder implements Game {
         ctx.lineWidth = inch_pixel_ratio/4;
         ctx.stroke();
 
-        ctx.beginPath()
+        ctx.beginPath();
         ctx.arc(side / 6, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
         ctx.closePath();
 

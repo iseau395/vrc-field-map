@@ -8,7 +8,7 @@
     import type { Input } from "./constants";
 
     import PathSidebar, { sidebar_visible } from "./paths/PathSidebar.svelte";
-    import { cache_undo_state, get_save_state, load_save_state, redo, undo } from "./saving";
+    import { cache_undo_state, redo, undo } from "./saving";
 
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
@@ -23,8 +23,8 @@
     };
 
     onMount(() => {
-        const bg_ctx = bg_canvas.getContext("2d", { alpha: false });
-        const fg_ctx = fg_canvas.getContext("2d");
+        const bg_ctx = bg_canvas.getContext("2d", { alpha: false }) as CanvasRenderingContext2D;
+        const fg_ctx = fg_canvas.getContext("2d") as CanvasRenderingContext2D;
 
         const input: Input = {
             mouse_x: 0,
@@ -34,7 +34,7 @@
             mouse_button: -1,
             mouse_button_changed: false,
             wheel: -1,
-            keys: new Map<string, boolean | undefined>(),
+            keys: new Map<string, boolean | null>(),
         };
 
 

@@ -9,7 +9,7 @@ const radius = 3.5 * inch_pixel_ratio;
 export class Triball {
     public x: number;
     public y: number;
-    public rotation: number
+    public rotation: number;
 
     constructor(x: number, y: number, rotation: number = 0) {
         this.x = x * inch_pixel_ratio;

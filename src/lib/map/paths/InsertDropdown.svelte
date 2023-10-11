@@ -34,16 +34,16 @@
                 if (point_regex.test(data)) {
                     const output = point_regex.exec(data);
 
-                    point_x = +output.groups.x;
-                    point_y = +output.groups.y;
+                    point_x = +output!.groups!.x;
+                    point_y = +output!.groups!.y;
 
                     ev.preventDefault();
                 }
             } else if (type == 1) {
-                const bezier_regex = /^pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |	)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\)$/;
+                const bezier_regex = /^pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |\t)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |\t)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\),?\n?(?: |\t)*pos\((-?\d+(?:\.\d+)?), (-?\d+(?:\.\d+)?)\)$/;
 
                 if (bezier_regex.test(data)) {
-                    const output = bezier_regex.exec(data);
+                    const output = bezier_regex.exec(data)!;
 
                     bezier_x1 = +output[2];
                     bezier_y1 = +output[1];

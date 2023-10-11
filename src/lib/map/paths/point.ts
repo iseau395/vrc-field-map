@@ -8,7 +8,7 @@ export class Point {
     x: number;
     y: number;
 
-    hidden: boolean;
+    hidden: boolean = false;
 
     constructor(x: number, y: number) {
         this.x = x * inch_pixel_ratio;
@@ -26,7 +26,7 @@ export class Point {
         ctx.fill();
     }
 
-    private readonly subscribers = [];
+    private readonly subscribers: ((point: Point) => void)[] = [];
     subscribe(callback: (point: Point) => void) {
         callback(this);
 
@@ -44,7 +44,6 @@ export class Point {
     }
 
     delete() {
-        // @ts-ignore
         remove_callbacks(this);
     }
 }
