@@ -101,7 +101,7 @@ export const game: Promise<Game> = new Promise<Game>(async (resolve) => {
 
 export const path = new Path();
 
-export const cache_scale = 3.5;
+export const cache_scale = 3;
 const bg_cache = document.createElement("canvas");
 bg_cache.width = field_side * inch_pixel_ratio * cache_scale;
 bg_cache.height = field_side * inch_pixel_ratio * cache_scale;
@@ -141,13 +141,11 @@ export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
         init_load = true;
     }
 
-    ctx.save();
-    ctx.translate(field_x, field_y);
-    ctx.scale(field_scale / cache_scale, field_scale / cache_scale);
-
-    ctx.drawImage(bg_cache, 0, 0);
-
-    ctx.restore();
+    ctx.drawImage(bg_cache,
+        field_x, field_y,
+        field_side * inch_pixel_ratio * field_scale,
+        field_side * inch_pixel_ratio * field_scale
+    );
 }
 
 export function draw_field(fg_ctx: CanvasRenderingContext2D, bg_ctx: CanvasRenderingContext2D, draw_background: boolean) {
