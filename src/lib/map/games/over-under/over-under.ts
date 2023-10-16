@@ -132,6 +132,7 @@ export class OverUnder implements Game {
         // Goals
 
         ctx.lineWidth = 1 * inch_pixel_ratio;
+        const goal_net_gap = 1.5 * inch_pixel_ratio;
 
         // Red Goal
 
@@ -169,6 +170,34 @@ export class OverUnder implements Game {
         ctx.lineWidth = 1 * inch_pixel_ratio - inch_pixel_ratio / 2;
         ctx.stroke();
 
+        ctx.beginPath();
+        for (let i = 0; i < 11; i++) {
+            const x = side / 6 * 5 + side / 6 / 11 * i;
+
+            ctx.moveTo(x, side / 3 + goal_net_gap);
+            ctx.lineTo(x, side / 3 * 2 - goal_net_gap);
+        }
+        for (let i = 0; i < 20; i++) {
+            const y = (side / 3) + (side / 3 - goal_net_gap * 2) / 20 * i + goal_net_gap;
+
+            ctx.moveTo(side / 6 * 5, y);
+            ctx.lineTo(side, y);
+        }
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = .1 * inch_pixel_ratio;
+        ctx.stroke();
+
+        ctx.beginPath();
+
+        ctx.moveTo(side, side / 3 + goal_net_gap);
+        ctx.lineTo(side / 6 * 5, side / 3 + goal_net_gap);
+        ctx.lineTo(side / 6 * 5, side / 3 * 2 - goal_net_gap);
+        ctx.lineTo(side, side / 3 * 2 - goal_net_gap);
+        
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1 * inch_pixel_ratio;
+        ctx.stroke();
+
         // Blue Goal
 
         ctx.beginPath();
@@ -181,7 +210,7 @@ export class OverUnder implements Game {
         ctx.lineWidth = inch_pixel_ratio/4;
         ctx.stroke();
 
-        ctx.beginPath()
+        ctx.beginPath();
         ctx.arc(side / 6, side / 3 * 2, 4.315 * inch_pixel_ratio, 0, Math.PI * 2);
         ctx.closePath();
 
@@ -204,5 +233,34 @@ export class OverUnder implements Game {
         ctx.strokeStyle = "#0000FF";
         ctx.lineWidth = 1 * inch_pixel_ratio - inch_pixel_ratio / 2;
         ctx.stroke();
+        
+        ctx.beginPath();
+        for (let i = 0; i < 11; i++) {
+            const x = side / 6 / 11 * i;
+
+            ctx.moveTo(x, side / 3 + goal_net_gap);
+            ctx.lineTo(x, side / 3 * 2 - goal_net_gap);
+        }
+        for (let i = 0; i < 20; i++) {
+            const y = (side / 3) + (side / 3 - goal_net_gap * 2) / 20 * i + goal_net_gap;
+
+            ctx.moveTo(0, y);
+            ctx.lineTo(side / 6, y);
+        }
+        ctx.strokeStyle = "#0000FF";
+        ctx.lineWidth = .1 * inch_pixel_ratio;
+        ctx.stroke();
+        
+        ctx.beginPath();
+
+        ctx.moveTo(0, side / 3 + goal_net_gap);
+        ctx.lineTo(side / 6, side / 3 + goal_net_gap);
+        ctx.lineTo(side / 6, side / 3 * 2 - goal_net_gap);
+        ctx.lineTo(0, side / 3 * 2 - goal_net_gap);
+        
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1 * inch_pixel_ratio;
+        ctx.stroke();
+
     }
 }
