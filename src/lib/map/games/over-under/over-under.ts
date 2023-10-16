@@ -2,7 +2,10 @@ import { field_side, inch_pixel_ratio } from "../../constants";
 import { register_insert_option } from "../../../context_menu/context_menu";
 import type { Game } from "../game";
 import { Triball } from "./triball";
+import { cache_undo_state, saveable } from "../../saving";
+import { remove_callbacks } from "../../objects/object";
 
+@saveable
 export class OverUnder implements Game {
     objects = [
         new Triball(5.41, 5.41, 90),
@@ -25,9 +28,43 @@ export class OverUnder implements Game {
     constructor() {
         register_insert_option({
             name: "Triball",
-            on_select: (x, y) =>
-                this.objects.push(new Triball(x/inch_pixel_ratio, y/inch_pixel_ratio))
+            on_select: (x, y) => {
+                this.objects.push(new Triball(x/inch_pixel_ratio, y/inch_pixel_ratio));
+
+                cache_undo_state();
+            }
         });
+    }
+
+    save() {
+        function round(value: number) {
+            return Math.round(value * 100) / 100;
+        }
+
+        let data = "";
+
+        for (const object of this.objects) {
+            data += `${round(object.x/inch_pixel_ratio)},${round(object.y/inch_pixel_ratio)},${round(object.rotation/Math.PI*180)};`;
+        }
+
+        return data.slice(0, -1);
+    }
+
+    load(raw_data: string) {
+        for (const object of this.objects) {
+            remove_callbacks(object);
+        }
+        this.objects.length = 0;
+
+        if (!raw_data) return;
+
+        const data = raw_data.split(";");
+
+        for (const encoded_segment of data) {
+            const point = encoded_segment.split(",");
+
+            this.objects.push(new Triball(+point[0], +point[1], +point[2]));
+        }
     }
 
     draw_static(ctx: CanvasRenderingContext2D): void {

@@ -3,6 +3,7 @@ import type { Game } from "../game";
 import { Disc } from "./disc";
 import { Roller, RollerState } from "./roller";
 import { register_insert_option } from "../../../context_menu/context_menu";
+import { cache_undo_state } from "../../saving";
 
 export class SpinUp implements Game {
     readonly objects = [
@@ -90,8 +91,11 @@ export class SpinUp implements Game {
     constructor() {
         register_insert_option({
             name: "Disc",
-            on_select: (x, y) =>
-                this.objects.push(new Disc(x/inch_pixel_ratio, y/inch_pixel_ratio))
+            on_select: (x, y) => {
+                this.objects.push(new Disc(x/inch_pixel_ratio, y/inch_pixel_ratio));
+
+                cache_undo_state();
+            }
         });
     }
 

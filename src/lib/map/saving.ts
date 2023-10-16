@@ -33,6 +33,11 @@ export function saveable_off<T extends Saveable>(object: T) {
     }
 }
 
+const before_load_callbacks: (() => void)[] = [];
+export function before_load(callback: () => void) {
+    before_load_callbacks.push(callback);
+}
+
 export function get_save_state() {
     let data = "";
 
@@ -49,6 +54,12 @@ export function get_save_state() {
 export function load_save_state(raw_data: string) {
     const data = raw_data.split("|");
 
+    for (const callback of before_load_callbacks) {
+        (() => {
+            callback();
+        })();
+    }
+
     for (let i = 0; i < load_callbacks.length; i++) {
         load_callbacks[i](data[i]);
     }
@@ -58,12 +69,15 @@ export function load_save_state(raw_data: string) {
 const undo_states: string[] = [];
 const redo_states: string[] = [];
 let skip_cache = false;
+let first_cache = false;
 
 export function cache_undo_state() {
     if (skip_cache) {
         skip_cache = false;
         return;
     }
+    
+    first_cache = true;
 
     const save_state = get_save_state();
 
@@ -80,7 +94,7 @@ export function cache_undo_state() {
 }
 
 export function undo() {
-    if (undo_states.length <= 1) {
+    if (undo_states.length <= 1 || !first_cache) {
         return;
     }
 
@@ -92,7 +106,7 @@ export function undo() {
 }
 
 export function redo() {
-    if (redo_states.length <= 1) {
+    if (redo_states.length <= 1 || !first_cache) {
         return;
     }
 
@@ -102,5 +116,3 @@ export function redo() {
 
     skip_cache = true;
 }
-
-cache_undo_state();

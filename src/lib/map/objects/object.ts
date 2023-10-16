@@ -1,5 +1,6 @@
 import type { Input } from "../constants";
 import { set_cursor } from "../field";
+import { before_load } from "../saving";
 
 export type Callbacks = {
     [K in keyof Events]: Map<number, Events[K]>
@@ -20,7 +21,11 @@ const objects = new Map<number, MapObject>();
 export const callback_symbol = Symbol("ObjectCallbacks");
 const id_symbol = Symbol("ObjectID");
 
-let current_id = 0;
+let current_id = 1;
+
+before_load(() => {
+    current_id = 1;
+});
 
 export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
     return class extends Base {
