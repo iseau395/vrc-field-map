@@ -90,7 +90,7 @@
 
             fg_canvas.addEventListener("wheel", ev => {
                 input.wheel += ev.deltaY * 0.01;
-                input.wheel = Math.min(Math.max(-10, input.wheel), -.75);
+                input.wheel = Math.min(Math.max(-5, input.wheel), -.75);
             }, { passive: true });
         }
 
