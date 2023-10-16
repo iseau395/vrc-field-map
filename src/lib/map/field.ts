@@ -92,7 +92,7 @@ export function update_field(input: Input) {
 let game_loaded = false;
 // eslint-disable-next-line no-async-promise-executor
 export const game: Promise<Game> = new Promise<Game>(async (resolve) => {
-    const value = new (await import("./games/over-under/over-under")).OverUnder();
+    const value = new (await import("./games/spin-up/spin-up")).SpinUp();
     cache_undo_state();
     game_loaded = true;
 

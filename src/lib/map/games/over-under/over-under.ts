@@ -7,7 +7,7 @@ import { remove_callbacks } from "../../objects/object";
 
 @saveable
 export class OverUnder implements Game {
-    objects = [
+    readonly objects = [
         new Triball(5.41, 5.41, 90),
         new Triball(field_side - 5.41, 5.41, 180),
         new Triball(5.41, field_side - 5.41),

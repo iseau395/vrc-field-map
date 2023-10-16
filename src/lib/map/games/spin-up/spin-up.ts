@@ -3,8 +3,10 @@ import type { Game } from "../game";
 import { Disc } from "./disc";
 import { Roller, RollerState } from "./roller";
 import { register_insert_option } from "../../../context_menu/context_menu";
-import { cache_undo_state } from "../../saving";
+import { cache_undo_state, saveable } from "../../saving";
+import { remove_callbacks } from "../../objects/object";
 
+@saveable
 export class SpinUp implements Game {
     readonly objects = [
         new Roller(0, field_side / 6, true, RollerState.BlueRed),
@@ -92,11 +94,90 @@ export class SpinUp implements Game {
         register_insert_option({
             name: "Disc",
             on_select: (x, y) => {
-                this.objects.push(new Disc(x/inch_pixel_ratio, y/inch_pixel_ratio));
+                this.objects.push(new Disc(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
                 cache_undo_state();
             }
         });
+    }
+
+    save() {
+        function round(value: number) {
+            return Math.round(value * 100) / 100;
+        }
+
+        let data = "";
+
+        for (const object of this.objects) {
+            if ("state" in object) {
+                switch (object.state) {
+                    case RollerState.Blue: {
+                        data += "BB";
+                    } break;
+                    case RollerState.Red: {
+                        data += "RR";
+                    } break;
+                    case RollerState.BlueRed: {
+                        data += "BR";
+                    } break;
+                    case RollerState.RedBlue: {
+                        data += "RB";
+                    } break;
+                }
+            } else {
+                data += `${round(object.x / inch_pixel_ratio)},${round(object.y / inch_pixel_ratio)};`;
+            }
+        }
+
+        return data.slice(0, -1);
+    }
+
+    load(raw_data: string) {
+        const roller_data: [number, number, boolean][] = [
+            [this.objects[0].x / inch_pixel_ratio, this.objects[0].y / inch_pixel_ratio, (this.objects[0] as Roller).rotated],
+            [this.objects[1].x / inch_pixel_ratio, this.objects[1].y / inch_pixel_ratio, (this.objects[1] as Roller).rotated],
+            [this.objects[2].x / inch_pixel_ratio, this.objects[2].y / inch_pixel_ratio, (this.objects[2] as Roller).rotated],
+            [this.objects[3].x / inch_pixel_ratio, this.objects[3].y / inch_pixel_ratio, (this.objects[3] as Roller).rotated]
+        ];
+
+        for (const object of this.objects) {
+            remove_callbacks(object);
+        }
+        this.objects.length = 0;
+
+        if (!raw_data) return;
+
+        const raw_rollers = [
+            raw_data.slice(0, 2),
+            raw_data.slice(2, 4),
+            raw_data.slice(4, 6),
+            raw_data.slice(6, 8)
+        ];
+
+        for (let i = 0; i < raw_rollers.length; i++) {
+            switch (raw_rollers[i]) {
+                case "BB": {
+                    this.objects.push(new Roller(roller_data[i][0], roller_data[i][1], roller_data[i][2], RollerState.Blue));
+                } break;
+                case "RR": {
+                    this.objects.push(new Roller(roller_data[i][0], roller_data[i][1], roller_data[i][2], RollerState.Red));
+                } break;
+                case "BR": {
+                    this.objects.push(new Roller(roller_data[i][0], roller_data[i][1], roller_data[i][2], RollerState.BlueRed));
+                } break;
+                case "RB": {
+                    this.objects.push(new Roller(roller_data[i][0], roller_data[i][1], roller_data[i][2], RollerState.RedBlue));
+                } break;
+            }
+        }
+
+        const data = raw_data.slice(8, raw_data.length).split(";");
+
+        for (const encoded_segment of data) {
+            const point = encoded_segment.split(",");
+
+            this.objects.push(new Disc(+point[0], +point[1]));
+        }
     }
 
     draw_static(ctx: CanvasRenderingContext2D): void {
@@ -108,7 +189,7 @@ export class SpinUp implements Game {
 
         // Diagonal Lines
 
-        const line_seperation = Math.SQRT2 + Math.sqrt((.5/2)^2 + (.5/2)^2);
+        const line_seperation = Math.SQRT2 + Math.sqrt((.5 / 2) ^ 2 + (.5 / 2) ^ 2);
 
         ctx.moveTo(line_seperation * inch_pixel_ratio, 0);
         ctx.lineTo((field_side * inch_pixel_ratio), (field_side * inch_pixel_ratio) - line_seperation * inch_pixel_ratio);
