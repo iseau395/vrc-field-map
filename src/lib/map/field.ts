@@ -4,6 +4,7 @@ import { grid_enabled } from "../../stores/settings";
 import { inch_pixel_ratio, field_side } from "./constants";
 import { Path } from "./paths/path";
 import type { Game } from "./games/game";
+import { cache_undo_state } from "./saving";
 
 let redraw_background = true;
 
@@ -89,8 +90,10 @@ export function update_field(input: Input) {
 }
 
 let game_loaded = false;
+// eslint-disable-next-line no-async-promise-executor
 export const game: Promise<Game> = new Promise<Game>(async (resolve) => {
     const value = new (await import("./games/over-under/over-under")).OverUnder();
+    cache_undo_state();
     game_loaded = true;
 
     resolve(value);
@@ -134,7 +137,7 @@ async function init_field_load(ctx: CanvasRenderingContext2D) {
 let init_load = false;
 export async function draw_field_bg(ctx: CanvasRenderingContext2D) {
     if (!init_load) {
-        await init_field_load(bg_cache.getContext("2d"));
+        await init_field_load(bg_cache.getContext("2d") as CanvasRenderingContext2D);
         init_load = true;
     }
 

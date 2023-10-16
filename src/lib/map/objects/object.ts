@@ -1,17 +1,18 @@
 import type { Input } from "../constants";
 import { set_cursor } from "../field";
+import { before_load } from "../saving";
 
 export type Callbacks = {
     [K in keyof Events]: Map<number, Events[K]>
 };
 
-let callbacks: Callbacks = {
-    render: new Map(),
-    postrender: new Map(),
-    update: new Map()
+const callbacks: Callbacks = {
+    render: new Map<number, Events["render"]>(),
+    postrender: new Map<number, Events["postrender"]>(),
+    update: new Map<number, Events["update"]>()
 };
 
-type MapObject = { x: number, y: number, hidden?: boolean, notify?: () => void };
+type MapObject = { x: number, y: number, hidden?: boolean, [id_symbol]?: number, notify?: () => void };
 
 const objects = new Map<number, MapObject>();
 
@@ -20,7 +21,11 @@ const objects = new Map<number, MapObject>();
 export const callback_symbol = Symbol("ObjectCallbacks");
 const id_symbol = Symbol("ObjectID");
 
-let current_id = 0;
+let current_id = 1;
+
+before_load(() => {
+    current_id = 1;
+});
 
 export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
     return class extends Base {
@@ -34,9 +39,9 @@ export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
             const object_callbacks: Map<keyof Events, Events[keyof Events]> | undefined = Base.prototype[callback_symbol];
 
             if (object_callbacks) {
-                object_callbacks.forEach((value: (...args: unknown[]) => void, key: string) => {
-                    callbacks[key].set(this[id_symbol], (ctx: CanvasRenderingContext2D) =>
-                        value.apply(this, [ctx]));
+                object_callbacks.forEach((value: (...args: any[]) => void, key: keyof Events) => {
+                    callbacks[key].set(this[id_symbol]!, (...params: unknown[]) =>
+                        value.apply(this, params));
                 });
             }
         }
@@ -66,13 +71,13 @@ export function collisioncircle(x_offset: number, y_offset: number, radius: numb
     };
 }
 
-export function add_box_collision<T>(object: T, x_offset: number, y_offset: number, width: number, height: number) {
+export function add_box_collision<T extends { [collision_symbol]: Collision[] }>(object: T, x_offset: number, y_offset: number, width: number, height: number) {
     if (!object[collision_symbol])
         object[collision_symbol] = [];
 
     object[collision_symbol].push([CollisionType.BOX, x_offset, y_offset, width, height]);
 }
-export function add_circle_collision<T>(object: T, x_offset: number, y_offset: number, radius: number) {
+export function add_circle_collision<T extends { [collision_symbol]: Collision[] }>(object: T, x_offset: number, y_offset: number, radius: number) {
     if (!object[collision_symbol])
         object[collision_symbol] = [];
 
@@ -81,7 +86,7 @@ export function add_circle_collision<T>(object: T, x_offset: number, y_offset: n
 
 // Misc
 
-export function in_collision<T>(object: T, x: number, y: number) {
+export function in_collision<T extends { [collision_symbol]: Collision[] } & MapObject>(object: T, x: number, y: number) {
     x -= object["x"];
     y -= object["y"];
 
@@ -93,9 +98,9 @@ export function in_collision<T>(object: T, x: number, y: number) {
                 return true;
             }
         }
-    
+
         if (collision[0] == CollisionType.CIRCLE) {
-            if ((x - collision[1])**2 + (y - collision[2])**2 < collision[3]**2) {
+            if ((x - collision[1]) ** 2 + (y - collision[2]) ** 2 < collision[3] ** 2) {
                 return true;
             }
         }
@@ -106,7 +111,11 @@ export function in_collision<T>(object: T, x: number, y: number) {
 
 export let selection = -1;
 
-export function dragable<T extends new (...args: any[]) => { [callback_symbol]?: Map<string, Events[keyof Events]>, [collision_symbol]?: Collision[] } & MapObject>(Base: T) {
+interface Dragable extends MapObject {
+    [callback_symbol]?: Map<string, Events[keyof Events]>,
+    [collision_symbol]?: Collision[]
+}
+export function dragable<T extends new (...args: any[]) => Dragable>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -123,8 +132,8 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
 
                 if (selection == -1 && input.mouse_button == 0 && this[collision_symbol]) {
 
-                    if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt")) {
-                        selection = this[id_symbol];
+                    if (collision_symbol in this && in_collision(this as { [collision_symbol]: Collision[] } & typeof this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt")) {
+                        selection = this[id_symbol]!;
 
                         if (this.x != input.mouse_x || this.y != input.mouse_y)
                             changed = true;
@@ -133,7 +142,7 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
                         this.y = input.gridless_mouse_y;
                     }
                 } else if (selection == -1 && this[collision_symbol]) {
-                    if (in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
+                    if (in_collision(this as { [collision_symbol]: Collision[] } & typeof this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt"))
                         set_cursor("grab");
                 }
 
@@ -141,7 +150,7 @@ export function dragable<T extends new (...args: any[]) => { [callback_symbol]?:
                     update_func(input);
 
                 if ("notify" in this && changed)
-                    this.notify();
+                    this.notify!();
             });
         }
     };
@@ -156,11 +165,11 @@ interface Events {
 }
 
 export function on<E extends keyof Events>(event: E) {
-    return (target: unknown, _: unknown, descriptor: TypedPropertyDescriptor<Events[E]>) => {
+    return (target: { [callback_symbol]?: Map<keyof Events, Events[keyof Events]> } & MapObject, _: unknown, descriptor: TypedPropertyDescriptor<Events[E]>) => {
         if (!target[callback_symbol])
             target[callback_symbol] = new Map<keyof Events, Events[keyof Events]>();
 
-        target[callback_symbol].set(event, descriptor.value);
+        target[callback_symbol].set(event, descriptor.value!);
     };
 }
 
@@ -175,9 +184,11 @@ export function off(event: keyof Events, id: number) {
     callbacks[event].delete(id);
 }
 
-export function remove_callbacks(target: { [callback_symbol]: Map<keyof Events, Events[keyof Events]> }) {
+export function remove_callbacks(target: { [callback_symbol]?: Map<keyof Events, Events[keyof Events]> } & MapObject) {
     const target_callbacks = target[callback_symbol];
     const id = target[id_symbol];
+    
+    if (!target_callbacks || !id) return;
 
     target_callbacks.forEach((callback, event) => {
         off(event, id);
@@ -199,7 +210,7 @@ export function update_objects(input: Input) {
     if (selection != -1 && input.mouse_button == 0) {
         set_cursor("grabbing");
 
-        const selected_object = objects.get(selection);
+        const selected_object = objects.get(selection)!;
 
         const changed = selected_object.x != input.mouse_x || selected_object.y != input.mouse_y;
 
@@ -209,7 +220,7 @@ export function update_objects(input: Input) {
         objects.set(selection, selected_object);
 
         if ("notify" in selected_object && changed)
-            selected_object.notify();
+            selected_object.notify!();
     } else if (input.mouse_button != 0) {
         selection = -1;
     }

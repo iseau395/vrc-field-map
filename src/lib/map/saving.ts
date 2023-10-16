@@ -1,6 +1,6 @@
 
 type SaveFunc = () => string;
-type LoadFunc = (data: String) => void;
+type LoadFunc = (data: string) => void;
 interface Saveable {
     save: SaveFunc;
     load: LoadFunc;
@@ -8,7 +8,7 @@ interface Saveable {
 
 const save_callbacks: SaveFunc[] = [];
 const load_callbacks: LoadFunc[] = [];
-export function saveable<T extends new (...args: any[]) => Saveable>(Base: T) {
+export function saveable<T extends (new (...args: any[]) => Saveable)>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -33,6 +33,11 @@ export function saveable_off<T extends Saveable>(object: T) {
     }
 }
 
+const before_load_callbacks: (() => void)[] = [];
+export function before_load(callback: () => void) {
+    before_load_callbacks.push(callback);
+}
+
 export function get_save_state() {
     let data = "";
 
@@ -49,6 +54,12 @@ export function get_save_state() {
 export function load_save_state(raw_data: string) {
     const data = raw_data.split("|");
 
+    for (const callback of before_load_callbacks) {
+        (() => {
+            callback();
+        })();
+    }
+
     for (let i = 0; i < load_callbacks.length; i++) {
         load_callbacks[i](data[i]);
     }
@@ -58,12 +69,15 @@ export function load_save_state(raw_data: string) {
 const undo_states: string[] = [];
 const redo_states: string[] = [];
 let skip_cache = false;
+let first_cache = false;
 
 export function cache_undo_state() {
     if (skip_cache) {
         skip_cache = false;
         return;
     }
+    
+    first_cache = true;
 
     const save_state = get_save_state();
 
@@ -80,27 +94,25 @@ export function cache_undo_state() {
 }
 
 export function undo() {
-    if (undo_states.length <= 1) {
+    if (undo_states.length <= 1 || !first_cache) {
         return;
     }
 
-    load_save_state(undo_states.at(-2));
-    redo_states.push(undo_states.at(-2));
+    load_save_state(undo_states.at(-2) as string);
+    redo_states.push(undo_states.at(-2) as string);
     undo_states.pop();
 
     skip_cache = true;
 }
 
 export function redo() {
-    if (redo_states.length <= 1) {
+    if (redo_states.length <= 1 || !first_cache) {
         return;
     }
 
-    load_save_state(redo_states.at(-2));
-    undo_states.push(redo_states.at(-2));
+    load_save_state(redo_states.at(-2) as string);
+    undo_states.push(redo_states.at(-2) as string);
     redo_states.pop();
 
     skip_cache = true;
 }
-
-cache_undo_state();

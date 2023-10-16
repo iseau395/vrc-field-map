@@ -3,7 +3,7 @@ import { on_event } from "../objects/object";
 import { Point } from "./point";
 import { register_insert_option } from "../../context_menu/context_menu";
 import { BezierCurve } from "./bezier";
-import { saveable } from "../saving";
+import { cache_undo_state, saveable } from "../saving";
 
 @saveable
 export class Path {
@@ -14,6 +14,8 @@ export class Path {
             name: "Point",
             on_select: (x, y) => {
                 this.add_segment(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
+
+                cache_undo_state();
             }
         });
 
@@ -28,6 +30,8 @@ export class Path {
                 }
 
                 this.add_segment(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
+
+                cache_undo_state();
             }
         });
 
@@ -110,7 +114,7 @@ export class Path {
     }
 
     load(data_string: string) {
-        let data = data_string.split(";");
+        const data = data_string.split(";");
 
         for (const segment of this.path) {
             segment.delete();
@@ -127,7 +131,7 @@ export class Path {
             if (encoded_segment.startsWith("b")) {
                 encoded_segment = encoded_segment.substring(1);
 
-                let points = encoded_segment.split(",");
+                const points = encoded_segment.split(",");
 
                 this.path.push(new BezierCurve(
                     0,
@@ -142,7 +146,7 @@ export class Path {
             } else if (encoded_segment.startsWith("p")) {
                 encoded_segment = encoded_segment.substring(1);
 
-                let point = encoded_segment.split(",");
+                const point = encoded_segment.split(",");
 
                 this.path.push(new Point(+point[0] / inch_pixel_ratio, +point[1] / inch_pixel_ratio));
             }
@@ -151,7 +155,7 @@ export class Path {
         this.notify();
     }
 
-    private readonly callbacks = [];
+    private readonly callbacks: ((path: Path) => void)[] = [];
     subscribe(callback: (path: Path) => void) {
         callback(this);
 

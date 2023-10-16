@@ -4,7 +4,7 @@ import { object, collisioncircle, on, dragable } from "../../objects/object";
 
 const radius = 5.5/2 * inch_pixel_ratio;
 const disc_cache = document.createElement("canvas");
-let disc_cache_ctx: CanvasRenderingContext2D = undefined;
+let disc_cache_ctx: CanvasRenderingContext2D | null = null;
 disc_cache.width = radius*cache_scale*2;
 disc_cache.height = radius*cache_scale*2;
 
@@ -23,8 +23,7 @@ export class Disc {
     @on("render")
     public render(ctx: CanvasRenderingContext2D) {
         if (!disc_cache_ctx) {
-            disc_cache_ctx = disc_cache.getContext("2d");
-
+            disc_cache_ctx = disc_cache.getContext("2d")!;
 
             disc_cache_ctx.beginPath();
             disc_cache_ctx.arc(radius * cache_scale, radius * cache_scale, radius * cache_scale, 0, 2 * Math.PI);
