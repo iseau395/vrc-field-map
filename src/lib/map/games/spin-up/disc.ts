@@ -23,7 +23,7 @@ export class Disc {
     @on("render")
     public render(ctx: CanvasRenderingContext2D) {
         if (!disc_cache_ctx) {
-            disc_cache_ctx = disc_cache.getContext("2d")!;
+            disc_cache_ctx = disc_cache.getContext("2d") as CanvasRenderingContext2D;
 
             disc_cache_ctx.beginPath();
             disc_cache_ctx.arc(radius * cache_scale, radius * cache_scale, radius * cache_scale, 0, 2 * Math.PI);
