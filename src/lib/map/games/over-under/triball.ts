@@ -6,8 +6,8 @@ const radius = 3.5 * inch_pixel_ratio;
 
 const triball_cache = document.createElement("canvas");
 let triball_cache_ctx: CanvasRenderingContext2D | null = null;
-triball_cache.width = radius*cache_scale*2;
-triball_cache.height = radius*cache_scale*2;
+triball_cache.width = radius*cache_scale*2 + inch_pixel_ratio/4 * cache_scale;
+triball_cache.height = radius*cache_scale*2 + inch_pixel_ratio/4 * cache_scale;
 
 @object
 @collisioncircle(0, 0, radius)
