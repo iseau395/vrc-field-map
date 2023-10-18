@@ -32,9 +32,9 @@ export class Triball {
     
             triball_cache_ctx.beginPath();
             for (let i = 0; i < 3; i++) {
-                const x = radius * cache_scale + radius * Math.cos(this.rotation + i * deg_120) * cache_scale;
-                const y = radius * cache_scale + radius * Math.sin(this.rotation + i * deg_120) * cache_scale;
-                triball_cache_ctx.arc(x, y, 6.1 * inch_pixel_ratio * cache_scale, this.rotation + i * deg_120 + deg_120*1.25, this.rotation + i * deg_120 - deg_120*1.25);
+                const x = radius * cache_scale + radius * Math.cos(i * deg_120) * cache_scale;
+                const y = radius * cache_scale + radius * Math.sin(i * deg_120) * cache_scale;
+                triball_cache_ctx.arc(x, y, 6.1 * inch_pixel_ratio * cache_scale, i * deg_120 + deg_120*1.25, i * deg_120 - deg_120*1.25);
             }
             triball_cache_ctx.closePath();
     
@@ -45,6 +45,12 @@ export class Triball {
             triball_cache_ctx.stroke();
         }
 
-        ctx.drawImage(triball_cache, this.x - radius, this.y - radius, radius * 2, radius * 2);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.drawImage(triball_cache, -radius, -radius, radius * 2, radius * 2);
+        ctx.restore();
+
+        // ctx.drawImage(triball_cache, this.x - radius, this.y - radius, radius * 2, radius * 2);
     }
 }
