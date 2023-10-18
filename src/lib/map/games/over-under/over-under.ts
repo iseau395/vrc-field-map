@@ -2,38 +2,64 @@ import { field_side, inch_pixel_ratio } from "../../constants";
 import { register_insert_option } from "../../../context_menu/context_menu";
 import type { Game } from "../game";
 import { Triball } from "./triball";
-import { cache_undo_state, saveable } from "../../saving";
+import { save_state, saveable, saveable_off } from "../../saving";
 import { remove_callbacks } from "../../objects/object";
 
-@saveable
+@saveable("overunder")
 export class OverUnder implements Game {
-    readonly objects = [
-        new Triball(5.41, 5.41, 90),
-        new Triball(field_side - 5.41, 5.41, 180),
-        new Triball(5.41, field_side - 5.41),
-        new Triball(field_side - 5.41, field_side - 5.41, 270),
-        
-        new Triball(field_side / 3, field_side / 2, 90),
-        new Triball(field_side / 2 - 4, field_side / 2, 270),
-        new Triball(field_side / 2 - 4, field_side / 3, 90),
+    objects: Triball[];
 
-        new Triball(field_side / 3 * 2, field_side / 2, 270),
-        new Triball(field_side / 2 + 4, field_side / 2, 90),
-        new Triball(field_side / 2 + 4, field_side / 3 * 2, 270),
-
-        new Triball(field_side / 2, field_side / 12, 90),
-        new Triball(field_side / 2, field_side / 12 * 11, 270),
-    ];
-
-    constructor() {
+    constructor(is_skills: boolean) {
         register_insert_option({
             name: "Triball",
             on_select: (x, y) => {
-                this.objects.push(new Triball(x/inch_pixel_ratio, y/inch_pixel_ratio));
+                this.objects.push(new Triball(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
-                cache_undo_state();
+                save_state();
             }
         });
+
+        this.place_objects(is_skills);
+    }
+
+    private place_objects(is_skills: boolean) {
+        if (!is_skills) {
+            this.objects = [
+                new Triball(5.41, 5.41, 90),
+                new Triball(field_side - 5.41, 5.41, 180),
+                new Triball(5.41, field_side - 5.41),
+                new Triball(field_side - 5.41, field_side - 5.41, 270),
+
+                new Triball(field_side / 3, field_side / 2, 90),
+                new Triball(field_side / 2 - 4, field_side / 2, 270),
+                new Triball(field_side / 2 - 4, field_side / 3, 90),
+
+                new Triball(field_side / 3 * 2, field_side / 2, 270),
+                new Triball(field_side / 2 + 4, field_side / 2, 90),
+                new Triball(field_side / 2 + 4, field_side / 3 * 2, 270),
+
+                new Triball(field_side / 2, field_side / 12, 90),
+                new Triball(field_side / 2, field_side / 12 * 11, 270),
+            ];
+        } else {
+            this.objects = [
+                new Triball(5.41, 5.41, 90),
+                new Triball(field_side - 5.41, 5.41, 180),
+                new Triball(5.41, field_side - 5.41),
+                new Triball(field_side - 5.41, field_side - 5.41, 270),
+
+                new Triball(field_side / 3 * 2, field_side / 2, 0),
+
+                new Triball(field_side / 2 + 4, field_side / 6 + 4, 0),
+                new Triball(field_side / 2 + 4, field_side / 3, 0),
+                new Triball(field_side / 2 + 4, field_side / 2, 0),
+                new Triball(field_side / 2 + 4, field_side / 3 * 2, 0),
+                new Triball(field_side / 2 + 4, field_side / 6 * 5 - 4, 0),
+
+                new Triball(field_side / 2, field_side / 12, 90),
+                new Triball(field_side / 2, field_side / 12 * 11, 270),
+            ];
+        }
     }
 
     save() {
@@ -44,7 +70,7 @@ export class OverUnder implements Game {
         let data = "";
 
         for (const object of this.objects) {
-            data += `${round(object.x/inch_pixel_ratio)},${round(object.y/inch_pixel_ratio)},${round(object.rotation/Math.PI*180)};`;
+            data += `${round(object.x / inch_pixel_ratio)},${round(object.y / inch_pixel_ratio)},${round(object.rotation / Math.PI * 180)};`;
         }
 
         return data.slice(0, -1);
@@ -180,7 +206,7 @@ export class OverUnder implements Game {
         ctx.fillStyle = "#FF0000";
         ctx.fill();
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.lineWidth = inch_pixel_ratio / 4;
         ctx.stroke();
 
         ctx.beginPath();
@@ -190,7 +216,7 @@ export class OverUnder implements Game {
         ctx.fillStyle = "#FF0000";
         ctx.fill();
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.lineWidth = inch_pixel_ratio / 4;
         ctx.stroke();
 
         ctx.beginPath();
@@ -230,7 +256,7 @@ export class OverUnder implements Game {
         ctx.lineTo(side / 6 * 5, side / 3 + goal_net_gap);
         ctx.lineTo(side / 6 * 5, side / 3 * 2 - goal_net_gap);
         ctx.lineTo(side, side / 3 * 2 - goal_net_gap);
-        
+
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 1 * inch_pixel_ratio;
         ctx.stroke();
@@ -244,7 +270,7 @@ export class OverUnder implements Game {
         ctx.fillStyle = "#0000FF";
         ctx.fill();
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.lineWidth = inch_pixel_ratio / 4;
         ctx.stroke();
 
         ctx.beginPath();
@@ -254,7 +280,7 @@ export class OverUnder implements Game {
         ctx.fillStyle = "#0000FF";
         ctx.fill();
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = inch_pixel_ratio/4;
+        ctx.lineWidth = inch_pixel_ratio / 4;
         ctx.stroke();
 
         ctx.beginPath();
@@ -270,7 +296,7 @@ export class OverUnder implements Game {
         ctx.strokeStyle = "#0000FF";
         ctx.lineWidth = 1 * inch_pixel_ratio - inch_pixel_ratio / 2;
         ctx.stroke();
-        
+
         ctx.beginPath();
         for (let i = 0; i < 11; i++) {
             const x = side / 6 / 11 * i;
@@ -287,17 +313,26 @@ export class OverUnder implements Game {
         ctx.strokeStyle = "#0000FF";
         ctx.lineWidth = .1 * inch_pixel_ratio;
         ctx.stroke();
-        
+
         ctx.beginPath();
 
         ctx.moveTo(0, side / 3 + goal_net_gap);
         ctx.lineTo(side / 6, side / 3 + goal_net_gap);
         ctx.lineTo(side / 6, side / 3 * 2 - goal_net_gap);
         ctx.lineTo(0, side / 3 * 2 - goal_net_gap);
-        
+
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 1 * inch_pixel_ratio;
         ctx.stroke();
 
+    }
+
+    delete() {
+        for (const object of this.objects) {
+            remove_callbacks(object);
+        }
+        this.objects.length = 0;
+
+        saveable_off(this);
     }
 }

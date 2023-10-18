@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Switch from "./Switch.svelte";
+    import Switch from "../components/Switch.svelte";
     import { grid_enabled } from "../../stores/settings";
 
     export let on_close: () => void;
@@ -14,7 +14,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <span class="settings-bg" on:click={on_close} />
     <span class="settings-popup">
-        <h1>
+        <h4>
             Settings
             <button on:click={on_close} title="Close Settings">
                 <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -22,7 +22,7 @@
                     <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
                 </svg>
             </button>
-        </h1>
+        </h4>
         Grid: <Switch bind:value={$grid_enabled}/><br/>
     </span>
 </div>
@@ -43,7 +43,7 @@
     span.settings-popup {
         width: 70%;
         min-width: 300px;
-        max-width: 1000px;
+        max-width: 500px;
         height: 70%;
         min-height: 300px;
         max-height: 700px;
@@ -75,7 +75,7 @@
         justify-content: center;
     }
 
-    h1 {
+    h4 {
         margin-top: 0;
 
         display: flex;

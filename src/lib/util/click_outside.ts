@@ -1,7 +1,9 @@
 // stolen from the svelte tutorial lol
 
-export function clickOutside(node) {
-    const handleClick = (event) => {
+import type { SvelteComponent } from "svelte";
+
+export function clickOutside(node: HTMLElement | SvelteComponent) {
+    const handleClick = (event: MouseEvent) => {
         if (!node.contains(event.target)) {
             node.dispatchEvent(new CustomEvent("outclick"));
         }

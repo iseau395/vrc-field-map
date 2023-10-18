@@ -3,102 +3,118 @@ import type { Game } from "../game";
 import { Disc } from "./disc";
 import { Roller, RollerState } from "./roller";
 import { register_insert_option } from "../../../context_menu/context_menu";
-import { cache_undo_state, saveable } from "../../saving";
+import { save_state, saveable, saveable_off } from "../../saving";
 import { remove_callbacks } from "../../objects/object";
 
-@saveable
+@saveable("spinup")
 export class SpinUp implements Game {
-    readonly objects = [
-        new Roller(0, field_side / 6, true, RollerState.BlueRed),
-        new Roller(field_side / 6, 0, false, RollerState.RedBlue),
-        new Roller(field_side - 2.4, field_side / 6 * 5 - 9.8, true, RollerState.BlueRed),
-        new Roller(field_side / 6 * 5 - 9.8, field_side - 2.4, false, RollerState.RedBlue),
+    objects: (Disc | Roller)[];
 
-        new Disc(field_side / 12 * 1, field_side / 12 * 1),
-        new Disc(field_side / 12 * 2, field_side / 12 * 2),
-        new Disc(field_side / 12 * 3, field_side / 12 * 3 - 1),
-        new Disc(field_side / 12 * 3, field_side / 12 * 3 - 2),
-        new Disc(field_side / 12 * 3, field_side / 12 * 3 - 3),
-        new Disc(field_side / 12 * 4, field_side / 12 * 4),
-        new Disc(field_side / 12 * 5, field_side / 12 * 5),
-
-        new Disc(field_side / 12 * 7, field_side / 12 * 7),
-        new Disc(field_side / 12 * 8, field_side / 12 * 8),
-        new Disc(field_side / 12 * 9, field_side / 12 * 9 - 1),
-        new Disc(field_side / 12 * 9, field_side / 12 * 9 - 2),
-        new Disc(field_side / 12 * 9, field_side / 12 * 9 - 3),
-        new Disc(field_side / 12 * 10, field_side / 12 * 10),
-        new Disc(field_side / 12 * 11, field_side / 12 * 11),
-
-
-        new Disc(field_side / 12 * 5, field_side / 12 * 3),
-        new Disc(field_side / 12 * 6, field_side / 12 * 4),
-        new Disc(field_side / 12 * 7, field_side / 12 * 5),
-
-        new Disc(field_side / 12 * 9, field_side / 12 * 7 - 1),
-        new Disc(field_side / 12 * 9, field_side / 12 * 7 - 2),
-        new Disc(field_side / 12 * 9, field_side / 12 * 7 - 3),
-
-
-        new Disc(field_side / 12 * 5, field_side / 12 * 7),
-        new Disc(field_side / 12 * 6, field_side / 12 * 8),
-        new Disc(field_side / 12 * 7, field_side / 12 * 9),
-
-        new Disc(field_side / 12 * 3, field_side / 12 * 5 - 1),
-        new Disc(field_side / 12 * 3, field_side / 12 * 5 - 2),
-        new Disc(field_side / 12 * 3, field_side / 12 * 5 - 3),
-
-        new Disc(field_side / 48 * 31, field_side / 48 * 9),
-        new Disc(field_side / 48 * 31, field_side / 48 * 12),
-        new Disc(field_side / 48 * 31, field_side / 48 * 15),
-        new Disc(field_side / 48 * 33, field_side / 48 * 17),
-        new Disc(field_side / 48 * 36, field_side / 48 * 17),
-        new Disc(field_side / 48 * 39, field_side / 48 * 17),
-
-        new Disc(field_side / 48 * 9, field_side / 48 * 31),
-        new Disc(field_side / 48 * 12, field_side / 48 * 31),
-        new Disc(field_side / 48 * 15, field_side / 48 * 31),
-        new Disc(field_side / 48 * 17, field_side / 48 * 33),
-        new Disc(field_side / 48 * 17, field_side / 48 * 36),
-        new Disc(field_side / 48 * 17, field_side / 48 * 39),
-
-        // Preloads and Match Loads
-        new Disc(-field_side / 12, field_side / 20 * 7),
-        new Disc(-field_side / 12, field_side / 20 * 8),
-        new Disc(-field_side / 12, field_side / 20 * 13),
-        new Disc(-field_side / 12, field_side / 20 * 12),
-
-        new Disc(field_side + field_side / 12, field_side / 20 * 7),
-        new Disc(field_side + field_side / 12, field_side / 20 * 8),
-        new Disc(field_side + field_side / 12, field_side / 20 * 13),
-        new Disc(field_side + field_side / 12, field_side / 20 * 12),
-
-        new Disc(-field_side / 12 * 2, field_side / 20 * 7),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 8),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 9),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 10),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 11),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 12),
-        new Disc(-field_side / 12 * 2, field_side / 20 * 13),
-
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 7),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 8),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 9),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 10),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 11),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 12),
-        new Disc(field_side + field_side / 12 * 2, field_side / 20 * 13),
-    ];
-
-    constructor() {
+    constructor(is_skills: boolean) {
         register_insert_option({
             name: "Disc",
             on_select: (x, y) => {
                 this.objects.push(new Disc(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
-                cache_undo_state();
+                save_state();
             }
         });
+
+        this.place_objects(is_skills);
+    }
+
+    place_objects(is_skills: boolean) {
+        this.objects = [
+            new Roller(0, field_side / 6, true, RollerState.BlueRed),
+            new Roller(field_side / 6, 0, false, RollerState.RedBlue),
+            new Roller(field_side - 2.4, field_side / 6 * 5 - 9.8, true, RollerState.BlueRed),
+            new Roller(field_side / 6 * 5 - 9.8, field_side - 2.4, false, RollerState.RedBlue),
+    
+            new Disc(field_side / 12 * 1, field_side / 12 * 1),
+            new Disc(field_side / 12 * 2, field_side / 12 * 2),
+            new Disc(field_side / 12 * 3, field_side / 12 * 3 - 1),
+            new Disc(field_side / 12 * 3, field_side / 12 * 3 - 2),
+            new Disc(field_side / 12 * 3, field_side / 12 * 3 - 3),
+            new Disc(field_side / 12 * 4, field_side / 12 * 4),
+            new Disc(field_side / 12 * 5, field_side / 12 * 5),
+    
+            new Disc(field_side / 12 * 7, field_side / 12 * 7),
+            new Disc(field_side / 12 * 8, field_side / 12 * 8),
+            new Disc(field_side / 12 * 9, field_side / 12 * 9 - 1),
+            new Disc(field_side / 12 * 9, field_side / 12 * 9 - 2),
+            new Disc(field_side / 12 * 9, field_side / 12 * 9 - 3),
+            new Disc(field_side / 12 * 10, field_side / 12 * 10),
+            new Disc(field_side / 12 * 11, field_side / 12 * 11),
+    
+    
+            new Disc(field_side / 12 * 5, field_side / 12 * 3),
+            new Disc(field_side / 12 * 6, field_side / 12 * 4),
+            new Disc(field_side / 12 * 7, field_side / 12 * 5),
+    
+            new Disc(field_side / 12 * 9, field_side / 12 * 7 - 1),
+            new Disc(field_side / 12 * 9, field_side / 12 * 7 - 2),
+            new Disc(field_side / 12 * 9, field_side / 12 * 7 - 3),
+    
+    
+            new Disc(field_side / 12 * 5, field_side / 12 * 7),
+            new Disc(field_side / 12 * 6, field_side / 12 * 8),
+            new Disc(field_side / 12 * 7, field_side / 12 * 9),
+    
+            new Disc(field_side / 12 * 3, field_side / 12 * 5 - 1),
+            new Disc(field_side / 12 * 3, field_side / 12 * 5 - 2),
+            new Disc(field_side / 12 * 3, field_side / 12 * 5 - 3),
+    
+            new Disc(field_side / 48 * 31, field_side / 48 * 9),
+            new Disc(field_side / 48 * 31, field_side / 48 * 12),
+            new Disc(field_side / 48 * 31, field_side / 48 * 15),
+            new Disc(field_side / 48 * 33, field_side / 48 * 17),
+            new Disc(field_side / 48 * 36, field_side / 48 * 17),
+            new Disc(field_side / 48 * 39, field_side / 48 * 17),
+    
+            new Disc(field_side / 48 * 9, field_side / 48 * 31),
+            new Disc(field_side / 48 * 12, field_side / 48 * 31),
+            new Disc(field_side / 48 * 15, field_side / 48 * 31),
+            new Disc(field_side / 48 * 17, field_side / 48 * 33),
+            new Disc(field_side / 48 * 17, field_side / 48 * 36),
+            new Disc(field_side / 48 * 17, field_side / 48 * 39),
+    
+            // Preloads and Match Loads
+            new Disc(-field_side / 12, field_side / 20 * 7),
+            new Disc(-field_side / 12, field_side / 20 * 8),
+            new Disc(-field_side / 12, field_side / 20 * 13),
+            new Disc(-field_side / 12, field_side / 20 * 12),
+    
+            new Disc(field_side + field_side / 12, field_side / 20 * 7),
+            new Disc(field_side + field_side / 12, field_side / 20 * 8),
+            new Disc(field_side + field_side / 12, field_side / 20 * 13),
+            new Disc(field_side + field_side / 12, field_side / 20 * 12),
+    
+            new Disc(-field_side / 12 * 2, field_side / 20 * 7),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 8),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 9),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 10),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 11),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 12),
+            new Disc(-field_side / 12 * 2, field_side / 20 * 13),
+    
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 7),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 8),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 9),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 10),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 11),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 12),
+            new Disc(field_side + field_side / 12 * 2, field_side / 20 * 13),
+        ];
+
+        if (is_skills) {
+            for (let i = 0; i < 4; i++) {
+                const object = this.objects[i];
+
+                if ("state" in object) {
+                    object.state = RollerState.Blue;
+                }
+            }
+        }
     }
 
     save() {
@@ -276,5 +292,14 @@ export class SpinUp implements Game {
         ctx.arc((field_side * inch_pixel_ratio) / 24 * 3, (field_side * inch_pixel_ratio) / 24 * 21, high_goal_diameter / 2 * inch_pixel_ratio, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
+    }
+
+    delete() {
+        for (const object of this.objects) {
+            remove_callbacks(object);
+        }
+        this.objects.length = 0;
+
+        saveable_off(this);
     }
 }

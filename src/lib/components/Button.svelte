@@ -2,13 +2,16 @@
     export let text: string;
 </script>
 
-<span on:click on:keydown>
+<button on:click on:keydown>
     {text}
-</span>
+</button>
 
 <style>
-    span {
-        height: 100%;
+    button {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+
+        height: 40px;
         padding-left: 10px;
         padding-right: 10px;
 
@@ -27,9 +30,11 @@
         border-radius: 12px;
 
         margin-right: 5px;
+
+        border-style: none;
     }
 
-    span:hover {
+    button:hover {
         background-color: #656565;
         color: #E0E0E0;
     }

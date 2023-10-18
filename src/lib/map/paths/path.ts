@@ -3,9 +3,9 @@ import { on_event } from "../objects/object";
 import { Point } from "./point";
 import { register_insert_option } from "../../context_menu/context_menu";
 import { BezierCurve } from "./bezier";
-import { cache_undo_state, saveable } from "../saving";
+import { save_state, saveable } from "../saving";
 
-@saveable
+@saveable("path")
 export class Path {
     path: (Point | BezierCurve)[] = [];
 
@@ -15,7 +15,7 @@ export class Path {
             on_select: (x, y) => {
                 this.add_segment(new Point(x / inch_pixel_ratio, y / inch_pixel_ratio));
 
-                cache_undo_state();
+                save_state();
             }
         });
 
@@ -31,7 +31,7 @@ export class Path {
 
                 this.add_segment(new BezierCurve(x, y, x, y - 15, x + 20, y - 15, x + 20, y));
 
-                cache_undo_state();
+                save_state();
             }
         });
 
@@ -183,6 +183,15 @@ export class Path {
 
     add_segment(segment: Point | BezierCurve) {
         this.path.push(segment);
+
+        this.notify();
+    }
+
+    reset() {
+        for (const segment of this.path) {
+            segment.delete();
+        }
+        this.path.length = 0;
 
         this.notify();
     }

@@ -1,10 +1,10 @@
 import { draw_objects, update_objects } from "./objects/object";
 import type { Input } from "./constants";
-import { grid_enabled } from "../../stores/settings";
+import { game_type, grid_enabled, is_skills } from "../../stores/settings";
 import { inch_pixel_ratio, field_side } from "./constants";
 import { Path } from "./paths/path";
-import type { Game } from "./games/game";
-import { cache_undo_state } from "./saving";
+import { GameType, type Game } from "./games/game";
+import { save_state } from "./saving";
 
 let redraw_background = true;
 
@@ -89,11 +89,28 @@ export function update_field(input: Input) {
     last_mouse_y = input.mouse_y;
 }
 
+let game_type_value = undefined;
+let is_skills_value = undefined;
+game_type.subscribe(v => game_type_value = v);
+is_skills.subscribe(v => is_skills_value = v);
+
 let game_loaded = false;
 // eslint-disable-next-line no-async-promise-executor
-export const game: Promise<Game> = new Promise<Game>(async (resolve) => {
-    const value = new (await import("./games/over-under/over-under")).OverUnder();
-    cache_undo_state();
+export let game: Promise<Game> = new Promise<Game>(async (resolve) => {
+    let value: Game | undefined;
+
+    switch (game_type_value) {
+        case GameType.OverUnder: {
+            value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value);
+        } break;
+        case GameType.SpinUp: {
+            value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value);
+        } break;
+    }
+
+    if (!value) return;
+
+    save_state();
     game_loaded = true;
 
     resolve(value);
@@ -193,4 +210,35 @@ export function check_cursor(fg_canvas: HTMLCanvasElement) {
 
 export function set_cursor(cursor: string) {
     new_cursor = cursor;
+}
+
+export async function reset() {
+    path.reset();
+    (await game).delete();
+    
+    game_loaded = false;
+    // eslint-disable-next-line no-async-promise-executor
+    game = new Promise<Game>(async (resolve) => {
+        let value: Game | undefined;
+
+        switch (game_type_value) {
+            case GameType.OverUnder: {
+                value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value);
+            } break;
+            case GameType.SpinUp: {
+                value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value);
+            } break;
+        }
+
+        if (!value) return;
+
+        save_state();
+
+        bg_cache.getContext("2d").scale(1/cache_scale, 1/cache_scale);
+        game_loaded = true;
+        init_load = false;
+        redraw_background = true;
+
+        resolve(value);
+    });
 }

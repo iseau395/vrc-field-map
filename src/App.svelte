@@ -2,7 +2,9 @@
     import NavBar from "./lib/navbar/NavBar.svelte";
     import Map from "./lib/map/Map.svelte";
     import SettingsScreen from "./lib/settings_screen/SettingsScreen.svelte";
-    import { settings_screen_visible } from "./stores/settings";
+    import { game_type, settings_screen_visible } from "./stores/settings";
+    import NewSaveScreen, { new_save_screen_open } from "./lib/save_screens/NewSaveScreen.svelte";
+    import { current_save_id } from "./lib/map/saving";
 
     function close_settings() {
         $settings_screen_visible = false;
@@ -26,7 +28,9 @@
 
 <main>
     <NavBar/>
+    {#key $current_save_id}
     <Map />
+    {/key}
     {#if !hasMouse}
     <p>
         It looks like you are on a device without a mouse or touchpad. If you can, please use a device with a mouse or touchpad as this map is only designed to work on these devices.
@@ -35,6 +39,10 @@
 
     {#if $settings_screen_visible}
     <SettingsScreen on_close={close_settings} />
+    {/if}
+
+    {#if $new_save_screen_open}
+    <NewSaveScreen/>
     {/if}
 </main>
 

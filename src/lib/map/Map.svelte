@@ -8,7 +8,7 @@
     import type { Input } from "./constants";
 
     import PathSidebar, { sidebar_visible } from "./paths/PathSidebar.svelte";
-    import { cache_undo_state, redo, undo } from "./saving";
+    import { save_state, redo, undo } from "./saving";
 
     let bg_canvas: HTMLCanvasElement;
     let fg_canvas: HTMLCanvasElement;
@@ -56,7 +56,7 @@
                     ev.preventDefault();
 
                 input.keys.set(ev.key, false);
-                cache_undo_state();
+                save_state();
             });
 
             window.addEventListener("mousemove", ev => {
@@ -75,7 +75,7 @@
             fg_canvas.addEventListener("mouseup", () => {
                 input.mouse_button = -1;
                 input.mouse_button_changed = true;
-                cache_undo_state();
+                save_state();
             });
 
             fg_canvas.addEventListener("contextmenu", ev => {

@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/svelte";
 import { describe, test, expect, afterEach, vi } from "vitest";
-import Button from "../../src/lib/navbar/Button.svelte";
+import Button from "../../src/lib/components/Button.svelte";
 
 describe("Button.svelte", () => {
     // TODO: @testing-library/svelte claims to add this automatically but it doesn't work without explicit afterEach

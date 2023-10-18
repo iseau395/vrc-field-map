@@ -8,7 +8,7 @@ export class Point {
     x: number;
     y: number;
 
-    hidden: boolean = false;
+    hidden = false;
 
     constructor(x: number, y: number) {
         this.x = x * inch_pixel_ratio;

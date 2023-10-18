@@ -2,10 +2,16 @@
     export let value = false;
 </script>
 
-<input type="checkbox" bind:checked={value}/>
-<div class="switch-outer" style="justify-content: {value ? 'flex-end' : 'flex-start'}; {!value && 'background-color: #999999'}">
-    <div class="switch-slider" />
-</div>
+<span>
+    <input type="checkbox" bind:checked={value} />
+    <div
+        class="switch-outer"
+        style="justify-content: {value ? 'flex-end' : 'flex-start'}; {!value &&
+            'background-color: #999999'}"
+    >
+        <div class="switch-slider" />
+    </div>
+</span>
 
 <style>
     input {
@@ -19,7 +25,7 @@
 
         position: absolute;
     }
-    
+
     div.switch-outer {
         width: 34px;
         height: 14px;
@@ -29,7 +35,7 @@
 
         display: inline-flex;
 
-        background-color: #7777FF;
+        background-color: #7777ff;
     }
 
     div.switch-slider {
