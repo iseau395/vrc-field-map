@@ -8,8 +8,8 @@ import { save_state } from "./saving";
 
 let redraw_background = true;
 
-let field_x = 200;
-let field_y = 200;
+let field_x = window.innerWidth / 2 - field_side * inch_pixel_ratio / 2;
+let field_y = window.innerHeight / 2 - field_side * inch_pixel_ratio / 2;
 let field_scale = 1;
 
 let grid_on = false;
