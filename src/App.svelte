@@ -5,6 +5,7 @@
     import { game_type, settings_screen_visible } from "./stores/settings";
     import NewSaveScreen, { new_save_screen_open } from "./lib/save_screens/NewSaveScreen.svelte";
     import { current_save_id } from "./lib/map/saving";
+    import LoadSaveScreen, { load_save_screen_open } from "./lib/save_screens/LoadSaveScreen.svelte";
 
     function close_settings() {
         $settings_screen_visible = false;
@@ -43,6 +44,10 @@
 
     {#if $new_save_screen_open}
     <NewSaveScreen/>
+    {/if}
+
+    {#if $load_save_screen_open}
+    <LoadSaveScreen/>
     {/if}
 </main>
 

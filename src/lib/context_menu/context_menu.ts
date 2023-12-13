@@ -34,6 +34,6 @@ export const options: ContextMenuOption[] = [
 ];
 
 export function register_insert_option(data: ContextMenuOptionCallback) {
-    if ("options" in options[0])
+    if ("options" in options[0] && !options[0].options.map(v => v.name).includes(data.name))
         options[0].options.push(data);
 }

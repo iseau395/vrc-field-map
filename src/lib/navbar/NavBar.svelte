@@ -4,6 +4,7 @@
     import { sidebar_visible } from "../map/paths/PathSidebar.svelte";
     import { current_save_id, save_as } from "../map/saving";
     import { new_save_screen_open } from "../save_screens/NewSaveScreen.svelte";
+    import { load_save_screen_open } from "../save_screens/LoadSaveScreen.svelte";
 </script>
 
 <div class="navbar-wrapper">
@@ -11,7 +12,7 @@
         <Button text="Settings" on:click={() => $settings_screen_visible = !$settings_screen_visible} />
         <Button text="Edit Path" on:click={() => $sidebar_visible = !$sidebar_visible} />
         <Button text="New Save" on:click={() => $new_save_screen_open = !$new_save_screen_open} />
-        <!-- <Button text="Load Save" on:click={() => $saving_screen_visible = !$saving_screen_visible} /> -->
+        <Button text="Load Save" on:click={() => $load_save_screen_open = !$load_save_screen_open} />
         <Button text="Save as..." on:click={() => {
             const new_id = prompt("What should it be saved as?");
             if (!new_id) return;

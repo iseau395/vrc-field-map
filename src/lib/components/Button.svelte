@@ -1,8 +1,9 @@
 <script lang="ts">
     export let text: string;
+    export let red = false;
 </script>
 
-<button on:click on:keydown>
+<button on:click on:keydown class={red ? "button-red" : ""}>
     {text}
 </button>
 
@@ -25,8 +26,8 @@
         align-items: center;
         justify-content: center;
 
-        background-color: #454545;
         color: #E0E0E0;
+        background-color: #454545;
         border-radius: 12px;
 
         margin-right: 5px;
@@ -37,5 +38,13 @@
     button:hover {
         background-color: #656565;
         color: #E0E0E0;
+    }
+
+    .button-red {
+        background-color: #FF6666;
+    }
+
+    .button-red:hover {
+        background-color: #FF0000;
     }
 </style>

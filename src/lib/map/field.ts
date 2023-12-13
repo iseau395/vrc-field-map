@@ -43,7 +43,7 @@ export function update_field(input: Input) {
         redraw_background = true;
     }
 
-    field_scale = input.wheel * -1;
+    field_scale = -1 * input.wheel;
     field_scale = Math.min(Math.max(.75, field_scale), 5);
 
     if (last_scale - field_scale != 0) {
@@ -212,13 +212,12 @@ export function set_cursor(cursor: string) {
     new_cursor = cursor;
 }
 
-export async function reset() {
-    path.reset();
+export async function reset_field() {
     (await game).delete();
     
     game_loaded = false;
     // eslint-disable-next-line no-async-promise-executor
-    game = new Promise<Game>(async (resolve) => {
+    game = new Promise<Game>(async (resolve, reject) => {
         let value: Game | undefined;
 
         switch (game_type_value) {
@@ -230,7 +229,7 @@ export async function reset() {
             } break;
         }
 
-        if (!value) return;
+        if (!value) return reject();
 
         save_state();
 
@@ -241,4 +240,7 @@ export async function reset() {
 
         resolve(value);
     });
+
+    await game;
+    path.reset();
 }

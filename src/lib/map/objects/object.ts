@@ -1,6 +1,5 @@
 import type { Input } from "../constants";
 import { set_cursor } from "../field";
-import { before_load } from "../saving";
 
 export type Callbacks = {
     [K in keyof Events]: Map<number, Events[K]>
@@ -19,13 +18,18 @@ const objects = new Map<number, MapObject>();
 // Decorators
 
 export const callback_symbol = Symbol("ObjectCallbacks");
-const id_symbol = Symbol("ObjectID");
+export const id_symbol = Symbol("ObjectID");
 
 let current_id = 1;
 
-before_load(() => {
+export function reset_objects() {
     current_id = 1;
-});
+    objects.clear();
+
+    for (const event in callbacks) {
+        callbacks[event].clear();
+    }
+}
 
 export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
     return class extends Base {
@@ -33,6 +37,8 @@ export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
             super(...args);
 
             this[id_symbol] = current_id++;
+            this[callback_symbol] = this[callback_symbol] ?? Base.prototype[callback_symbol] ?? Base.prototype.prototype[callback_symbol];
+            this[collision_symbol] = this[collision_symbol] ?? Base.prototype[collision_symbol] ?? Base.prototype.prototype[collision_symbol];
 
             objects.set(this[id_symbol], this);
 
@@ -109,6 +115,11 @@ export function in_collision<T extends { [collision_symbol]: Collision[] } & Map
     return false;
 }
 
+export function clear_collision<T extends { [collision_symbol]?: Collision[] } & MapObject>(object: T) {
+    if (collision_symbol in object)
+        object[collision_symbol].length = 0;
+}
+
 export let selection = -1;
 
 interface Dragable extends MapObject {
@@ -131,7 +142,6 @@ export function dragable<T extends new (...args: any[]) => Dragable>(Base: T) {
                 let changed = false;
 
                 if (selection == -1 && input.mouse_button == 0 && this[collision_symbol]) {
-
                     if (collision_symbol in this && in_collision(this as { [collision_symbol]: Collision[] } & typeof this, input.gridless_mouse_x, input.gridless_mouse_y) && !input.keys.get("Alt")) {
                         selection = this[id_symbol]!;
 
@@ -177,6 +187,7 @@ let on_event_id = -1;
 export function on_event<E extends keyof Events>(event: E, callback: Events[E]) {
     const id = on_event_id--;
     callbacks[event].set(id, callback);
+
     return id;
 }
 
@@ -185,13 +196,10 @@ export function off(event: keyof Events, id: number) {
 }
 
 export function remove_callbacks(target: { [callback_symbol]?: Map<keyof Events, Events[keyof Events]> } & MapObject) {
-    const target_callbacks = target[callback_symbol];
-    const id = target[id_symbol];
-    
-    if (!target_callbacks || !id) return;
+    if (!target[callback_symbol] || !target[id_symbol]) return;
 
-    target_callbacks.forEach((callback, event) => {
-        off(event, id);
+    target[callback_symbol].forEach((_, event) => {
+        off(event, target[id_symbol]);
     });
 }
 

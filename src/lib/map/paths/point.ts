@@ -1,8 +1,8 @@
 import { inch_pixel_ratio } from "../constants";
-import { collisioncircle, dragable, object, on, remove_callbacks } from "../objects/object";
+import { add_circle_collision, clear_collision, dragable, object, on, remove_callbacks } from "../objects/object";
 
 @object
-@collisioncircle(0, 0, 1.5 * inch_pixel_ratio)
+// @collisioncircle(0, 0, 1.5 * inch_pixel_ratio)
 @dragable
 export class Point {
     x: number;
@@ -13,6 +13,8 @@ export class Point {
     constructor(x: number, y: number) {
         this.x = x * inch_pixel_ratio;
         this.y = y * inch_pixel_ratio;
+
+        add_circle_collision(this as any, 0, 0, 1.5 * inch_pixel_ratio);
     }
 
     @on("postrender")
@@ -45,5 +47,6 @@ export class Point {
 
     delete() {
         remove_callbacks(this);
+        clear_collision(this);
     }
 }

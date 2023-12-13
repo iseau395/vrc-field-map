@@ -150,7 +150,7 @@
 </script>
 
 <li draggable="true" on:dragstart={dragStart} on:dragover={dragOver} on:dragend={dragEnd}>
-    {#if "points" in segment}
+    {#if "points" in $segment}
         <canvas width="50" height="50" bind:this={canvas} />
         Bézier Curve
     {:else}

@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
-import { game_type, is_skills } from "../../stores/settings";
+import { game_type } from "../../stores/settings";
+import { reset_objects } from "./objects/object";
 
 const SAVE_VERSION = 0;
 
@@ -36,18 +37,11 @@ export function saveable_off<T extends Saveable>(object: T) {
     }
 }
 
-const before_load_callbacks: (() => void)[] = [];
-export function before_load(callback: () => void) {
-    before_load_callbacks.push(callback);
-}
-
 let game_type_value = undefined;
-let is_skills_value = undefined;
 game_type.subscribe(v => game_type_value = v);
-is_skills.subscribe(v => is_skills_value = v);
 
 export function get_save_state() {
-    let data = `${SAVE_VERSION},${game_type_value},${is_skills_value ? 1 : 0}`;
+    let data = `${SAVE_VERSION},${game_type_value}`;
 
     save_callbacks.forEach((callback, save_id) => {
         data += `|${save_id}:${callback()}`;
@@ -64,16 +58,8 @@ export function load_save_state(raw_data: string) {
     const metadata = data.shift().split(",");
 
     game_type.set(+metadata[1]);
-    is_skills.set(+metadata[2] == 1);
 
-    for (const callback of before_load_callbacks) {
-        (() => {
-            callback();
-        })();
-    }
-
-    console.log(load_callbacks);
-    console.log(raw_data);
+    reset_objects();
 
     for (const data_segment of data) {
         const [id, raw_data] = data_segment.split(":");
@@ -171,4 +157,9 @@ export function redo() {
     redo_states.pop();
 
     skip_cache = true;
+}
+
+export function reset_undo() {
+    undo_states.length = 0;
+    redo_states.length = 0;
 }

@@ -1,6 +1,6 @@
 import { inch_pixel_ratio } from "../../constants";
 import { cache_scale } from "../../field";
-import { object, collisioncircle, on, dragable } from "../../objects/object";
+import { object, on, dragable, add_circle_collision, remove_callbacks, clear_collision } from "../../objects/object";
 
 const radius = 5.5/2 * inch_pixel_ratio;
 const disc_cache = document.createElement("canvas");
@@ -9,7 +9,7 @@ disc_cache.width = radius*cache_scale*2;
 disc_cache.height = radius*cache_scale*2;
 
 @object
-@collisioncircle(0, 0, radius)
+// @collisioncircle(0, 0, radius)
 @dragable
 export class Disc {
     public x: number;
@@ -18,6 +18,8 @@ export class Disc {
     constructor(x: number, y: number) {
         this.x = x * inch_pixel_ratio;
         this.y = y * inch_pixel_ratio;
+
+        add_circle_collision(this as any, 0, 0, radius);
     }
 
     @on("render")
@@ -42,5 +44,10 @@ export class Disc {
         ctx.scale(1/cache_scale, 1/cache_scale);
         ctx.drawImage(disc_cache, (this.x - radius) * cache_scale, (this.y - radius) * cache_scale, radius * cache_scale * 2, radius * cache_scale * 2);
         ctx.scale(cache_scale, cache_scale);
+    }
+
+    delete() {
+        remove_callbacks(this);
+        clear_collision(this);
     }
 }

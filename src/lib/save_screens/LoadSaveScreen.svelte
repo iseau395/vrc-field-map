@@ -1,49 +1,34 @@
 <script lang="ts" context="module">
     import { writable } from "svelte/store";
 
-    export const new_save_screen_open = writable(false);
+    export const load_save_screen_open = writable(false);
 </script>
 
 <script lang="ts">
-    import Button from "../components/Button.svelte";
-    import Dropdown from "../components/Dropdown.svelte";
-    import Switch from "../components/Switch.svelte";
-    import { game_type, is_skills } from "../../stores/settings";
-    import { string_to_game_type } from "../map/games/game";
-    import { reset_field } from "../map/field";
-    import Textbox from "../components/Textbox.svelte";
-    import { current_save_id, get_save_state, load_save_state, reset_undo } from "../map/saving";
+    import SaveFile from "./SaveFile.svelte";
 
     window.addEventListener("keydown", ev => {
         if (ev.key == "Escape")
-            $new_save_screen_open = false;
+            $load_save_screen_open = false;
     });
 
-    let selected_game_type: string;
-    let save_name: string;
-    let skills = false;
+    let raw_saves = localStorage.getItem("save-list");
 
-    async function create_save() {
-        if (!selected_game_type || !save_name.trim()) return;
-        $new_save_screen_open = false;
+    let saves = raw_saves ? raw_saves.split("|") : [];
 
-        $game_type = string_to_game_type(selected_game_type);
-        $is_skills = skills;
-        $current_save_id = save_name.trim();
-        
-        reset_undo();
-        await reset_field();
-        load_save_state(get_save_state());
+    function update_saves_list() {
+        raw_saves = localStorage.getItem("save-list");
+        saves = raw_saves ? raw_saves.split("|") : [];
     }
 </script>
 
 <div>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span class="new-save-bg" on:click={() => $new_save_screen_open = false} />
+    <span class="new-save-bg" on:click={() => $load_save_screen_open = false} />
     <span class="new-save-popup">
         <h4>
-            New Save...
-            <button on:click={() => $new_save_screen_open = false} title="Close New Save Screen">
+            Load Save...
+            <button on:click={() => $load_save_screen_open = false} title="Close New Save Screen">
                 <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <line x1="5" y1="5" x2="45" y2="45" stroke="white" stroke-width="4" />
                     <line x1="45" y1="5" x2="5" y2="45" stroke="white" stroke-width="4" />
@@ -52,10 +37,15 @@
         </h4>
 
         <ul>
-            <li><p>Save Name: </p> <Textbox bind:value={save_name}></Textbox></li>
-            <li><p>Season:</p> <Dropdown label="Select..." options={["Over Under", "Spin Up"]} bind:selected={selected_game_type}></Dropdown></li>
-            <li><p>Skills:</p> <Switch bind:value={skills}/></li>
-            <li><Button text="Create" on:click={create_save}></Button></li>
+            {#if raw_saves}
+            {#key saves}
+            {#each saves as save}
+            <SaveFile id={save} update_saves_list={update_saves_list}/>
+            {/each}
+            {/key}
+            {:else}
+            <p>No saves found!</p>
+            {/if}
         </ul>
     </span>
 </div>
@@ -135,17 +125,5 @@
     ul {
         list-style-type: none;
         padding: 0;
-    }
-
-    li {
-        height: 40px;
-        margin-bottom: 5px;
-        display: flex;
-        align-items: center;
-    }
-
-    p {
-        display: inline;
-        margin-right: 10px;
     }
 </style>

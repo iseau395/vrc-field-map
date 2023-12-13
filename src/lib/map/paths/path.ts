@@ -1,5 +1,5 @@
 import { inch_pixel_ratio } from "../constants";
-import { on_event } from "../objects/object";
+import { off, on_event } from "../objects/object";
 import { Point } from "./point";
 import { register_insert_option } from "../../context_menu/context_menu";
 import { BezierCurve } from "./bezier";
@@ -8,6 +8,9 @@ import { save_state, saveable } from "../saving";
 @saveable("path")
 export class Path {
     path: (Point | BezierCurve)[] = [];
+
+    private render_event_id: number;
+    private update_event_id: number;
 
     constructor() {
         register_insert_option({
@@ -35,8 +38,8 @@ export class Path {
             }
         });
 
-        on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
-        on_event("update", () => this.update());
+        this.render_event_id = on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
+        this.update_event_id = on_event("update", () => this.update());
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -114,16 +117,18 @@ export class Path {
     }
 
     load(data_string: string) {
-        const data = data_string.split(";");
-
         for (const segment of this.path) {
             segment.delete();
         }
+
         this.path.length = 0;
 
-        if (data.length == 0) {
-            return;
-        }
+        this.render_event_id = on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
+        this.update_event_id = on_event("update", () => this.update());
+
+        if (!data_string) return;
+        
+        const data = data_string.split(";");
         
         for (let i = 0; i < data.length; i++) {
             let encoded_segment = data[i];
@@ -192,6 +197,12 @@ export class Path {
             segment.delete();
         }
         this.path.length = 0;
+
+        off("postrender", this.render_event_id);
+        off("update", this.update_event_id);
+
+        this.render_event_id = on_event("postrender", (ctx: CanvasRenderingContext2D) => this.render(ctx));
+        this.update_event_id = on_event("update", () => this.update());
 
         this.notify();
     }

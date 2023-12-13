@@ -3,7 +3,6 @@ import { register_insert_option } from "../../../context_menu/context_menu";
 import type { Game } from "../game";
 import { Triball } from "./triball";
 import { save_state, saveable, saveable_off } from "../../saving";
-import { remove_callbacks } from "../../objects/object";
 
 @saveable("overunder")
 export class OverUnder implements Game {
@@ -48,13 +47,13 @@ export class OverUnder implements Game {
                 new Triball(5.41, field_side - 5.41),
                 new Triball(field_side - 5.41, field_side - 5.41, 270),
 
-                new Triball(field_side / 3 * 2, field_side / 2, 0),
+                new Triball(field_side / 3, field_side / 2, 180),
 
-                new Triball(field_side / 2 + 4, field_side / 6 + 4, 0),
-                new Triball(field_side / 2 + 4, field_side / 3, 0),
-                new Triball(field_side / 2 + 4, field_side / 2, 0),
-                new Triball(field_side / 2 + 4, field_side / 3 * 2, 0),
-                new Triball(field_side / 2 + 4, field_side / 6 * 5 - 4, 0),
+                new Triball(field_side / 2 - 4, field_side / 6 + 4, 180),
+                new Triball(field_side / 2 - 4, field_side / 3, 180),
+                new Triball(field_side / 2 - 4, field_side / 2, 180),
+                new Triball(field_side / 2 - 4, field_side / 3 * 2, 180),
+                new Triball(field_side / 2 - 4, field_side / 6 * 5 - 4, 180),
 
                 new Triball(field_side / 2, field_side / 12, 90),
                 new Triball(field_side / 2, field_side / 12 * 11, 270),
@@ -78,7 +77,7 @@ export class OverUnder implements Game {
 
     load(raw_data: string) {
         for (const object of this.objects) {
-            remove_callbacks(object);
+            object.delete();
         }
         this.objects.length = 0;
 
@@ -329,7 +328,7 @@ export class OverUnder implements Game {
 
     delete() {
         for (const object of this.objects) {
-            remove_callbacks(object);
+            object.delete();
         }
         this.objects.length = 0;
 

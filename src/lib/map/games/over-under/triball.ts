@@ -1,16 +1,11 @@
 import { inch_pixel_ratio } from "../../constants";
 import { cache_scale } from "../../field";
-import { object, collisioncircle, on, dragable } from "../../objects/object";
+import { object, on, dragable, remove_callbacks, clear_collision, add_circle_collision } from "../../objects/object";
 
 const radius = 3.5 * inch_pixel_ratio;
 
-// const triball_cache = document.createElement("canvas");
-// let triball_cache_ctx: CanvasRenderingContext2D | null = null;
-// triball_cache.width = radius*cache_scale*2 + inch_pixel_ratio/4 * cache_scale;
-// triball_cache.height = radius*cache_scale*2 + inch_pixel_ratio/4 * cache_scale;
-
 @object
-@collisioncircle(0, 0, radius)
+// @collisioncircle(0, 0, radius)
 @dragable
 export class Triball {
     public x: number;
@@ -24,6 +19,8 @@ export class Triball {
         this.x = x * inch_pixel_ratio;
         this.y = y * inch_pixel_ratio;
         this.rotation = rotation * Math.PI / 180;
+
+        add_circle_collision(this as any, 0, 0, radius);
     }
 
     @on("render") 
@@ -55,7 +52,10 @@ export class Triball {
         ctx.rotate(this.rotation);
         ctx.drawImage(Triball.triball_cache, -radius, -radius, radius * 2, radius * 2);
         ctx.restore();
+    }
 
-        // ctx.drawImage(triball_cache, this.x - radius, this.y - radius, radius * 2, radius * 2);
+    delete() {
+        remove_callbacks(this);
+        clear_collision(this);
     }
 }
