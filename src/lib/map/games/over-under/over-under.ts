@@ -6,7 +6,7 @@ import { save_state, saveable, saveable_off } from "../../saving";
 
 @saveable("overunder")
 export class OverUnder implements Game {
-    objects: Triball[];
+    objects: Triball[] = [];
 
     constructor(is_skills: boolean) {
         register_insert_option({

@@ -22,7 +22,7 @@
     if ("points" in segment) {
         let unsub: () => void;
         onMount(() => {
-            const ctx = canvas.getContext("2d");
+            const ctx = canvas.getContext("2d")!;
 
             unsub = segment.subscribe(() => {
                 if (!("points" in segment)) return;
@@ -98,7 +98,7 @@
         }
     }
 
-    function isBefore(el1, el2) {
+    function isBefore(el1: HTMLElement, el2: HTMLElement) {
         let cur;
         if (el2.parentNode === el1.parentNode) {
             for (cur = el1.previousSibling; cur; cur = cur.previousSibling) {
@@ -109,8 +109,8 @@
     }
 
     function dragStart(ev: DragEvent) {
-        ev.dataTransfer.effectAllowed = "move";
-        ev.dataTransfer.setData("text/plain", null);
+        ev.dataTransfer!.effectAllowed = "move";
+        ev.dataTransfer!.setData("text/plain", "");
         $selected = ev.target as HTMLLIElement;
         (ev.target as HTMLLIElement).style.opacity = "0";
     }
@@ -122,25 +122,25 @@
         $selected.style.boxShadow = "-5px -5px 0 #00AA00";
         $selected.style.marginLeft = "5px";
 
-        if (isBefore($selected, ev.target)) {
-            (ev.target as HTMLLIElement).parentNode.insertBefore($selected, ev.target as HTMLLIElement);
+        if (isBefore($selected, ev.target! as HTMLElement)) {
+            (ev.target as HTMLLIElement).parentNode!.insertBefore($selected, ev.target as HTMLLIElement);
         } else {
-            (ev.target as HTMLLIElement).parentNode.insertBefore($selected, (ev.target as HTMLLIElement).nextSibling);
+            (ev.target as HTMLLIElement).parentNode!.insertBefore($selected, (ev.target as HTMLLIElement).nextSibling);
         }
         ev.preventDefault();
     }
 
     function dragEnd(ev: DragEvent) {
-        $selected.style.boxShadow = "none";
-        $selected.style.marginLeft = "0";
+        $selected!.style.boxShadow = "none";
+        $selected!.style.marginLeft = "0";
 
-        if (isBefore($selected, ev.target)) {
-            (ev.target as HTMLLIElement).parentNode.insertBefore($selected, ev.target as HTMLLIElement);
+        if (isBefore($selected!, ev.target! as HTMLElement)) {
+            (ev.target as HTMLLIElement).parentNode!.insertBefore($selected!, ev.target as HTMLLIElement);
         } else {
-            (ev.target as HTMLLIElement).parentNode.insertBefore($selected, (ev.target as HTMLLIElement).nextSibling);
+            (ev.target as HTMLLIElement).parentNode!.insertBefore($selected!, (ev.target as HTMLLIElement).nextSibling);
         }
 
-        const nodes = Array.prototype.slice.call( (ev.target as HTMLLIElement).parentElement.children );
+        const nodes = Array.prototype.slice.call( (ev.target as HTMLLIElement).parentElement!.children );
 
         path.move_segment(index, nodes.indexOf(ev.target));
         index = nodes.indexOf(ev.target);

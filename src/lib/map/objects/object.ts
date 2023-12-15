@@ -27,6 +27,8 @@ export function reset_objects() {
     objects.clear();
 
     for (const event in callbacks) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         callbacks[event].clear();
     }
 }
@@ -37,8 +39,8 @@ export function object<T extends { new(...args: any[]): MapObject }>(Base: T) {
             super(...args);
 
             this[id_symbol] = current_id++;
-            this[callback_symbol] = this[callback_symbol] ?? Base.prototype[callback_symbol] ?? Base.prototype.prototype[callback_symbol];
-            this[collision_symbol] = this[collision_symbol] ?? Base.prototype[collision_symbol] ?? Base.prototype.prototype[collision_symbol];
+            (this as any)[callback_symbol] = (this as any)[callback_symbol] ?? Base.prototype[callback_symbol] ?? Base.prototype.prototype[callback_symbol];
+            (this as any)[collision_symbol] = (this as any)[collision_symbol] ?? Base.prototype[collision_symbol] ?? Base.prototype.prototype[collision_symbol];
 
             objects.set(this[id_symbol], this);
 
@@ -117,7 +119,7 @@ export function in_collision<T extends { [collision_symbol]: Collision[] } & Map
 
 export function clear_collision<T extends { [collision_symbol]?: Collision[] } & MapObject>(object: T) {
     if (collision_symbol in object)
-        object[collision_symbol].length = 0;
+        object[collision_symbol]!.length = 0;
 }
 
 export let selection = -1;
@@ -199,7 +201,7 @@ export function remove_callbacks(target: { [callback_symbol]?: Map<keyof Events,
     if (!target[callback_symbol] || !target[id_symbol]) return;
 
     target[callback_symbol].forEach((_, event) => {
-        off(event, target[id_symbol]);
+        off(event, target[id_symbol]!);
     });
 }
 

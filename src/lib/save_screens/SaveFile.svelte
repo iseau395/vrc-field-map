@@ -12,9 +12,9 @@
     export let update_saves_list: () => void;
 
     const raw_save_data = localStorage.getItem(`file-${id}`);
-    const save_data = raw_save_data.split("|");
+    const save_data = raw_save_data!.split("|");
     
-    const metadata = save_data.shift().split(",");
+    const metadata = save_data.shift()!.split(",");
 
     const save_game_type: GameType = +metadata[1];
 
@@ -28,7 +28,7 @@
         await reset_field();
         await game;
 
-        load_save_state(raw_save_data);
+        load_save_state(raw_save_data!);
         reset_undo();
 
         $load_save_screen_open = false;
@@ -39,7 +39,7 @@
 
         localStorage.removeItem(`file-${id}`);
 
-        const save_list = localStorage.getItem("save-list").split("|");
+        const save_list = localStorage.getItem("save-list")!.split("|");
         
         save_list.splice(save_list.indexOf(id), 1);
 

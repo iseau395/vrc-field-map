@@ -33,9 +33,8 @@
         {/if}
 
         <li>
-
             <button on:click={() => $insert_dropdown_open = ! $insert_dropdown_open}>
-            <svg viewbox="0 0 50 50">
+            <svg viewBox="0 0 50 50">
                 <line x1="5" y1="25" x2="45" y2="25" stroke="#555555" stroke-width="5" stroke-linecap="round" />
                 <line x1="25" y1="5" x2="25" y2="45" stroke="#555555" stroke-width="5" stroke-linecap="round" />
             </svg>

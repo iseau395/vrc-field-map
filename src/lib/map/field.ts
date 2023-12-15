@@ -89,8 +89,8 @@ export function update_field(input: Input) {
     last_mouse_y = input.mouse_y;
 }
 
-let game_type_value = undefined;
-let is_skills_value = undefined;
+let game_type_value: GameType | undefined = undefined;
+let is_skills_value: boolean | undefined = undefined;
 game_type.subscribe(v => game_type_value = v);
 is_skills.subscribe(v => is_skills_value = v);
 
@@ -101,10 +101,10 @@ export let game: Promise<Game> = new Promise<Game>(async (resolve) => {
 
     switch (game_type_value) {
         case GameType.OverUnder: {
-            value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value);
+            value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value!);
         } break;
         case GameType.SpinUp: {
-            value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value);
+            value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value!);
         } break;
     }
 
@@ -222,10 +222,10 @@ export async function reset_field() {
 
         switch (game_type_value) {
             case GameType.OverUnder: {
-                value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value);
+                value = new (await import("./games/over-under/over-under")).OverUnder(is_skills_value!);
             } break;
             case GameType.SpinUp: {
-                value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value);
+                value = new (await import("./games/spin-up/spin-up")).SpinUp(is_skills_value!);
             } break;
         }
 
@@ -233,7 +233,7 @@ export async function reset_field() {
 
         save_state();
 
-        bg_cache.getContext("2d").scale(1/cache_scale, 1/cache_scale);
+        bg_cache.getContext("2d")!.scale(1/cache_scale, 1/cache_scale);
         game_loaded = true;
         init_load = false;
         redraw_background = true;

@@ -6,7 +6,7 @@
     export let og_y: number;
 
     export let name: string;
-    export let options: ContextMenuOption[];
+    export let options: ContextMenuOption[] | null;
 
     let submenu_visible = false;
     function onmouseenter() {

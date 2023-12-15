@@ -27,7 +27,7 @@
 <span style="left: {x}px; top:{y}px;" on:contextmenu|preventDefault>
     <div on:mouseenter on:mouseleave>
         {#each options as option}
-        <ContextMenuButton name={option.name} options={"options" in option ? option.options : null} og_x={x ?? og_x} og_y={y ?? og_y} on:click={"on_select" in option ? () => button_pressed("on_select" in option ? option.on_select : null) : undefined}/>
+        <ContextMenuButton name={option.name} options={"options" in option ? option.options : null} og_x={x ?? og_x} og_y={y ?? og_y} on:click={"on_select" in option ? () => button_pressed("on_select" in option ? option.on_select : () => {}) : undefined}/>
         {/each}
     </div>
 </span>

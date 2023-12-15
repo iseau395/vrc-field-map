@@ -27,7 +27,7 @@
         if (!selected_game_type || !save_name.trim()) return;
         $new_save_screen_open = false;
 
-        $game_type = string_to_game_type(selected_game_type);
+        $game_type = string_to_game_type(selected_game_type)!;
         $is_skills = skills;
         $current_save_id = save_name.trim();
         

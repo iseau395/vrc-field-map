@@ -30,7 +30,7 @@ describe("Disc", () => {
             mouse_button: -1,
             mouse_button_changed: false,
             wheel: 1,
-            keys: new Map<string, boolean | undefined>(),
+            keys: new Map<string, boolean | null>(),
         });
 
         update_objects({
@@ -41,7 +41,7 @@ describe("Disc", () => {
             mouse_button: 0,
             mouse_button_changed: true,
             wheel: 1,
-            keys: new Map<string, boolean | undefined>(),
+            keys: new Map<string, boolean | null>(),
         });
 
         expect(disc.x / inch_pixel_ratio).toBe(x1);
@@ -55,7 +55,7 @@ describe("Disc", () => {
             mouse_button: 0,
             mouse_button_changed: false,
             wheel: 1,
-            keys: new Map<string, boolean | undefined>(),
+            keys: new Map<string, boolean | null>(),
         });
 
         expect(disc.x / inch_pixel_ratio).toBe(x2);

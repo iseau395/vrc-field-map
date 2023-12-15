@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { game_type } from "../../stores/settings";
 import { reset_objects } from "./objects/object";
+import type { GameType } from "./games/game";
 
 const SAVE_VERSION = 0;
 
@@ -37,11 +38,11 @@ export function saveable_off<T extends Saveable>(object: T) {
     }
 }
 
-let game_type_value = undefined;
+let game_type_value: GameType | undefined = undefined;
 game_type.subscribe(v => game_type_value = v);
 
 export function get_save_state() {
-    let data = `${SAVE_VERSION},${game_type_value}`;
+    let data = `${SAVE_VERSION},${game_type_value!}`;
 
     save_callbacks.forEach((callback, save_id) => {
         data += `|${save_id}:${callback()}`;
@@ -53,9 +54,11 @@ export function get_save_state() {
 }
 
 export function load_save_state(raw_data: string) {
+    if (!raw_data) return;
+
     const data = raw_data.split("|");
 
-    const metadata = data.shift().split(",");
+    const metadata = data.shift()!.split(",");
 
     game_type.set(+metadata[1]);
 

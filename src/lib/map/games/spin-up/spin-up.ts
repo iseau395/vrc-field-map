@@ -8,7 +8,7 @@ import { remove_callbacks } from "../../objects/object";
 
 @saveable("spinup")
 export class SpinUp implements Game {
-    objects: (Disc | Roller)[];
+    objects: (Disc | Roller)[] = [];
 
     constructor(is_skills: boolean) {
         register_insert_option({

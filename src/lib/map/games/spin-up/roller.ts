@@ -25,16 +25,16 @@ export class Roller {
         this.rotated = rotated;
 
         if (!this.rotated)
-            add_box_collision(this, 0, 0, 9.8 * inch_pixel_ratio, 2.4 * inch_pixel_ratio);
+            add_box_collision(this as any, 0, 0, 9.8 * inch_pixel_ratio, 2.4 * inch_pixel_ratio);
         else 
-            add_box_collision(this, 0, 0, 2.4 * inch_pixel_ratio, 9.8 * inch_pixel_ratio);
+            add_box_collision(this as any, 0, 0, 2.4 * inch_pixel_ratio, 9.8 * inch_pixel_ratio);
 
         this.state = state;
     }
 
     @on("update")
     public update(input: Input) {
-        const mouse_over = in_collision(this, input.gridless_mouse_x, input.gridless_mouse_y);
+        const mouse_over = in_collision(this as any, input.gridless_mouse_x, input.gridless_mouse_y);
 
         if (input.mouse_button == 0 && mouse_over && input.mouse_button_changed && selection == -1) {
             this.state++;
